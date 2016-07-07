@@ -1,0 +1,25 @@
+#############################################################
+# Example of an i18n file: WEB-INF/i18n/master_en_US.i18n
+#############################################################
+
+# General text
+title = Examene online
+
+# For the /jsp/index.jsp page
+index.conectare=Conectare
+index.email=Adresa Email
+index.pass=Parola
+index.rememberme=Tine-ma minte
+index.lostPass=Am uitat parola
+
+unavailable_account=Cont inexistent
+bad_credentials=Email sau parola gresite
+
+# For /jsp/recoverPassword.jsp page
+recoverPassword.title=Recupereaza parola
+recoverPassword.recover = Recupereaza
+
+# For the UserAction
+UserAction.required_field = Required Field!
+UserAction.bad_username = Invalid username!
+UserAction.bad_email = Invalid email!
