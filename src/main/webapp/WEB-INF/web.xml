@@ -1,0 +1,28 @@
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+    <!-- Override default start page -->
+    <welcome-file-list>
+        <welcome-file>/jsp/index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- The Mentawai controller -->
+    <servlet>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>org.mentawai.core.Controller</servlet-class>
+        <init-param>
+            <param-name>applicationManager</param-name>
+            <param-value>ro.agitman.moe.web.AppManager</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- You must choose an extension to indicate a mentawai action -->
+    <servlet-mapping>
+        <servlet-name>Controller</servlet-name>
+        <url-pattern>*.m</url-pattern>
+    </servlet-mapping>
+
+</web-app>
