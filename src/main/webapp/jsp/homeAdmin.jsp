@@ -10,4 +10,18 @@
 <%@taglib prefix="mtw" uri="http://www.mentaframework.org/tags-mtw/"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-home admin
+<mtw:list value="users">
+
+  My list of users:
+
+  <mtw:isEmpty>
+    You don't have anyone in your list!
+  </mtw:isEmpty>
+
+  <mtw:loop var="u">
+    Name: <mtw:out value="u.name"/><br/>
+    Email: <mtw:out value="u.email"/><br/>
+    Group: <mtw:out value="u.groupId" list="groups" /><br/>
+  </mtw:loop>
+
+</mtw:list>

@@ -3,6 +3,7 @@ package ro.agitman.moe.web;
 import org.mentabean.DBTypes;
 import org.mentabean.jdbc.MySQLBeanSession;
 import org.mentabean.jdbc.PostgreSQLBeanSession;
+import org.mentabean.util.SQLUtils;
 import org.mentawai.core.ApplicationManager;
 import org.mentawai.core.Context;
 import org.mentawai.core.Props;
@@ -12,16 +13,10 @@ import org.mentawai.filter.AuthenticationFilter;
 import org.mentawai.mail.Email;
 import ro.agitman.moe.dao.UserDao;
 import ro.agitman.moe.dao.impl.UserDaoImpl;
-import ro.agitman.moe.model.Exam;
-import ro.agitman.moe.model.ExamGroup;
-import ro.agitman.moe.model.User;
-import ro.agitman.moe.web.action.HelloAction;
-import ro.agitman.moe.web.action.LoginAction;
-import ro.agitman.moe.web.action.LogoutAction;
-import ro.agitman.moe.web.action.RenewPasswordAction;
+import ro.agitman.moe.model.*;
+import ro.agitman.moe.web.action.*;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * Created by edi on 7/6/2016.
@@ -31,6 +26,7 @@ public class AppManager extends ApplicationManager {
     @Override
     public void init(Context context) {
         Props props = getProps();
+
 
         ////////////////////////////////////////////
         // TURN ON/OFF DEBUG MODE
@@ -89,6 +85,8 @@ public class AppManager extends ApplicationManager {
                 .on(ERROR, redir("/jsp/confirmPassword.jsp"));
 
 
+        action("/initDB", InitDBAction.class)
+                .on(SUCCESS, redir("/jsp/home.jsp"));
 
     }
 
@@ -107,7 +105,6 @@ public class AppManager extends ApplicationManager {
         ioc(UserDao.class, UserDaoImpl.class);
     }
 
-
     @Override
     public ConnectionHandler createConnectionHandler() {
 
@@ -124,7 +121,7 @@ public class AppManager extends ApplicationManager {
     @Override
     public void loadBeans() {
 
-        bean(ExamGroup.class, "verificationtoken")
+        bean(VerificationToken.class, "verification_token")
                 .pk("id", DBTypes.AUTOINCREMENT)
                 .field("token", DBTypes.STRING)
                 .field("verified", DBTypes.INTEGER)
@@ -132,7 +129,15 @@ public class AppManager extends ApplicationManager {
                 .field("expiredate", DBTypes.TIMESTAMP)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
-        bean(ExamGroup.class, "studentexaminstances")
+        bean(StudentExamAnswer.class, "student_exam_answers")
+                .pk("id", DBTypes.AUTOINCREMENT)
+                .field("studentExamInstanceId", DBTypes.INTEGER)
+                .field("examItemId", DBTypes.INTEGER)
+                .field("ownerId", DBTypes.INTEGER)
+                .field("value", DBTypes.STRING)
+                .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
+
+        bean(StudentExamInstance.class, "student_exam_instances")
                 .pk("id", DBTypes.AUTOINCREMENT)
                 .field("examid", DBTypes.INTEGER)
                 .field("studid", DBTypes.INTEGER)
@@ -140,14 +145,14 @@ public class AppManager extends ApplicationManager {
                 .field("dateupdated", DBTypes.TIMESTAMP)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
-        bean(ExamGroup.class, "examitemanswers")
+        bean(ExamItemAnswer.class, "exam_item_answers")
                 .pk("id", DBTypes.AUTOINCREMENT)
                 .field("correct", DBTypes.INTEGER)
                 .field("value", DBTypes.STRING)
                 .field("itemid", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
-        bean(ExamGroup.class, "examitems")
+        bean(ExamItem.class, "exam_items")
                 .pk("id", DBTypes.AUTOINCREMENT)
                 .field("assertion", DBTypes.STRING)
                 .field("difficulty", DBTypes.INTEGER)
@@ -156,7 +161,7 @@ public class AppManager extends ApplicationManager {
                 .field("examid", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
-        bean(ExamGroup.class, "examsinstance")
+        bean(ExamInstance.class, "exam_instances")
                 .pk("id", DBTypes.AUTOINCREMENT)
                 .field("name", DBTypes.STRING)
                 .field("status", DBTypes.INTEGER)
@@ -167,13 +172,13 @@ public class AppManager extends ApplicationManager {
                 .field("egroupid", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
-        bean(ExamGroup.class, "examgroupuser")
+        bean(ExamGroupUser.class, "exam_group_user")
                 .pk("id", DBTypes.AUTOINCREMENT)
                 .field("groupid", DBTypes.INTEGER)
                 .field("studentid", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
-        bean(ExamGroup.class, "examgroups")
+        bean(ExamGroup.class, "exam_groups")
                 .pk("id", DBTypes.AUTOINCREMENT)
                 .field("name", DBTypes.STRING)
                 .field("owner", DBTypes.INTEGER)

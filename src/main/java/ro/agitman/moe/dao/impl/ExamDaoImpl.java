@@ -1,5 +1,6 @@
 package ro.agitman.moe.dao.impl;
 
+import org.mentabean.BeanSession;
 import ro.agitman.moe.dao.ExamDao;
 import ro.agitman.moe.model.Exam;
 
@@ -9,7 +10,7 @@ import ro.agitman.moe.model.Exam;
 public class ExamDaoImpl extends GenericDaoImpl<Exam> implements ExamDao {
 
 
-    public ExamDaoImpl() {
+    public ExamDaoImpl(BeanSession beanSession) {
         super(Exam.class, beanSession);
     }
 }
