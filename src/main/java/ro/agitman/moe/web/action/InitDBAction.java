@@ -13,7 +13,7 @@ public class InitDBAction extends BaseAction {
     public InitDBAction(BeanSession beanSession) {
         this.session = beanSession;
         try {
-            session.createTables();
+//            session.createTables();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -21,7 +21,7 @@ public class InitDBAction extends BaseAction {
 
     public String execute(){
 
-        session.createTables();
+//        session.createTables();
 
         return SUCCESS;
     }

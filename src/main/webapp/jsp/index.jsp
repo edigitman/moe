@@ -26,17 +26,19 @@
          <div class="row">
              <div class="col-lg-12 col-md-12 col-sm-12 text-center">
                  <mtw:outError>
-                     <span color="red"><mtw:out /></span>
+                     <span color="red"><mtw:out/></span>
                  </mtw:outError>
 
                  <mtw:form klass="form-signin" action="/Login.m" method="post">
                      <h2 class="form-signin-heading"><mtw:i18n key="conectare"/></h2>
 
                      <label for="email" class="sr-only"><mtw:i18n key="email"/></label>
-                     <input type="email" name="email" id="email" class="form-control" placeholder='<mtw:i18n key='email'/>'  required="" autofocus="">
+                     <input type="email" name="email" id="email" class="form-control"
+                            placeholder='<mtw:i18n key='email'/>' required="" autofocus="">
                      <br/>
                      <label for="password" class="sr-only"><mtw:i18n key="pass"/></label>
-                     <input type="password" name="password" id="password" class="form-control" placeholder="<mtw:i18n key="pass"/>" required="">
+                     <input type="password" name="password" id="password" class="form-control"
+                            placeholder="<mtw:i18n key="pass"/>" required="">
 
                      <div class="checkbox">
                          <label>
@@ -52,6 +54,8 @@
 
      </div>
 
+       <mtw:isLogged>
+           <jsp:forward page="/Login.m"/>
+       </mtw:isLogged>
   </jsp:attribute>
-
 </t:layout>

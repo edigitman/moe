@@ -13,4 +13,14 @@ public class ExamDaoImpl extends GenericDaoImpl<Exam> implements ExamDao {
     public ExamDaoImpl(BeanSession beanSession) {
         super(Exam.class, beanSession);
     }
+
+    @Override
+    public Exam findById(Integer id) {
+        Exam exam = new Exam(id);
+        boolean loaded = beanSession.load(exam);
+        if (!loaded) {
+            throw new IllegalStateException("Cannot load exam by id " + id);
+        }
+        return exam;
+    }
 }

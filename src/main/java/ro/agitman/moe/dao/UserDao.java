@@ -8,9 +8,6 @@ import ro.agitman.moe.model.User;
  */
 public interface UserDao extends GenericDao<User>{
 
-
-//    User insert(User user);
-//
     User findByEmail(String email);
 
 }

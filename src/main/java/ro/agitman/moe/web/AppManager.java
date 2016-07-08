@@ -15,6 +15,7 @@ import ro.agitman.moe.dao.UserDao;
 import ro.agitman.moe.dao.impl.UserDaoImpl;
 import ro.agitman.moe.model.*;
 import ro.agitman.moe.web.action.*;
+import ro.agitman.moe.web.filter.PerformanceMonitoringFilter;
 
 import java.sql.Timestamp;
 
@@ -66,8 +67,11 @@ public class AppManager extends ApplicationManager {
     @Override
     public void loadActions() {
 
+        action("/EditUser", AdminHomeAction.class, "editUser")
+                .on(SUCCESS, redir("/jsp/home.jsp"));
+
         action("/Login", LoginAction.class)
-                .on(SUCCESS, redir("/jsp/home.jsp"))
+                .on(SUCCESS, fwd("/jsp/home.jsp"))
                 .on(ERROR, fwd("/jsp/index.jsp"));
         action("/Logout", LogoutAction.class)
                 .on(SUCCESS, redir("/jsp/index.jsp"));
@@ -83,17 +87,13 @@ public class AppManager extends ApplicationManager {
         action("/ValidateRenewPassword", RenewPasswordAction.class, "validate")
                 .on(SUCCESS, redir("/jsp/home.jsp"))
                 .on(ERROR, redir("/jsp/confirmPassword.jsp"));
-
-
-        action("/initDB", InitDBAction.class)
-                .on(SUCCESS, redir("/jsp/home.jsp"));
-
     }
 
     @Override
     public void loadFilters() {
 
         filter(new AuthenticationFilter());
+        filter(new PerformanceMonitoringFilter());
         on(LOGIN, redir("/jsp/index.jsp"));
     }
 

@@ -23,7 +23,9 @@
     </mtw:hasAuthorization>
 
     <mtw:hasAuthorization group="ADMIN">
+
       <%@include file="homeAdmin.jsp"%>
+
     </mtw:hasAuthorization>
 
   </jsp:attribute>

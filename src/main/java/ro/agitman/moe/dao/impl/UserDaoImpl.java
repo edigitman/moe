@@ -14,9 +14,19 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao {
         super(User.class, beanSession);
     }
 
-    public User findByEmail(String email){
+    @Override
+    public User findByEmail(String email) {
         User u = new User(email);
         return beanSession.loadUnique(u);
     }
 
+    @Override
+    public User findById(Integer id) {
+        User user = new User(id);
+        boolean loaded = beanSession.load(user);
+        if (!loaded) {
+            throw new IllegalStateException("Cannot load user by id " + id);
+        }
+        return user;
+    }
 }

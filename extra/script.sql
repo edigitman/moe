@@ -9,7 +9,7 @@ CREATE TABLE users
   dateofbirth date,
   enabled integer,
   role character varying(200),
-  datecreated timestamp without time zone,
+  datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT users_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -23,7 +23,7 @@ CREATE TABLE verification_token
   verified integer,
   userid integer,
   expiredate timestamp without time zone,
-  datecreated timestamp without time zone,
+  datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT verification_token_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -36,7 +36,7 @@ CREATE TABLE exams
   name character varying(200),
   owner integer,
   difficulty character varying(200),
-  datecreated timestamp without time zone,
+  datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT exams_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -51,7 +51,7 @@ CREATE TABLE exam_items
   points integer,
   type integer,
   examid integer,
-  datecreated timestamp without time zone,
+  datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT exam_items_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -64,7 +64,7 @@ CREATE TABLE exam_item_answers
   correct integer,
   value character varying(200),
   itemid integer,
-  datecreated timestamp without time zone,
+  datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT exam_item_answers_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -81,7 +81,7 @@ CREATE TABLE exam_instances
   points integer,
   examid integer,
   egroupid integer,
-  datecreated timestamp without time zone,
+  datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT exam_instances_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -93,7 +93,7 @@ CREATE TABLE exam_groups
   id integer NOT NULL,
   name character varying(200),
   owner integer,
-  datecreated timestamp without time zone,
+  datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT exam_groups_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -105,7 +105,7 @@ CREATE TABLE exam_group_user
   id integer NOT NULL,
   groupid integer,
   studentid integer,
-  datecreated timestamp without time zone,
+  datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT exam_group_user_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -119,7 +119,7 @@ CREATE TABLE student_exam_answers
   examitemid integer,
   ownerid integer,
   value character varying(200),
-  datecreated timestamp without time zone,
+  datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT student_exam_answers_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -133,7 +133,7 @@ CREATE TABLE student_exam_instances
   studid integer,
   status integer,
   dateupdated timestamp without time zone,
-  datecreated timestamp without time zone,
+  datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT student_exam_instances_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -161,3 +161,12 @@ ALTER TABLE exam_groups ALTER COLUMN id SET DEFAULT nextval('exam_groups_seq');
 ALTER TABLE exam_group_user ALTER COLUMN id SET DEFAULT nextval('exam_group_user_seq');
 ALTER TABLE student_exam_instances ALTER COLUMN id SET DEFAULT nextval('student_exam_instances_seq');
 ALTER TABLE student_exam_answers ALTER COLUMN id SET DEFAULT nextval('student_exam_answers_seq');
+
+insert INTO users(email,name, password, role, enabled)
+VALUES ('prof@mail.com', 'profesor', 'secret', 'PROFESOR', 1);
+
+insert INTO users(email,name, password, role, enabled)
+VALUES ('stud@mail.com', 'student', 'secret', 'STUDENT', 1);
+
+insert INTO users(email,name, password, role, enabled)
+VALUES ('admin@mail.com', 'administrator', 'secret', 'ADMIN', 1);

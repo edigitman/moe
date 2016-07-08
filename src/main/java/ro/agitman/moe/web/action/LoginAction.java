@@ -20,6 +20,11 @@ public class LoginAction extends BaseLoginAction {
         String email = input.getString("email");
         String pass = input.getString("password");
 
+        if (getSessionObj() != null) {
+            loadDefaultDataForUser((String) getUserGroups().get(0));
+            return SUCCESS;
+        }
+
         if (Strings.isNullOrEmpty(email)) {
             addError("unavailable_account");
             return ERROR;
@@ -51,7 +56,26 @@ public class LoginAction extends BaseLoginAction {
         setSessionGroup(user.getRole());
 
         addMessage("login_successfully");
+
+        loadDefaultDataForUser(user.getRole());
+
         return SUCCESS;
+    }
+
+    /**
+     * Load default data for each user type
+     * ADMIN - list of users
+     * Student - list of student exams instances
+     * Professor - list of exams, list of exam instances
+     *
+     * @param role
+     */
+    private void loadDefaultDataForUser(String role) {
+
+        if ("ADMIN".equals(role)) {
+            output.setValue("users", userDao.findAll());
+        }
+
     }
 
     private String encriptPass(String pass) {

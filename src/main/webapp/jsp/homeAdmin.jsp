@@ -7,21 +7,35 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@page pageEncoding="UTF-8" %>
-<%@taglib prefix="mtw" uri="http://www.mentaframework.org/tags-mtw/"%>
+<%@taglib prefix="mtw" uri="http://www.mentaframework.org/tags-mtw/" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <mtw:list value="users">
+    <mtw:isEmpty>
+        Nu sunt utilizatori!
+    </mtw:isEmpty>
 
-  My list of users:
 
-  <mtw:isEmpty>
-    You don't have anyone in your list!
-  </mtw:isEmpty>
-
-  <mtw:loop var="u">
-    Name: <mtw:out value="u.name"/><br/>
-    Email: <mtw:out value="u.email"/><br/>
-    Group: <mtw:out value="u.groupId" list="groups" /><br/>
-  </mtw:loop>
-
+    <table class="table">
+        <caption>Lista cu utilizatori</caption>
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Email</th>
+            <th>Nume</th>
+            <th>Rol</th>
+        </tr>
+        </thead>
+        <tbody>
+        <mtw:loop var="u">
+            <tr>
+                <th scope="row"><mtw:out value="u.id"/></th>
+                <td><mtw:out value="u.email"/></td>
+                <td><mtw:out value="u.name"/></td>
+                <td><mtw:out value="u.role"/></td>
+                <td><a class="btn btn-link" href="/EditUser.editUser.m?id=<mtw:out value="u.id"/>">Modifica</a>  </td>
+            </tr>
+        </mtw:loop>
+        </tbody>
+    </table>
 </mtw:list>
