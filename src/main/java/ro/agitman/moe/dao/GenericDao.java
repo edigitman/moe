@@ -13,6 +13,8 @@ public interface GenericDao<T> {
 
     T insert(T object);
 
+    T save(T object);
+
     T update(T object);
 
     void delete(T object);

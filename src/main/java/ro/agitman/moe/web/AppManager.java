@@ -10,8 +10,14 @@ import org.mentawai.core.Props;
 import org.mentawai.db.BoneCPConnectionHandler;
 import org.mentawai.db.ConnectionHandler;
 import org.mentawai.filter.AuthenticationFilter;
+import org.mentawai.filter.OVFilter;
+import org.mentawai.filter.VOFilter;
 import org.mentawai.mail.Email;
+import ro.agitman.moe.dao.ExamDao;
+import ro.agitman.moe.dao.ExamItemDao;
 import ro.agitman.moe.dao.UserDao;
+import ro.agitman.moe.dao.impl.ExamDaoImpl;
+import ro.agitman.moe.dao.impl.ExamItemDaoImpl;
 import ro.agitman.moe.dao.impl.UserDaoImpl;
 import ro.agitman.moe.model.*;
 import ro.agitman.moe.web.action.*;
@@ -67,11 +73,43 @@ public class AppManager extends ApplicationManager {
     @Override
     public void loadActions() {
 
+        action("/home", HomeAction.class)
+                .filter(new AuthenticationFilter())
+                .on(SUCCESS, fwd("/jsp/home.jsp"));
+
+        action("/ProfHome", ProfHomeAction.class, "newExam")
+                .authorize("PROFESOR")
+                .on(SUCCESS, fwd("/jsp/profEditExam.jsp"));
+        action("/ProfHome", ProfHomeAction.class, "editExam")
+                .authorize("PROFESOR")
+                .on(SUCCESS, fwd("/jsp/profEditExam.jsp"));
+        action("/ProfHome", ProfHomeAction.class, "saveExam")
+                .authorize("PROFESOR")
+                .filter(new VOFilter("exam", Exam.class, "exam"))
+                .on(SUCCESS, redir("/home.m"));
+
+        action("/ProfHome", ProfHomeAction.class, "addItemsRedir")
+                .authorize("PROFESOR")
+                .on(SUCCESS, redir("/ProfHome.addItems.m"));
+        action("/ProfHome", ProfHomeAction.class, "addItems")
+                .authorize("PROFESOR")
+                .filter(new VOFilter("examItem", ExamItem.class, "item"))
+                .on(SUCCESS, fwd("/jsp/profAddItems.jsp"))
+                .on(CREATED, redir("/ProfHome.addItems.m"));
+
         action("/EditUser", AdminHomeAction.class, "editUser")
-                .on(SUCCESS, redir("/jsp/home.jsp"));
+                .authorize("ADMIN")
+                .on(SUCCESS, fwd("/jsp/adminEditUser.jsp"));
+        action("/EditUser", AdminHomeAction.class, "newUser")
+                .authorize("ADMIN")
+                .on(SUCCESS, fwd("/jsp/adminEditUser.jsp"));
+        action("/EditUser", AdminHomeAction.class, "saveUser")
+                .authorize("ADMIN")
+                .filter(new VOFilter("user", User.class, "user"))
+                .on(SUCCESS, redir("/home.m"));
 
         action("/Login", LoginAction.class)
-                .on(SUCCESS, fwd("/jsp/home.jsp"))
+                .on(SUCCESS, redir("/home.m"))
                 .on(ERROR, fwd("/jsp/index.jsp"));
         action("/Logout", LogoutAction.class)
                 .on(SUCCESS, redir("/jsp/index.jsp"));
@@ -85,7 +123,7 @@ public class AppManager extends ApplicationManager {
                 .on(ERROR, redir("/jsp/index.jsp"));
 //        save the new password
         action("/ValidateRenewPassword", RenewPasswordAction.class, "validate")
-                .on(SUCCESS, redir("/jsp/home.jsp"))
+                .on(SUCCESS, redir("/home.m"))
                 .on(ERROR, redir("/jsp/confirmPassword.jsp"));
     }
 
@@ -103,6 +141,8 @@ public class AppManager extends ApplicationManager {
         ioc("beanSession", PostgreSQLBeanSession.class);
 
         ioc(UserDao.class, UserDaoImpl.class);
+        ioc(ExamDao.class, ExamDaoImpl.class);
+        ioc(ExamItemDao.class, ExamItemDaoImpl.class);
     }
 
     @Override
