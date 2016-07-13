@@ -36,6 +36,7 @@ CREATE TABLE exams
   name character varying(200),
   owner integer,
   difficulty character varying(200),
+  points integer,
   datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT exams_pkey PRIMARY KEY (id)
 )
@@ -49,7 +50,7 @@ CREATE TABLE exam_items
   assertion character varying(200),
   difficulty integer,
   points integer,
-  type integer,
+  type CHARACTER VARYING(20),
   examid integer,
   datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT exam_items_pkey PRIMARY KEY (id)
