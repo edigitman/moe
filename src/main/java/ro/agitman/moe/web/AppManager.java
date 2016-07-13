@@ -14,9 +14,11 @@ import org.mentawai.filter.OVFilter;
 import org.mentawai.filter.VOFilter;
 import org.mentawai.mail.Email;
 import ro.agitman.moe.dao.ExamDao;
+import ro.agitman.moe.dao.ExamItemAnswerDao;
 import ro.agitman.moe.dao.ExamItemDao;
 import ro.agitman.moe.dao.UserDao;
 import ro.agitman.moe.dao.impl.ExamDaoImpl;
+import ro.agitman.moe.dao.impl.ExamItemAnswerDaoImpl;
 import ro.agitman.moe.dao.impl.ExamItemDaoImpl;
 import ro.agitman.moe.dao.impl.UserDaoImpl;
 import ro.agitman.moe.model.*;
@@ -91,11 +93,18 @@ public class AppManager extends ApplicationManager {
         action("/ProfHome", ProfHomeAction.class, "addItemsRedir")
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/ProfHome.addItems.m"));
+        action("/ProfHome", ProfHomeAction.class, "addItemsAnswer")
+                .authorize("PROFESOR")
+                .filter(new VOFilter("answer", ExamItemAnswer.class, "answer"))
+                .on(SUCCESS, redir("/ProfHome.addItems.m"));
         action("/ProfHome", ProfHomeAction.class, "addItems")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("examItem", ExamItem.class, "item"))
                 .on(SUCCESS, fwd("/jsp/profAddItems.jsp"))
                 .on(CREATED, redir("/ProfHome.addItems.m"));
+
+
+
 
         action("/EditUser", AdminHomeAction.class, "editUser")
                 .authorize("ADMIN")
@@ -143,6 +152,7 @@ public class AppManager extends ApplicationManager {
         ioc(UserDao.class, UserDaoImpl.class);
         ioc(ExamDao.class, ExamDaoImpl.class);
         ioc(ExamItemDao.class, ExamItemDaoImpl.class);
+        ioc(ExamItemAnswerDao.class, ExamItemAnswerDaoImpl.class);
     }
 
     @Override

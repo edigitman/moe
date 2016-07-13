@@ -11,6 +11,7 @@ public class Exam {
     private String name;
     private Integer owner;
     private String difficulty;
+    private Long points;
     private Timestamp datecreated;
 
     public Exam() {
@@ -92,5 +93,13 @@ public class Exam {
 
     public void setDatecreated(Timestamp datecreated) {
         this.datecreated = datecreated;
+    }
+
+    public Long getPoints() {
+        return points;
+    }
+
+    public void setPoints(Long points) {
+        this.points = points;
     }
 }

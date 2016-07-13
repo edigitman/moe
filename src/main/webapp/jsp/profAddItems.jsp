@@ -16,58 +16,112 @@
   <jsp:attribute name="body">
 
      <div class="row">
-         <div class="col-md-6 col-md-offset-3">
+         <div class="col-md-6">
+             <mtw:list value="examItems">
+                 <mtw:isEmpty>
+                     Nu sunt subiecte!
+                 </mtw:isEmpty>
+
+                 <mtw:isEmpty negate="true">
+                     <table class="table">
+                         <caption>Lista cu subiecte</caption>
+                         <thead>
+                         <tr>
+                             <th>#</th>
+                             <th>Enunt</th>
+                             <th>Puncte</th>
+                             <th>Tip</th>
+                         </tr>
+                         </thead>
+                         <tbody>
+                         <mtw:loop var="i">
+                             <tr>
+                                 <th scope="row"><mtw:out value="i.id"/></th>
+                                 <td><mtw:out value="i.assertion"/></td>
+                                 <td><mtw:out value="i.points"/></td>
+                                 <td><mtw:out value="i.type"/></td>
+                                 <td>edit / delete</td>
+                             </tr>
+                         </mtw:loop>
+                         </tbody>
+                     </table>
+                 </mtw:isEmpty>
+             </mtw:list>
+         </div>
+         <div class="col-md-6">
 
              <div class="form-group">
-                 <span>Examen: <mtw:out value="exam.name"/></span>
+                 <span>Examen: <mtw:out value="exam.name"/></span><br/>
+                 <span>Puncte totale: <mtw:out value="exam.points"/></span>
              </div>
 
              <mtw:form action="/ProfHome.addItems.m" method="post">
                  <mtw:input name="exam.id" type="hidden"/>
 
-
                  <div class="form-group">
                      <label for="assertion">Enunt</label>
-                     <mtw:input type="text" klass="form-control" name="item.assertion" id="assertion"/>
+                     <mtw:textarea klass="form-control" name="item.assertion" id="assertion"/>
+                 </div>
+                 <div class="form-group">
+                     <label for="points">Puncte</label>
+                     <mtw:input klass="form-control" name="item.points" id="points"/>
+                 </div>
+                 <div class="form-group">
+                     <label for="type">Tip item</label>
+                     <mtw:select klass="form-control" id="type" name="item.type" list="itemTypes"/>
                  </div>
 
-
                  <button type="submit" class="btn btn-info">Adauga</button>
-
              </mtw:form>
+
+             <div class="well">
+                 <mtw:form action="/ProfHome.addItemsAnswer.m" method="post">
+                     <mtw:input name="item.id" type="hidden"/>
+
+                     <div class="form-group">
+                         <label for="answer">Raspuns</label>
+                         <mtw:textarea klass="form-control" name="answer.value" id="answer"/>
+                     </div>
+                     <div class="form-group">
+                         <label for="correct">Status raspuns</label>
+                         <mtw:input klass="form-control" name="answer.correct" id="correct"/>
+                     </div>
+
+                     <button type="submit" class="btn btn-info">Adauga</button>
+                 </mtw:form>
+
+                 <mtw:list value="answers">
+                     <mtw:isEmpty>
+                         Nu sunt raspunsuri pentru acest subiect!
+                     </mtw:isEmpty>
+
+                     <mtw:isEmpty negate="true">
+                         <table class="table">
+                             <caption>Lista cu raspunsuri</caption>
+                             <thead>
+                             <tr>
+                                 <th>#</th>
+                                 <th>Raspuns</th>
+                                 <th>Corect</th>
+                             </tr>
+                             </thead>
+                             <tbody>
+                             <mtw:loop var="a">
+                                 <tr>
+                                     <th scope="row"><mtw:out value="a.id"/></th>
+                                     <td><mtw:out value="a.value"/></td>
+                                     <td><mtw:out value="a.correct"/></td>
+                                     <td>delete / edit</td>
+                                 </tr>
+                             </mtw:loop>
+                             </tbody>
+                         </table>
+                     </mtw:isEmpty>
+                 </mtw:list>
+
+             </div>
          </div>
      </div>
-
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <mtw:list value="examItems">
-                <mtw:isEmpty>
-                    Nu sunt subiecte!
-                </mtw:isEmpty>
-
-                <mtw:isEmpty negate="true">
-                    <table class="table">
-                        <caption>Lista cu subiecte</caption>
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Enunt</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <mtw:loop var="i">
-                            <tr>
-                                <th scope="row"><mtw:out value="i.id"/></th>
-                                <td><mtw:out value="i.assertion"/></td>
-
-                            </tr>
-                        </mtw:loop>
-                        </tbody>
-                    </table>
-                </mtw:isEmpty>
-            </mtw:list>
-        </div>
-    </div>
 
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
