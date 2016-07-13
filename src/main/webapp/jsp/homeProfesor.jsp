@@ -41,6 +41,7 @@
                     <mtw:isEmpty>
                         Nu este nici un concept adaugat
                     </mtw:isEmpty>
+                    <mtw:isEmpty negate="true">
                     <table class="table">
                         <caption> Lista de concepte examene:</caption>
                         <thead>
@@ -64,6 +65,7 @@
                         </mtw:loop>
                         </tbody>
                     </table>
+                    </mtw:isEmpty>
                 </mtw:list>
 
                 <div class="row">

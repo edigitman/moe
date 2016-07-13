@@ -207,7 +207,7 @@ public class AppManager extends ApplicationManager {
                 .field("assertion", DBTypes.STRING)
                 .field("difficulty", DBTypes.INTEGER)
                 .field("points", DBTypes.LONG)
-                .field("type", DBTypes.INTEGER)
+                .field("type", DBTypes.STRING)
                 .field("examid", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
@@ -238,6 +238,7 @@ public class AppManager extends ApplicationManager {
                 .pk("id", DBTypes.AUTOINCREMENT)
                 .field("name", DBTypes.STRING)
                 .field("owner", DBTypes.INTEGER)
+                .field("points", DBTypes.INTEGER)
                 .field("difficulty", DBTypes.STRING)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
