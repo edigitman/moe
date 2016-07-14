@@ -39,7 +39,7 @@
                          </thead>
                          <tbody>
                          <mtw:loop var="i" counter="c" counterStart="1">
-                             <tr class="itemRow-<mtw:out value="i.id"/>">
+                             <tr class="itemRow" itemId="<mtw:out value="i.id"/>">
                                  <td scope="row">
                                      <mtw:out value="c"/>
                                  </td>
@@ -54,14 +54,14 @@
                                          <mtw:out value="i.type"/>
                                      </span>
                                  </td>
-                                 <td>
-                                     <a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.editItem.m?id=<mtw:out value="i.id"/>">
-                                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                                     </a>
-                                     <a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.deleteItem.m?id=<mtw:out value="i.id"/>">
-                                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                     </a>
-                                 </td>
+                                 <%--<td>--%>
+                                     <%--<a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.editItem.m?id=<mtw:out value="i.id"/>">--%>
+                                         <%--<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>--%>
+                                     <%--</a>--%>
+                                     <%--<a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.deleteItem.m?id=<mtw:out value="i.id"/>">--%>
+                                         <%--<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>--%>
+                                     <%--</a>--%>
+                                 <%--</td>--%>
                              </tr>
                          </mtw:loop>
                          </tbody>
@@ -85,7 +85,7 @@
                      <mtw:textarea klass="form-control" name="item.assertion" id="assertion"/>
                  </div>
                  <div class="row">
-                     <div class="col-md-3">
+                     <div class="col-md-2">
                          <div class="form-group" id="pointsDiv">
                              <label for="points">Puncte</label>
                              <mtw:input klass="form-control" name="item.points" id="points"/>
@@ -102,6 +102,9 @@
                      </div>
                      <div class="col-md-2" style="height: 74px; padding-top: 25px">
                          <a href="/ProfHome.removeEditItem.m" id="clearItemForm" class="btn btn-link">Curata</a>
+                     </div>
+                     <div class="col-md-2" style="height: 74px; padding-top: 25px">
+                         <a href="/ProfHome.deleteItem.m?id=<mtw:out value="item.id"/>" id="delete" class="btn btn-danger">Sterge</a>
                      </div>
                  </div>
              </mtw:form>
@@ -200,15 +203,33 @@
                 }
             });
 
+            // edit item click
+            $('.itemRow').click(function (event) {
+                event.preventDefault();
+                var itemId = event.currentTarget.attributes.itemId.value;
+                $.get('/ProfHome.editItem.m?id=' + itemId, function (data, result) {
+                    if (result == 'success')
+                        location.reload();
+                });
+            });
+
 //            highlight the selected item
             var itemId = $('#itemId').val();
             if (itemId != '') {
-                $('.itemRow-' + itemId).addClass('currentItem');
+                $('.itemRow').each(function(index){
+                    if($(this).attr('itemId') == itemId)
+                        $(this).addClass('currentItem');
+                });
                 $('#addItemBtn').text('Modifica');
+            } else {
+                $('.answersWell').hide();
+                $('#delete').hide();
             }
 
 //          disable responses if item type is free text
             $('#type').change(function(){
+                if(itemId == '') return;
+
                 if($(this).val() == 3){
                     $('.answersWell').hide();
                 } else {
@@ -229,7 +250,7 @@
 
 //             decrypt answer correctness
             $('.answerCorrect').each(function(index){
-                if ('1' == $.trim($(this).text())) {
+                if ('true' == $.trim($(this).text())) {
                     $(this).text('Corect');
                 } else {
                     $(this).text('Gresit');

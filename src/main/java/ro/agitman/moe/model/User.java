@@ -15,7 +15,7 @@ public class User {
     private String lastname;
     private String password;
     private Date dateOfBirth;
-    private Integer enabled;
+    private Boolean enabled;
     private String role;
     private Timestamp datecreated;
 
@@ -129,11 +129,11 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Integer getEnabled() {
+    public Boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Integer enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 

@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 public class ExamItemAnswer {
 
     private Integer id;
-    private Integer correct;
+    private Boolean correct;
     private String value;
     private Integer itemid;
     private Timestamp datecreated;
@@ -62,11 +62,11 @@ public class ExamItemAnswer {
         this.id = id;
     }
 
-    public Integer getCorrect() {
+    public Boolean getCorrect() {
         return correct;
     }
 
-    public void setCorrect(Integer correct) {
+    public void setCorrect(Boolean correct) {
         this.correct = correct;
     }
 

@@ -4,6 +4,7 @@ import org.mentabean.DBTypes;
 import org.mentabean.jdbc.MySQLBeanSession;
 import org.mentabean.jdbc.PostgreSQLBeanSession;
 import org.mentabean.util.SQLUtils;
+import org.mentawai.ajax.renderer.JsonRenderer;
 import org.mentawai.core.ApplicationManager;
 import org.mentawai.core.Context;
 import org.mentawai.core.Props;
@@ -13,6 +14,7 @@ import org.mentawai.filter.AuthenticationFilter;
 import org.mentawai.filter.OVFilter;
 import org.mentawai.filter.VOFilter;
 import org.mentawai.mail.Email;
+import ro.agitman.moe.custom.MyBooleanStringType;
 import ro.agitman.moe.dao.ExamDao;
 import ro.agitman.moe.dao.ExamItemAnswerDao;
 import ro.agitman.moe.dao.ExamItemDao;
@@ -99,6 +101,7 @@ public class AppManager extends ApplicationManager {
                 .on(SUCCESS, redir("/ProfHome.addItems.m"));
         action("/ProfHome", ProfHomeAction.class, "editItem")
                 .authorize("PROFESOR")
+                .on(AJAX, ajax(new JsonRenderer()))
                 .on(SUCCESS, redir("/ProfHome.addItems.m"));
         action("/ProfHome", ProfHomeAction.class, "deleteItem")
                 .authorize("PROFESOR")
@@ -206,7 +209,7 @@ public class AppManager extends ApplicationManager {
 
         bean(ExamItemAnswer.class, "exam_item_answers")
                 .pk("id", DBTypes.SEQUENCE)
-                .field("correct", DBTypes.INTEGER)
+                .field("correct", new MyBooleanStringType())
                 .field("value", DBTypes.STRING)
                 .field("itemid", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
@@ -259,7 +262,7 @@ public class AppManager extends ApplicationManager {
                 .field("lastname", DBTypes.STRING)
                 .field("password", DBTypes.STRING)
                 .field("dateOfBirth", DBTypes.DATE)
-                .field("enabled", DBTypes.INTEGER)
+                .field("enabled", new MyBooleanStringType())
                 .field("role", DBTypes.STRING)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
     }

@@ -30,9 +30,9 @@ public class ProfHomeAction extends BaseAction {
         examItemType.put(3, "Text liber");
 
         diffs = new HashMap<>();
-        examItemType.put(1, "Usor");
-        examItemType.put(2, "Mediu");
-        examItemType.put(3, "Greu");
+        diffs.put(1, "Usor");
+        diffs.put(2, "Mediu");
+        diffs.put(3, "Greu");
     }
 
     public ProfHomeAction(ExamDao examDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao) {
@@ -120,7 +120,7 @@ public class ProfHomeAction extends BaseAction {
         return SUCCESS;
     }
 
-    public String deleteItem(){
+    public String deleteItem() {
         Integer itemId = input.getInt("id");
         examItemDao.delete(examItemDao.findById(itemId));
         session().removeAttribute("examItemId");
@@ -130,6 +130,9 @@ public class ProfHomeAction extends BaseAction {
 
     public String editItem() {
         session().setAttribute("examItemId", input.getInt("id"));
+        if (isAjaxRequest()) {
+            return AJAX;
+        }
         return SUCCESS;
     }
 
@@ -138,13 +141,13 @@ public class ProfHomeAction extends BaseAction {
         return SUCCESS;
     }
 
-    private void recomputeExamPoints(){
+    private void recomputeExamPoints() {
         Integer examId = (Integer) session().getAttribute("examId");
         Exam exam = examDao.findById(examId);
         List<ExamItem> items = examItemDao.findByExamId(examId);
 
         Long total = 0L;
-        for(ExamItem ei : items){
+        for (ExamItem ei : items) {
             total += ei.getPoints();
         }
 

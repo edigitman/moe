@@ -46,7 +46,7 @@ public class LoginAction extends BaseLoginAction {
             return ERROR;
         }
 
-        if (user.getEnabled() == 0) {
+        if (!user.getEnabled()) {
             addError("bad_credentials");
             return ERROR;
         }
