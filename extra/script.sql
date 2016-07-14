@@ -164,10 +164,10 @@ ALTER TABLE student_exam_instances ALTER COLUMN id SET DEFAULT nextval('student_
 ALTER TABLE student_exam_answers ALTER COLUMN id SET DEFAULT nextval('student_exam_answers_seq');
 
 INSERT INTO users (email, name, password, role, enabled)
-VALUES ('prof@mail.com', 'profesor', 'secret', 'PROFESOR', 1);
+VALUES ('prof@mail.com', 'profesor', 'secret', 'PROFESOR', TRUE);
 
 INSERT INTO users (email, name, password, role, enabled)
-VALUES ('stud@mail.com', 'student', 'secret', 'STUDENT', 1);
+VALUES ('stud@mail.com', 'student', 'secret', 'STUDENT', TRUE);
 
 INSERT INTO users (email, name, password, role, enabled)
-VALUES ('admin@mail.com', 'administrator', 'secret', 'ADMIN', 1);
+VALUES ('admin@mail.com', 'administrator', 'secret', 'ADMIN', TRUE);

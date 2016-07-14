@@ -120,6 +120,12 @@ public class ProfHomeAction extends BaseAction {
         return SUCCESS;
     }
 
+    public String deleteAnswer(){
+        Integer answerId = input.getInt("id");
+        answerDao.delete(answerDao.findById(answerId));
+        return SUCCESS;
+    }
+
     public String deleteItem() {
         Integer itemId = input.getInt("id");
         examItemDao.delete(examItemDao.findById(itemId));

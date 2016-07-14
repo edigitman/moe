@@ -146,7 +146,7 @@
                              <thead>
                              <tr>
                                  <th>#</th>
-                                 <th>Raspuns</th>
+                                 <th style="width: 370px;">Raspuns</th>
                                  <th>Corect</th>
                              </tr>
                              </thead>
@@ -160,7 +160,11 @@
                                             <mtw:out value="a.correct"/>
                                          </span>
                                      </td>
-                                     <td>delete / edit</td>
+                                     <td>
+                                         <a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.deleteAnswer.m?id=<mtw:out value="a.id"/>">
+                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                         </a>
+                                     </td>
                                  </tr>
                              </mtw:loop>
                              </tbody>

@@ -114,6 +114,10 @@ public class AppManager extends ApplicationManager {
                 .filter(new VOFilter("examItem", ExamItem.class, "item"))
                 .on(SUCCESS, fwd("/jsp/profAddItems.jsp"))
                 .on(CREATED, redir("/ProfHome.addItems.m"));
+        action("/ProfHome", ProfHomeAction.class, "deleteAnswer")
+                .authorize("PROFESOR")
+                .on(SUCCESS, redir("/ProfHome.addItems.m"));
+
 
 
 
