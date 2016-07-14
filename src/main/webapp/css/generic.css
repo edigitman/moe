@@ -7,3 +7,11 @@
     padding: 15px;
     margin: 0 auto;
 }
+
+.currentItem{
+    background-color: beige;
+}
+
+/*.has-error{*/
+    /*border-style: solid;*/
+/*}*/

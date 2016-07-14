@@ -13,6 +13,10 @@
 
 <t:layout title="index">
 
+    <jsp:attribute name="head">
+        <link rel="stylesheet" type="text/css" href="/css/switchButton.css">
+    </jsp:attribute>
+
   <jsp:attribute name="body">
 
      <div class="row">
@@ -28,21 +32,35 @@
                          <thead>
                          <tr>
                              <th style="width: 35px">#</th>
-                             <th style="width: 210px">Enunt</th>
+                             <th style="width: 330px">Enunt</th>
                              <th style="width: 35px">Pct.</th>
                              <th>Tip</th>
                          </tr>
                          </thead>
                          <tbody>
                          <mtw:loop var="i" counter="c" counterStart="1">
-                             <tr>
-                                 <th scope="row"><mtw:out value="c"/></th>
-                                 <td><mtw:out value="i.assertion"/></td>
-                                 <td><mtw:out value="i.points"/></td>
-                                 <td><mtw:out value="i.type"/></td>
+                             <tr class="itemRow-<mtw:out value="i.id"/>">
+                                 <td scope="row">
+                                     <mtw:out value="c"/>
+                                 </td>
                                  <td>
-                                     <a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.editItem.m?id=<mtw:out value="i.id"/>">Modifica</a>
-                                     <a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.deleteItem.m?id=<mtw:out value="i.id"/>">Sterge</a>
+                                     <span class="assertionClass">
+                                        <mtw:out value="i.assertion"/>
+                                     </span>
+                                 </td>
+                                 <td><mtw:out value="i.points"/></td>
+                                 <td>
+                                     <span class="itemType">
+                                         <mtw:out value="i.type"/>
+                                     </span>
+                                 </td>
+                                 <td>
+                                     <a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.editItem.m?id=<mtw:out value="i.id"/>">
+                                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                     </a>
+                                     <a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.deleteItem.m?id=<mtw:out value="i.id"/>">
+                                         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                     </a>
                                  </td>
                              </tr>
                          </mtw:loop>
@@ -60,7 +78,7 @@
 
              <mtw:form action="/ProfHome.addItems.m" method="post">
                  <mtw:input name="exam.id" type="hidden"/>
-                 <mtw:input name="item.id" type="hidden"/>
+                 <mtw:input id="itemId" name="item.id" type="hidden"/>
 
                  <div class="form-group">
                      <label for="assertion">Enunt</label>
@@ -68,37 +86,43 @@
                  </div>
                  <div class="row">
                      <div class="col-md-3">
-                         <div class="form-group">
+                         <div class="form-group" id="pointsDiv">
                              <label for="points">Puncte</label>
                              <mtw:input klass="form-control" name="item.points" id="points"/>
                          </div>
                      </div>
-                     <div class="col-md-6">
+                     <div class="col-md-4">
                          <div class="form-group">
                              <label for="type">Tip item</label>
                              <mtw:select klass="form-control" id="type" name="item.type" list="itemTypes"/>
                          </div>
                      </div>
-                     <div class="col-md-3" style="height: 74px; padding-top: 25px">
-                         <button type="submit" class="btn btn-info">Adauga</button>
+                     <div class="col-md-2" style="height: 74px; padding-top: 25px">
+                         <button type="submit" class="btn btn-info" id="addItemBtn">Adauga</button>
+                     </div>
+                     <div class="col-md-2" style="height: 74px; padding-top: 25px">
+                         <a href="/ProfHome.removeEditItem.m" id="clearItemForm" class="btn btn-link">Curata</a>
                      </div>
                  </div>
              </mtw:form>
 
-             <div class="well">
+             <div class="well answersWell">
                  <mtw:form action="/ProfHome.addItemsAnswer.m" method="post">
                      <mtw:input name="item.id" type="hidden"/>
 
                      <div class="form-group">
-                         <label for="answer">Raspuns</label>
+                         <label for="answer">Adauga un raspuns</label>
                          <mtw:textarea klass="form-control" name="answer.value" id="answer"/>
                      </div>
 
                      <div class="row">
-                         <div class="col-md-3">
+                         <div class="col-md-6">
                              <div class="form-group">
                                  <label for="correct">Status raspuns</label>
-                                 <mtw:input klass="form-control" name="answer.correct" id="correct"/>
+                                 <mtw:input klass="form-control" style="display: none" name="answer.correct" id="mtwcorrect"/>
+                                 <div class="switch-wrapper">
+                                    <input type="checkbox" name="html.answer.correct" id="correct">
+                                 </div>
                              </div>
                          </div>
                          <div class="col-md-3" style="height: 74px; padding-top: 25px">
@@ -124,11 +148,15 @@
                              </tr>
                              </thead>
                              <tbody>
-                             <mtw:loop var="a">
+                             <mtw:loop var="a" counter="c" counterStart="1">
                                  <tr>
-                                     <th scope="row"><mtw:out value="a.id"/></th>
+                                     <th scope="row"><mtw:out value="c"/></th>
                                      <td><mtw:out value="a.value"/></td>
-                                     <td><mtw:out value="a.correct"/></td>
+                                     <td>
+                                         <span class="answerCorrect">
+                                            <mtw:out value="a.correct"/>
+                                         </span>
+                                     </td>
                                      <td>delete / edit</td>
                                  </tr>
                              </mtw:loop>
@@ -148,5 +176,79 @@
 </div>
 
   </jsp:attribute>
+
+    <jsp:attribute name="scripts">
+        <script type="text/javascript" src="/js/switchButton.js"></script>
+        <script type="text/javascript">
+            var check = $("input#correct");
+            check.switchButton({
+                checked: false,
+                on_label: "Corect",            // Text to be displayed when checked
+                off_label: "Gresit",          // Text to be displayed when unchecked
+                width: 35,                 // Width of the button in pixels
+                height: 25,                // Height of the button in pixels
+                button_width: 20          // Width of the sliding part in pixels
+            });
+            check.change(function () {
+                $('#mtwcorrect').val(check.is(":checked") ? 1 : 0);
+            });
+
+//          cut the assertion
+            $('.assertionClass').each(function (index) {
+                if ($(this).text().trim().length > 40) {
+                    $(this).text($(this).text().trim().substr(0, 40) + '...')
+                }
+            });
+
+//            highlight the selected item
+            var itemId = $('#itemId').val();
+            if (itemId != '') {
+                $('.itemRow-' + itemId).addClass('currentItem');
+                $('#addItemBtn').text('Modifica');
+            }
+
+//          disable responses if item type is free text
+            $('#type').change(function(){
+                if($(this).val() == 3){
+                    $('.answersWell').hide();
+                } else {
+                    $('.answersWell').show();
+                }
+            });
+            if($('#type').val() == 3) $('.answersWell').hide();
+
+//          show error on points not a number
+            $( "#points" ).keyup(function() {
+                var email = new RegExp('^[0-9]+$');
+                if(!email.test($(this).val())){
+                    $('#pointsDiv').addClass("has-error");
+                } else {
+                    $('#pointsDiv').removeClass("has-error");
+                }
+            });
+
+//             decrypt answer correctness
+            $('.answerCorrect').each(function(index){
+                if ('1' == $.trim($(this).text())) {
+                    $(this).text('Corect');
+                } else {
+                    $(this).text('Gresit');
+                }
+            });
+
+//            decrypt item type
+            $('.itemType').each(function (index) {
+                if ('1' == $.trim($(this).text())) {
+                    $(this).text('S.U.');
+                }
+                if ('2' == $.trim($(this).text())) {
+                    $(this).text('S.M.');
+                }
+                if ('3' == $.trim($(this).text())) {
+                    $(this).text('T.');
+                }
+            });
+        </script>
+    </jsp:attribute>
 
 </t:layout>

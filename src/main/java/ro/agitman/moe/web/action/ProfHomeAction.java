@@ -9,21 +9,31 @@ import ro.agitman.moe.model.ExamItem;
 import ro.agitman.moe.model.ExamItemAnswer;
 import ro.agitman.moe.model.User;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by edi on 7/11/2016.
  */
 public class ProfHomeAction extends BaseAction {
 
-    private final List<String> diffs = new ArrayList<String>(Arrays.asList("USOR", "MEDIU", "GREU"));
-    private final List<String> examItemType = new ArrayList<String>(Arrays.asList("Selectie unica", "Selectie multipla", "Text liber"));
+    private final Map<Integer, String> diffs;// = new ArrayList<String>(Arrays.asList("USOR", "MEDIU", "GREU"));
+    private final Map<Integer, String> examItemType;// = new ArrayList<String>(Arrays.asList("Selectie unica", "Selectie multipla", "Text liber"));
 
     private final ExamDao examDao;
     private final ExamItemDao examItemDao;
     private final ExamItemAnswerDao answerDao;
+
+    {
+        examItemType = new HashMap<>();
+        examItemType.put(1, "Selectie unica");
+        examItemType.put(2, "Selectie multipla");
+        examItemType.put(3, "Text liber");
+
+        diffs = new HashMap<>();
+        examItemType.put(1, "Usor");
+        examItemType.put(2, "Mediu");
+        examItemType.put(3, "Greu");
+    }
 
     public ProfHomeAction(ExamDao examDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao) {
         this.examDao = examDao;
@@ -120,6 +130,11 @@ public class ProfHomeAction extends BaseAction {
 
     public String editItem() {
         session().setAttribute("examItemId", input.getInt("id"));
+        return SUCCESS;
+    }
+
+    public String removeEditItem() {
+        session().removeAttribute("examItemId");
         return SUCCESS;
     }
 

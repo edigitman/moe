@@ -35,7 +35,7 @@ CREATE TABLE exams
   id integer NOT NULL,
   name character varying(200),
   owner integer,
-  difficulty character varying(200),
+  difficulty integer,
   points integer,
   datecreated timestamp without time zone DEFAULT now(),
   CONSTRAINT exams_pkey PRIMARY KEY (id)

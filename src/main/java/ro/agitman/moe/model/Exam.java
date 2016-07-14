@@ -10,7 +10,7 @@ public class Exam {
     private Integer id;
     private String name;
     private Integer owner;
-    private String difficulty;
+    private Integer difficulty;
     private Long points;
     private Timestamp datecreated;
 
@@ -79,11 +79,11 @@ public class Exam {
         this.owner = owner;
     }
 
-    public String getDifficulty() {
+    public Integer getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(String difficulty) {
+    public void setDifficulty(Integer difficulty) {
         this.difficulty = difficulty;
     }
 

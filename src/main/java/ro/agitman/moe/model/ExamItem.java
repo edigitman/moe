@@ -11,7 +11,7 @@ public class ExamItem {
     private String assertion;
     private Integer difficulty;
     private Long points;
-    private String type;
+    private Integer type;
     private Integer examid;
     private Timestamp datecreated;
 
@@ -93,11 +93,11 @@ public class ExamItem {
         this.points = points;
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 

@@ -103,6 +103,9 @@ public class AppManager extends ApplicationManager {
         action("/ProfHome", ProfHomeAction.class, "deleteItem")
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/ProfHome.addItems.m"));
+        action("/ProfHome", ProfHomeAction.class, "removeEditItem")
+                .authorize("PROFESOR")
+                .on(SUCCESS, redir("/ProfHome.addItems.m"));
         action("/ProfHome", ProfHomeAction.class, "addItems")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("examItem", ExamItem.class, "item"))
@@ -178,7 +181,7 @@ public class AppManager extends ApplicationManager {
     public void loadBeans() {
 
         bean(VerificationToken.class, "verification_token")
-                .pk("id", DBTypes.AUTOINCREMENT)
+                .pk("id", DBTypes.SEQUENCE)
                 .field("token", DBTypes.STRING)
                 .field("verified", DBTypes.INTEGER)
                 .field("userid", DBTypes.INTEGER)
@@ -186,7 +189,7 @@ public class AppManager extends ApplicationManager {
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(StudentExamAnswer.class, "student_exam_answers")
-                .pk("id", DBTypes.AUTOINCREMENT)
+                .pk("id", DBTypes.SEQUENCE)
                 .field("studentExamInstanceId", DBTypes.INTEGER)
                 .field("examItemId", DBTypes.INTEGER)
                 .field("ownerId", DBTypes.INTEGER)
@@ -194,7 +197,7 @@ public class AppManager extends ApplicationManager {
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(StudentExamInstance.class, "student_exam_instances")
-                .pk("id", DBTypes.AUTOINCREMENT)
+                .pk("id", DBTypes.SEQUENCE)
                 .field("examid", DBTypes.INTEGER)
                 .field("studid", DBTypes.INTEGER)
                 .field("status", DBTypes.INTEGER)
@@ -202,7 +205,7 @@ public class AppManager extends ApplicationManager {
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(ExamItemAnswer.class, "exam_item_answers")
-                .pk("id", DBTypes.AUTOINCREMENT)
+                .pk("id", DBTypes.SEQUENCE)
                 .field("correct", DBTypes.INTEGER)
                 .field("value", DBTypes.STRING)
                 .field("itemid", DBTypes.INTEGER)
@@ -213,12 +216,12 @@ public class AppManager extends ApplicationManager {
                 .field("assertion", DBTypes.STRING)
                 .field("difficulty", DBTypes.INTEGER)
                 .field("points", DBTypes.LONG)
-                .field("type", DBTypes.STRING)
+                .field("type", DBTypes.INTEGER)
                 .field("examid", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(ExamInstance.class, "exam_instances")
-                .pk("id", DBTypes.AUTOINCREMENT)
+                .pk("id", DBTypes.SEQUENCE)
                 .field("name", DBTypes.STRING)
                 .field("status", DBTypes.INTEGER)
                 .field("startdate", DBTypes.TIMESTAMP)
@@ -229,27 +232,27 @@ public class AppManager extends ApplicationManager {
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(ExamGroupUser.class, "exam_group_user")
-                .pk("id", DBTypes.AUTOINCREMENT)
+                .pk("id", DBTypes.SEQUENCE)
                 .field("groupid", DBTypes.INTEGER)
                 .field("studentid", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(ExamGroup.class, "exam_groups")
-                .pk("id", DBTypes.AUTOINCREMENT)
+                .pk("id", DBTypes.SEQUENCE)
                 .field("name", DBTypes.STRING)
                 .field("owner", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(Exam.class, "exams")
-                .pk("id", DBTypes.AUTOINCREMENT)
+                .pk("id", DBTypes.SEQUENCE)
                 .field("name", DBTypes.STRING)
                 .field("owner", DBTypes.INTEGER)
                 .field("points", DBTypes.LONG)
-                .field("difficulty", DBTypes.STRING)
+                .field("difficulty", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(User.class, "users")
-                .pk("id", DBTypes.AUTOINCREMENT)
+                .pk("id", DBTypes.SEQUENCE)
                 .field("email", DBTypes.STRING)
                 .field("name", DBTypes.STRING)
                 .field("firstname", DBTypes.STRING)
