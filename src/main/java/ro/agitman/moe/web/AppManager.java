@@ -97,6 +97,12 @@ public class AppManager extends ApplicationManager {
                 .authorize("PROFESOR")
                 .filter(new VOFilter("answer", ExamItemAnswer.class, "answer"))
                 .on(SUCCESS, redir("/ProfHome.addItems.m"));
+        action("/ProfHome", ProfHomeAction.class, "editItem")
+                .authorize("PROFESOR")
+                .on(SUCCESS, redir("/ProfHome.addItems.m"));
+        action("/ProfHome", ProfHomeAction.class, "deleteItem")
+                .authorize("PROFESOR")
+                .on(SUCCESS, redir("/ProfHome.addItems.m"));
         action("/ProfHome", ProfHomeAction.class, "addItems")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("examItem", ExamItem.class, "item"))
@@ -203,7 +209,7 @@ public class AppManager extends ApplicationManager {
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(ExamItem.class, "exam_items")
-                .pk("id", DBTypes.AUTOINCREMENT)
+                .pk("id", DBTypes.SEQUENCE)
                 .field("assertion", DBTypes.STRING)
                 .field("difficulty", DBTypes.INTEGER)
                 .field("points", DBTypes.LONG)
@@ -238,7 +244,7 @@ public class AppManager extends ApplicationManager {
                 .pk("id", DBTypes.AUTOINCREMENT)
                 .field("name", DBTypes.STRING)
                 .field("owner", DBTypes.INTEGER)
-                .field("points", DBTypes.INTEGER)
+                .field("points", DBTypes.LONG)
                 .field("difficulty", DBTypes.STRING)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 

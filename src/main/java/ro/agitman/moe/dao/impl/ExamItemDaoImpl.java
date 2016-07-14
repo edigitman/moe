@@ -28,6 +28,11 @@ public class ExamItemDaoImpl extends GenericDaoImpl<ExamItem> implements ExamIte
 
     @Override
     public ExamItem findById(Integer id) {
-        return null;
+        ExamItem examItem = new ExamItem(id);
+        boolean loaded = beanSession.load(examItem);
+        if (!loaded) {
+            throw new IllegalStateException("Cannot load examItem by id " + id);
+        }
+        return examItem;
     }
 }

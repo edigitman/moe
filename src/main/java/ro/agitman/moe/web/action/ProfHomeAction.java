@@ -51,11 +51,11 @@ public class ProfHomeAction extends BaseAction {
     public String addItemsAnswer() {
 
         ExamItemAnswer answer = (ExamItemAnswer) input.getValue("answer");
-        Integer itemId = (Integer) input.getValue("item.id");
+        Integer itemId = input.getInt("item.id");
 
         answer.setItemid(itemId);
 
-        answerDao.save(answer);
+        answerDao.insert(answer);
 
         return SUCCESS;
     }
@@ -68,14 +68,13 @@ public class ProfHomeAction extends BaseAction {
             Integer examId = (Integer) session().getAttribute("examId");
             examItem.setExamid(examId);
 
-            examItem = examItemDao.insert(examItem);
-            Exam exam = examDao.findById(examId);
-            if (exam.getPoints() == null) {
-                exam.setPoints(examItem.getPoints());
+            if (examItem.getId() == null) {
+                examItem = examItemDao.insert(examItem);
             } else {
-                exam.setPoints(examItem.getPoints() + exam.getPoints());
+                examItem = examItemDao.save(examItem);
             }
-            examDao.save(exam);
+
+            recomputeExamPoints();
 
             session().setAttribute("examItemId", examItem.getId());
 
@@ -109,6 +108,33 @@ public class ProfHomeAction extends BaseAction {
             }
         }
         return SUCCESS;
+    }
+
+    public String deleteItem(){
+        Integer itemId = input.getInt("id");
+        examItemDao.delete(examItemDao.findById(itemId));
+        session().removeAttribute("examItemId");
+        recomputeExamPoints();
+        return SUCCESS;
+    }
+
+    public String editItem() {
+        session().setAttribute("examItemId", input.getInt("id"));
+        return SUCCESS;
+    }
+
+    private void recomputeExamPoints(){
+        Integer examId = (Integer) session().getAttribute("examId");
+        Exam exam = examDao.findById(examId);
+        List<ExamItem> items = examItemDao.findByExamId(examId);
+
+        Long total = 0L;
+        for(ExamItem ei : items){
+            total += ei.getPoints();
+        }
+
+        exam.setPoints(total);
+        examDao.save(exam);
     }
 
     public String editExam() {

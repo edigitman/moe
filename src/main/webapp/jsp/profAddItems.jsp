@@ -27,20 +27,23 @@
                          <caption>Lista cu subiecte</caption>
                          <thead>
                          <tr>
-                             <th>#</th>
-                             <th>Enunt</th>
-                             <th>Puncte</th>
+                             <th style="width: 35px">#</th>
+                             <th style="width: 210px">Enunt</th>
+                             <th style="width: 35px">Pct.</th>
                              <th>Tip</th>
                          </tr>
                          </thead>
                          <tbody>
-                         <mtw:loop var="i">
+                         <mtw:loop var="i" counter="c" counterStart="1">
                              <tr>
-                                 <th scope="row"><mtw:out value="i.id"/></th>
+                                 <th scope="row"><mtw:out value="c"/></th>
                                  <td><mtw:out value="i.assertion"/></td>
                                  <td><mtw:out value="i.points"/></td>
                                  <td><mtw:out value="i.type"/></td>
-                                 <td>edit / delete</td>
+                                 <td>
+                                     <a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.editItem.m?id=<mtw:out value="i.id"/>">Modifica</a>
+                                     <a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.deleteItem.m?id=<mtw:out value="i.id"/>">Sterge</a>
+                                 </td>
                              </tr>
                          </mtw:loop>
                          </tbody>
@@ -57,21 +60,29 @@
 
              <mtw:form action="/ProfHome.addItems.m" method="post">
                  <mtw:input name="exam.id" type="hidden"/>
+                 <mtw:input name="item.id" type="hidden"/>
 
                  <div class="form-group">
                      <label for="assertion">Enunt</label>
                      <mtw:textarea klass="form-control" name="item.assertion" id="assertion"/>
                  </div>
-                 <div class="form-group">
-                     <label for="points">Puncte</label>
-                     <mtw:input klass="form-control" name="item.points" id="points"/>
+                 <div class="row">
+                     <div class="col-md-3">
+                         <div class="form-group">
+                             <label for="points">Puncte</label>
+                             <mtw:input klass="form-control" name="item.points" id="points"/>
+                         </div>
+                     </div>
+                     <div class="col-md-6">
+                         <div class="form-group">
+                             <label for="type">Tip item</label>
+                             <mtw:select klass="form-control" id="type" name="item.type" list="itemTypes"/>
+                         </div>
+                     </div>
+                     <div class="col-md-3" style="height: 74px; padding-top: 25px">
+                         <button type="submit" class="btn btn-info">Adauga</button>
+                     </div>
                  </div>
-                 <div class="form-group">
-                     <label for="type">Tip item</label>
-                     <mtw:select klass="form-control" id="type" name="item.type" list="itemTypes"/>
-                 </div>
-
-                 <button type="submit" class="btn btn-info">Adauga</button>
              </mtw:form>
 
              <div class="well">
@@ -82,12 +93,19 @@
                          <label for="answer">Raspuns</label>
                          <mtw:textarea klass="form-control" name="answer.value" id="answer"/>
                      </div>
-                     <div class="form-group">
-                         <label for="correct">Status raspuns</label>
-                         <mtw:input klass="form-control" name="answer.correct" id="correct"/>
+
+                     <div class="row">
+                         <div class="col-md-3">
+                             <div class="form-group">
+                                 <label for="correct">Status raspuns</label>
+                                 <mtw:input klass="form-control" name="answer.correct" id="correct"/>
+                             </div>
+                         </div>
+                         <div class="col-md-3" style="height: 74px; padding-top: 25px">
+                             <button type="submit" class="btn btn-info">Adauga</button>
+                         </div>
                      </div>
 
-                     <button type="submit" class="btn btn-info">Adauga</button>
                  </mtw:form>
 
                  <mtw:list value="answers">
