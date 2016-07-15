@@ -213,7 +213,7 @@ public class AppManager extends ApplicationManager {
 
         bean(ExamItemAnswer.class, "exam_item_answers")
                 .pk("id", DBTypes.SEQUENCE)
-                .field("correct", new MyBooleanStringType())
+                .field("correct", DBTypes.BOOLEAN)
                 .field("value", DBTypes.STRING)
                 .field("itemid", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
@@ -266,7 +266,7 @@ public class AppManager extends ApplicationManager {
                 .field("lastname", DBTypes.STRING)
                 .field("password", DBTypes.STRING)
                 .field("dateOfBirth", DBTypes.DATE)
-                .field("enabled", new MyBooleanStringType())
+                .field("enabled", DBTypes.BOOLEAN)
                 .field("role", DBTypes.STRING)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
     }

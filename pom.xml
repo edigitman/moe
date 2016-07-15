@@ -26,6 +26,18 @@
             <groupId>me.soliveirajr</groupId>
             <artifactId>mentawai</artifactId>
             <version>${mentawai.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>me.soliveirajr</groupId>
+                    <artifactId>menta-bean</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>me.soliveirajr</groupId>
+            <artifactId>menta-bean</artifactId>
+            <version>2.2.2</version>
         </dependency>
 
         <dependency>
