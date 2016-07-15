@@ -1,15 +1,12 @@
 package ro.agitman.moe.web.action;
 
 import org.mentawai.core.BaseAction;
-import ro.agitman.moe.dao.ExamDao;
-import ro.agitman.moe.dao.ExamItemAnswerDao;
-import ro.agitman.moe.dao.ExamItemDao;
-import ro.agitman.moe.model.Exam;
-import ro.agitman.moe.model.ExamItem;
-import ro.agitman.moe.model.ExamItemAnswer;
-import ro.agitman.moe.model.User;
+import ro.agitman.moe.dao.*;
+import ro.agitman.moe.model.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by edi on 7/11/2016.
@@ -20,9 +17,12 @@ public class ProfHomeAction extends BaseAction {
     private final Map<Integer, String> examItemType;// = new ArrayList<String>(Arrays.asList("Selectie unica", "Selectie multipla", "Text liber"));
 
     private final ExamDao examDao;
+    private final ExamGroupDao examGroupDao;
     private final ExamItemDao examItemDao;
     private final ExamItemAnswerDao answerDao;
+    private final UserDao userDao;
 
+//    static initialization
     {
         examItemType = new HashMap<>();
         examItemType.put(1, "Selectie unica");
@@ -35,17 +35,16 @@ public class ProfHomeAction extends BaseAction {
         diffs.put(3, "Greu");
     }
 
-    public ProfHomeAction(ExamDao examDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao) {
+    public ProfHomeAction(UserDao userDao, ExamDao examDao, ExamGroupDao examGroupDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao) {
+        this.userDao = userDao;
         this.examDao = examDao;
+        this.examGroupDao = examGroupDao;
         this.examItemDao = examItemDao;
         this.answerDao = answerDao;
     }
 
-    public String newExam() {
-        output.setValue("difficulties", diffs);
-        return SUCCESS;
-    }
-
+//******************************************************
+//---------------- ITEM ACTIONS ------------------------
     public String addItemsRedir() {
         Integer examId = input.getInt("id");
 
@@ -54,18 +53,6 @@ public class ProfHomeAction extends BaseAction {
         }
 
         session().setAttribute("examId", examId);
-
-        return SUCCESS;
-    }
-
-    public String addItemsAnswer() {
-
-        ExamItemAnswer answer = (ExamItemAnswer) input.getValue("answer");
-        Integer itemId = input.getInt("item.id");
-
-        answer.setItemid(itemId);
-
-        answerDao.insert(answer);
 
         return SUCCESS;
     }
@@ -120,9 +107,11 @@ public class ProfHomeAction extends BaseAction {
         return SUCCESS;
     }
 
-    public String deleteAnswer(){
-        Integer answerId = input.getInt("id");
-        answerDao.delete(answerDao.findById(answerId));
+    public String editItem() {
+        session().setAttribute("examItemId", input.getInt("id"));
+        if (isAjaxRequest()) {
+            return AJAX;
+        }
         return SUCCESS;
     }
 
@@ -131,14 +120,6 @@ public class ProfHomeAction extends BaseAction {
         examItemDao.delete(examItemDao.findById(itemId));
         session().removeAttribute("examItemId");
         recomputeExamPoints();
-        return SUCCESS;
-    }
-
-    public String editItem() {
-        session().setAttribute("examItemId", input.getInt("id"));
-        if (isAjaxRequest()) {
-            return AJAX;
-        }
         return SUCCESS;
     }
 
@@ -159,6 +140,33 @@ public class ProfHomeAction extends BaseAction {
 
         exam.setPoints(total);
         examDao.save(exam);
+    }
+
+//***********************************************************
+//---------------- EXAM ITEM ACTIONS ------------------------
+    public String addItemsAnswer() {
+
+        ExamItemAnswer answer = (ExamItemAnswer) input.getValue("answer");
+        Integer itemId = input.getInt("item.id");
+
+        answer.setItemid(itemId);
+
+        answerDao.insert(answer);
+
+        return SUCCESS;
+    }
+
+    public String deleteAnswer() {
+        Integer answerId = input.getInt("id");
+        answerDao.delete(answerDao.findById(answerId));
+        return SUCCESS;
+    }
+
+//******************************************************
+//---------------- EXAM ACTIONS ------------------------
+    public String newExam() {
+        output.setValue("difficulties", diffs);
+        return SUCCESS;
     }
 
     public String editExam() {
@@ -194,6 +202,86 @@ public class ProfHomeAction extends BaseAction {
         }
 
         return SUCCESS;
+    }
 
+//******************************************************
+//---------------- GROUPS ACTIONS ----------------------
+    public String newGroup() {
+        return SUCCESS;
+    }
+
+    public String saveGroup() {
+        ExamGroup group = (ExamGroup) input.getValue("group");
+
+        if (group == null) {
+            return ERROR;
+        }
+
+        User user = getSessionObj();
+        group.setOwner(user.getId());
+        if (group.getId() == null) {
+            group.setStudents(0);
+            examGroupDao.insert(group);
+        } else {
+            examGroupDao.save(group);
+        }
+        output().setObject("activeTab", "liGroups");
+        return SUCCESS;
+    }
+
+    public String editGroup() {
+        Integer groupId = input.getInt("id");
+
+        if (groupId < 1000) {
+            return ERROR;
+        }
+
+        ExamGroup examGroup = examGroupDao.findById(groupId);
+        if (examGroup == null) {
+            return ERROR;
+        }
+        output.setValue("group", examGroup);
+
+        return SUCCESS;
+    }
+
+    public String addStudsRedir() {
+        Integer examId = input.getInt("id");
+        if (examId < 1000) {
+            return ERROR;
+        }
+        session().setAttribute("groupId", examId);
+        return SUCCESS;
+    }
+
+    public String addStuds() {
+        if (isPost()) {
+            // do save
+
+//            get group id from input
+//            get user id from input
+            // create an examgroupuser and save
+
+            return CREATED;
+        } else {
+            if (isGet()) {
+                //populate page
+
+                List<User> users = userDao.findAllStudents();
+                Map<Integer, String> userMap = new HashMap<>();
+                for(User user : users){
+                    userMap.put(user.getId(), user.getName());
+                }
+
+                output().setValue("freeStudents", userMap);
+//                 list of user
+
+//                a map of students that are not in this group
+//                a map of students that are in this group
+                return SUCCESS;
+            }
+        }
+
+        return ERROR;
     }
 }

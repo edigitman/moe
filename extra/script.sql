@@ -1,11 +1,11 @@
 CREATE TABLE users
 (
   id          INTEGER NOT NULL,
-  email       CHARACTER VARYING(200),
-  name        CHARACTER VARYING(200),
-  firstname   CHARACTER VARYING(200),
-  lastname    CHARACTER VARYING(200),
-  password    CHARACTER VARYING(200),
+  email       CHARACTER VARYING(60),
+  name        CHARACTER VARYING(50),
+  firstname   CHARACTER VARYING(50),
+  lastname    CHARACTER VARYING(50),
+  password    CHARACTER VARYING(50),
   dateofbirth DATE,
   enabled     BOOLEAN,
   role        CHARACTER VARYING(20),
@@ -94,6 +94,7 @@ CREATE TABLE exam_groups
   id          INTEGER NOT NULL,
   name        CHARACTER VARYING(200),
   owner       INTEGER,
+  students    INTEGER DEFAULT 0,
   datecreated TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
   CONSTRAINT exam_groups_pkey PRIMARY KEY (id)
 )

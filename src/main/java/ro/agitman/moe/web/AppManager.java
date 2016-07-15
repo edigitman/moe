@@ -1,9 +1,7 @@
 package ro.agitman.moe.web;
 
 import org.mentabean.DBTypes;
-import org.mentabean.jdbc.MySQLBeanSession;
 import org.mentabean.jdbc.PostgreSQLBeanSession;
-import org.mentabean.util.SQLUtils;
 import org.mentawai.ajax.renderer.JsonRenderer;
 import org.mentawai.core.ApplicationManager;
 import org.mentawai.core.Context;
@@ -11,23 +9,13 @@ import org.mentawai.core.Props;
 import org.mentawai.db.BoneCPConnectionHandler;
 import org.mentawai.db.ConnectionHandler;
 import org.mentawai.filter.AuthenticationFilter;
-import org.mentawai.filter.OVFilter;
 import org.mentawai.filter.VOFilter;
 import org.mentawai.mail.Email;
-import ro.agitman.moe.custom.MyBooleanStringType;
-import ro.agitman.moe.dao.ExamDao;
-import ro.agitman.moe.dao.ExamItemAnswerDao;
-import ro.agitman.moe.dao.ExamItemDao;
-import ro.agitman.moe.dao.UserDao;
-import ro.agitman.moe.dao.impl.ExamDaoImpl;
-import ro.agitman.moe.dao.impl.ExamItemAnswerDaoImpl;
-import ro.agitman.moe.dao.impl.ExamItemDaoImpl;
-import ro.agitman.moe.dao.impl.UserDaoImpl;
+import ro.agitman.moe.dao.*;
+import ro.agitman.moe.dao.impl.*;
 import ro.agitman.moe.model.*;
 import ro.agitman.moe.web.action.*;
 import ro.agitman.moe.web.filter.PerformanceMonitoringFilter;
-
-import java.sql.Timestamp;
 
 /**
  * Created by edi on 7/6/2016.
@@ -80,7 +68,11 @@ public class AppManager extends ApplicationManager {
         action("/home", HomeAction.class)
                 .filter(new AuthenticationFilter())
                 .on(SUCCESS, fwd("/jsp/home.jsp"));
+//****************************************************************
+//---------- PROFESSOR ACTIONS -----------------------------------
 
+//````````````````````````````````````````````````````````````````
+//--------------- ACTIONS RELATED TO EXAM ------------------------
         action("/ProfHome", ProfHomeAction.class, "newExam")
                 .authorize("PROFESOR")
                 .on(SUCCESS, fwd("/jsp/profEditExam.jsp"));
@@ -92,6 +84,8 @@ public class AppManager extends ApplicationManager {
                 .filter(new VOFilter("exam", Exam.class, "exam"))
                 .on(SUCCESS, redir("/home.m"));
 
+//````````````````````````````````````````````````````````````````
+//--------------- ACTIONS RELATED TO EXAM ITEM -------------------
         action("/ProfHome", ProfHomeAction.class, "addItemsRedir")
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/ProfHome.addItems.m"));
@@ -118,10 +112,33 @@ public class AppManager extends ApplicationManager {
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/ProfHome.addItems.m"));
 
+//````````````````````````````````````````````````````````````````
+//--------------- ACTIONS RELATED TO GROUP -------------------
+        action("/ProfHome", ProfHomeAction.class, "newGroup")
+                .authorize("PROFESOR")
+                .on(SUCCESS, fwd("/jsp/profAddGroup.jsp"));
+        action("/ProfHome", ProfHomeAction.class, "saveGroup")
+                .authorize("PROFESOR")
+                .filter(new VOFilter("group", ExamGroup.class, "group"))
+                .on(SUCCESS, redir("/home.m"));
+        action("/ProfHome", ProfHomeAction.class, "editGroup")
+                .authorize("PROFESOR")
+                .on(SUCCESS, fwd("/jsp/profAddGroup.jsp"));
+        action("/ProfHome", ProfHomeAction.class, "addStudsRedir")
+                .authorize("PROFESOR")
+                .on(SUCCESS, redir("/ProfHome.addStuds.m"));
+        action("/ProfHome", ProfHomeAction.class, "addStuds")
+                .authorize("PROFESOR")
+                .filter(new VOFilter("stud", User.class, "stud"))
+                .on(SUCCESS, fwd("/jsp/profAddStuds.jsp"))
+                .on(CREATED, redir("/ProfHome.addStuds.m"));
 
 
 
-
+//****************************************************************
+//---------- ADMIN ACTIONS ---------------------------------------
+//````````````````````````````````````````````````````````````````
+//--------------- ACTIONS TO MANAGE USERS ------------------------
         action("/EditUser", AdminHomeAction.class, "editUser")
                 .authorize("ADMIN")
                 .on(SUCCESS, fwd("/jsp/adminEditUser.jsp"));
@@ -169,6 +186,7 @@ public class AppManager extends ApplicationManager {
         ioc(ExamDao.class, ExamDaoImpl.class);
         ioc(ExamItemDao.class, ExamItemDaoImpl.class);
         ioc(ExamItemAnswerDao.class, ExamItemAnswerDaoImpl.class);
+        ioc(ExamGroupDao.class, ExamGroupDaoImpl.class);
     }
 
     @Override
@@ -248,6 +266,7 @@ public class AppManager extends ApplicationManager {
                 .pk("id", DBTypes.SEQUENCE)
                 .field("name", DBTypes.STRING)
                 .field("owner", DBTypes.INTEGER)
+                .field("students", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(Exam.class, "exams")

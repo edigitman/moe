@@ -10,14 +10,20 @@
 <%@taglib prefix="mtw" uri="http://www.mentaframework.org/tags-mtw/" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:layout title="profesor">
-  <jsp:attribute name="body">
+<%--<t:layout title="profesor">--%>
+    <%--<jsp:attribute name="head">--%>
+
+    <%--</jsp:attribute>--%>
+  <%--<jsp:attribute name="body">--%>
     <div id="myTabs">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
 
             <li role="presentation" class="active">
                 <a href="#concepts" aria-controls="concepts" role="tab" data-toggle="tab">Concepte</a>
+            </li>
+            <li role="presentation">
+                <a href="#groups" aria-controls="groups" role="tab" data-toggle="tab">Grupe</a>
             </li>
             <li role="presentation">
                 <a href="#exams" aria-controls="exams" role="tab" data-toggle="tab">Examene</a>
@@ -28,9 +34,7 @@
             <li role="presentation">
                 <a href="#students" aria-controls="students" role="tab" data-toggle="tab">Studenti</a>
             </li>
-            <li role="presentation">
-                <a href="#groups" aria-controls="groups" role="tab" data-toggle="tab">Grupe</a>
-            </li>
+
         </ul>
 
         <!-- Tab panes -->
@@ -39,7 +43,9 @@
                 <mtw:list value="concepts">
 
                     <mtw:isEmpty>
+                        <br/>
                         Nu este nici un concept adaugat
+                        <br/><br/><br/>
                     </mtw:isEmpty>
                     <mtw:isEmpty negate="true">
                     <table class="table">
@@ -77,20 +83,62 @@
             <div role="tabpanel" class="tab-pane" id="exams">Examene</div>
             <div role="tabpanel" class="tab-pane" id="history">Istoric</div>
             <div role="tabpanel" class="tab-pane" id="students">Studenti</div>
-            <div role="tabpanel" class="tab-pane" id="groups">Grupe</div>
+            <div role="tabpanel" class="tab-pane" id="groups">
+                <mtw:list value="groups">
+
+                    <mtw:isEmpty>
+                        <br/>
+                        Nu este nici un grup adaugat
+                        <br/><br/><br/>
+                    </mtw:isEmpty>
+                    <mtw:isEmpty negate="true">
+                        <table class="table">
+                            <caption> Lista de grupuri de studenti pentru examene:</caption>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nume</th>
+                                <th>Nr. studenti</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <mtw:loop var="g">
+                                <tr>
+                                    <th scope="row"><mtw:out value="g.id"/></th>
+                                    <td><mtw:out value="g.name"/></td>
+                                    <td><mtw:out value="g.students"/></td>
+                                    <td>
+                                        <a class="btn btn-link" href="/ProfHome.addStudsRedir.m?id=<mtw:out value="g.id"/>">Adauga Studenti</a>
+                                        <a class="btn btn-link" href="/ProfHome.editGroup.m?id=<mtw:out value="g.id"/>">Modifica</a>
+                                    </td>
+                                </tr>
+                            </mtw:loop>
+                            </tbody>
+                        </table>
+                    </mtw:isEmpty>
+                </mtw:list>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="btn btn-info" href="/ProfHome.newGroup.m">Adauga</a>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
-  </jsp:attribute>
+  <%--</jsp:attribute>--%>
 
-  <jsp:attribute name="scripts">
-  <script type="text/javascript">
-      $('#myTabs a.role[tab]').click(function (e) {
-          e.preventDefault();
-          $(this).tab('show')
-      })
-  </script>
-  </jsp:attribute>
-</t:layout>
+  <%--<jsp:attribute name="scripts">--%>
+        <%--<script type="text/javascript" src="/js/jquery-picklist.min.js"></script>--%>
+        <%--<script type="text/javascript">--%>
+          <%--$('#myTabs a.role[tab]').click(function (e) {--%>
+              <%--e.preventDefault();--%>
+              <%--$(this).tab('show')--%>
+          <%--});--%>
+
+        <%--</script>--%>
+  <%--</jsp:attribute>--%>
+<%--</t:layout>--%>
 
 

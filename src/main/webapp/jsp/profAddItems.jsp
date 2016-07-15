@@ -54,14 +54,6 @@
                                          <mtw:out value="i.type"/>
                                      </span>
                                  </td>
-                                 <%--<td>--%>
-                                     <%--<a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.editItem.m?id=<mtw:out value="i.id"/>">--%>
-                                         <%--<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>--%>
-                                     <%--</a>--%>
-                                     <%--<a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.deleteItem.m?id=<mtw:out value="i.id"/>">--%>
-                                         <%--<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>--%>
-                                     <%--</a>--%>
-                                 <%--</td>--%>
                              </tr>
                          </mtw:loop>
                          </tbody>

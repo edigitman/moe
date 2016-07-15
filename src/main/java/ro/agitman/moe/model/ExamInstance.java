@@ -12,7 +12,6 @@ public class ExamInstance {
     private Integer   status;
     private Timestamp startdate;
     private Timestamp enddate;
-    private Long      points;
     private Integer   examid;
     private Integer   egroupid;
     private Timestamp datecreated;

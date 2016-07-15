@@ -4,6 +4,8 @@ import org.mentabean.BeanSession;
 import ro.agitman.moe.dao.UserDao;
 import ro.agitman.moe.model.User;
 
+import java.util.List;
+
 /**
  * Created by d-uu31cq on 07.07.2016.
  */
@@ -28,5 +30,12 @@ public class UserDaoImpl extends GenericDaoImpl<User> implements UserDao {
             throw new IllegalStateException("Cannot load user by id " + id);
         }
         return user;
+    }
+
+    public List<User> findAllStudents(){
+        User user = new User();
+        user.setRole("STUDENT");
+
+        return beanSession.loadList(user);
     }
 }
