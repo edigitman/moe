@@ -11,4 +11,5 @@ public interface ExamGroupDao extends GenericDao<ExamGroup>{
 
     List<ExamGroup> findByOwner(Integer id);
 
+    void updateStudents(Integer groupId);
 }

@@ -1,10 +1,15 @@
 package ro.agitman.moe.dao.impl;
 
+import org.mentabean.BeanException;
 import org.mentabean.BeanSession;
+import org.mentabean.util.SQLUtils;
 import ro.agitman.moe.dao.ExamGroupDao;
 import ro.agitman.moe.model.Exam;
 import ro.agitman.moe.model.ExamGroup;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -23,6 +28,23 @@ public class ExamGroupDaoImpl extends GenericDaoImpl<ExamGroup> implements ExamG
         examGroup.setOwner(id);
 
         return beanSession.loadList(examGroup);
+    }
+
+    public void updateStudents(Integer groupId){
+        Connection conn = beanSession.getConnection();
+        PreparedStatement stmt = null;
+        try {
+            StringBuilder query = new StringBuilder(256);
+            query.append("update exam_groups set students = ( select count (*) from exam_group_user where groupid = ? ) where id = ? ");
+
+            stmt = SQLUtils.prepare(conn, query.toString(), groupId, groupId);
+            stmt.executeUpdate();
+
+        } catch(SQLException e) {
+            throw new BeanException(e);
+        } finally {
+            SQLUtils.close(stmt);
+        }
     }
 
     @Override

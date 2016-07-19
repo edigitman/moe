@@ -170,7 +170,7 @@
 
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-        <a class="btn btn-info" href="/home.m">Salveaza Examen</a>
+        <a class="btn btn-link" href="/home.m">Inapoi</a>
     </div>
 </div>
 
