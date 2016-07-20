@@ -15,8 +15,8 @@
         <guava.version>17.0</guava.version>
         <commons-lang3.version>3.3.2</commons-lang3.version>
         <!-- logging -->
-        <org.slf4j.version>1.7.7</org.slf4j.version>
-        <logback.version>1.1.2</logback.version>
+        <org.slf4j.version>1.7.21</org.slf4j.version>
+        <logback.version>1.1.7</logback.version>
 
     </properties>
 
@@ -30,6 +30,10 @@
                 <exclusion>
                     <groupId>me.soliveirajr</groupId>
                     <artifactId>menta-bean</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.jolbox</groupId>
+                    <artifactId>bonecp</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -46,6 +50,11 @@
             <version>9.4.1208</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.jolbox</groupId>
+            <artifactId>bonecp</artifactId>
+            <version>0.8.0.RELEASE</version>
+        </dependency>
         <!-- util -->
 
         <dependency>
@@ -75,20 +84,8 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
-            <!-- <scope>runtime</scope> -->
+            <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${org.slf4j.version}</version>
-            <!-- <scope>runtime</scope> --> <!-- some spring dependencies need to compile against jcl -->
-        </dependency>
-        <dependency> <!-- needed to bridge to slf4j for projects that use the log4j APIs directly -->
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>${org.slf4j.version}</version>
-        </dependency>
-
     </dependencies>
 
     <build>

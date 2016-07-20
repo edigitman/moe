@@ -8,13 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@page pageEncoding="UTF-8" %>
 <%@taglib prefix="mtw" uri="http://www.mentaframework.org/tags-mtw/" %>
-<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<%--<t:layout title="profesor">--%>
-    <%--<jsp:attribute name="head">--%>
-
-    <%--</jsp:attribute>--%>
-  <%--<jsp:attribute name="body">--%>
     <div id="myTabs">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
@@ -127,18 +121,4 @@
         </div>
 
     </div>
-  <%--</jsp:attribute>--%>
-
-  <%--<jsp:attribute name="scripts">--%>
-        <%--<script type="text/javascript" src="/js/jquery-picklist.min.js"></script>--%>
-        <%--<script type="text/javascript">--%>
-          <%--$('#myTabs a.role[tab]').click(function (e) {--%>
-              <%--e.preventDefault();--%>
-              <%--$(this).tab('show')--%>
-          <%--});--%>
-
-        <%--</script>--%>
-  <%--</jsp:attribute>--%>
-<%--</t:layout>--%>
-
 
