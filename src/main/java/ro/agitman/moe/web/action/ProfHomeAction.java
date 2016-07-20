@@ -348,6 +348,7 @@ public class ProfHomeAction extends BaseAction {
 //            TODO implement logic to clone an exam
 
             if (instance.getId() == null) {
+                instance.setStatus(1);
                 instanceDao.insert(instance);
             } else {
                 instanceDao.save(instance);
@@ -381,4 +382,24 @@ public class ProfHomeAction extends BaseAction {
 
         return SUCCESS;
     }
+
+    public String changeInstanceStatus(){
+        Integer instanceId = input().getInt("id");
+        String action = input().getString("action");
+
+        ExamInstance instance = instanceDao.findById(instanceId);
+        if("doStart".equals(action) && instance.getStatus().equals(1)){
+            instance.setStatus(2);
+        }
+        if("doStop".equals(action) && instance.getStatus().equals(2)){
+            instance.setStatus(1);
+        }
+        if("doFinish".equals(action) && instance.getStatus().equals(2)){
+            instance.setStatus(3);
+        }
+
+        instanceDao.save(instance);
+        return SUCCESS;
+    }
+
 }

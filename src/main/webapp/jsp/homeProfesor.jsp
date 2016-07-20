@@ -107,7 +107,19 @@
                                     <td><mtw:out value="i.examid"/></td>
                                     <td><mtw:out value="i.egroupid"/></td>
                                     <td><mtw:out value="i.startdate"/></td>
-                                    <td> start / stop </td>
+                                    <td>
+                                        <c:if test="${i.status == 1}">
+                                            <a href="/ProfHome.changeInstanceStatus.m?id=<mtw:out value="i.id"/>&action=doStart">start</a>
+                                        </c:if>
+                                        <c:if test="${i.status == 2}">
+                                            <a href="/ProfHome.changeInstanceStatus.m?id=<mtw:out value="i.id"/>&action=doFinish">termina</a>
+                                            <a href="/ProfHome.changeInstanceStatus.m?id=<mtw:out value="i.id"/>&action=doStop">stop</a>
+                                        </c:if>
+                                        <c:if test="${i.status == 3}">
+                                            <%-- TODO viziualizare --%>
+                                            <a href="#">Vizualizare</a>
+                                        </c:if>
+                                    </td>
                                 </tr>
                             </mtw:loop>
                             </tbody>
