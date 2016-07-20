@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@page pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib prefix="mtw" uri="http://www.mentaframework.org/tags-mtw/" %>
 
     <div id="myTabs">
@@ -58,8 +59,13 @@
                                 <td><mtw:out value="c.name"/></td>
                                 <td><mtw:out value="c.difficulty"/></td>
                                 <td>
-                                    <a class="btn btn-link" href="/ProfHome.addItemsRedir.m?id=<mtw:out value="c.id"/>">Adauga Itemi</a>
-                                    <a class="btn btn-link" href="/ProfHome.editExam.m?id=<mtw:out value="c.id"/>">Modifica</a>
+                                    <c:if test="${!c.locked}">
+                                        <a class="btn btn-link" href="/ProfHome.addItemsRedir.m?id=<mtw:out value="c.id"/>">Adauga Itemi</a>
+                                        <a class="btn btn-link" href="/ProfHome.editExam.m?id=<mtw:out value="c.id"/>">Modifica</a>
+                                    </c:if>
+                                    <c:if test="${c.locked}">
+                                        <a class="btn btn-link" href="/ProfHome.editExam.m?id=<mtw:out value="c.id"/>">Cloneaza</a>
+                                    </c:if>
                                 </td>
                             </tr>
                         </mtw:loop>
@@ -101,7 +107,7 @@
                                     <td><mtw:out value="i.examid"/></td>
                                     <td><mtw:out value="i.egroupid"/></td>
                                     <td><mtw:out value="i.startdate"/></td>
-                                    <td>actiuni</td>
+                                    <td> start / stop </td>
                                 </tr>
                             </mtw:loop>
                             </tbody>
