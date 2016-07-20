@@ -18,64 +18,28 @@
  <div class="row">
      <div class="col-md-8 col-md-offset-2">
          <mtw:form action="/ProfHome.addStuds.m" method="post">
+             <mtw:input name="groupId" type="hidden"/>
 
              <div class="row">
-                 <div class="col-md-4">
-                     <div class="form-group">
-                         <label for="nameInput">Nume</label>
-                         <input type="text" class="form-control" id="nameInput"/>
-                     </div>
-                 </div>
-                 <div class="col-md-4">
-                     <div class="form-group" style="padding-top: 23px">
-                         <button class="btn btn-default">Cauta</button>
-                     </div>
-                 </div>
-             </div>
-             <div class="row" style="margin-bottom: 10px">
                  <div class="col-md-12">
-                     <button class="btn btn-info btn-sm">Adauga</button>
-                 </div>
-             </div>
-             <div class="row">
-                 <div class="col-md-6">
-                         <%--/ ALL Ussers not added yet --%>
-                     <mtw:select name="selectedStudents" klass="form-control"  list="freeStudents" multiple="true" style="width: 90%; height: 300px"/>
-                 </div>
-
-                 <div class="col-md-6">
-                         <%--/ All added users to the group --%>
-                     <mtw:list value="usedStudents">
-                         <mtw:isEmpty negate="true">
-                             <table class="table">
-                                 <caption>Studenti in grup</caption>
-                                 <thead>
-                                 <tr>
-                                     <th>#</th>
-                                     <th>Nume</th>
-                                     <th></th>
-                                 </tr>
-                                 </thead>
-                                 <tbody>
-                                 <mtw:loop var="s" counter="c" counterStart="1">
-                                     <tr>
-                                         <th scope="row"><mtw:out value="c"/></th>
-                                         <td><mtw:out value="s.name"/></td>
-                                         <td>
-                                             <a href="/ProfHome.deleteStuds.m?id=<mtw:out value="s.id"/>" id="delete">
-                                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                             </a>
-                                         </td>
-                                     </tr>
-                                 </mtw:loop>
-                                 </tbody>
-                             </table>
-                         </mtw:isEmpty>
-                     </mtw:list>
+                     <%--/ controll buttons --%>
+                     <button class="btn btn-info">Adauga</button>
                  </div>
              </div>
              <br/>
+            <div class="row">
+                <div class="col-md-6">
+                    <%--/ ALL Ussers not added yet --%>
+                    <mtw:select name="freeStudents" list="freeStudents" multiple="true" />
+                </div>
 
+                <div class="col-md-6">
+                    <%--/ All added users to the group --%>
+                </div>
+            </div>
+             <br/>
+
+             <button type="submit" class="btn btn-info">Salveaza</button>
              <a href="/home.m" class="btn btn-link">Inapoi</a>
          </mtw:form>
      </div>

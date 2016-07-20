@@ -129,11 +129,9 @@ public class AppManager extends ApplicationManager {
                 .on(SUCCESS, redir("/ProfHome.addStuds.m"));
         action("/ProfHome", ProfHomeAction.class, "addStuds")
                 .authorize("PROFESOR")
+                .filter(new VOFilter("stud", User.class, "stud"))
                 .on(SUCCESS, fwd("/jsp/profAddStuds.jsp"))
                 .on(CREATED, redir("/ProfHome.addStuds.m"));
-        action("/ProfHome", ProfHomeAction.class, "deleteStuds")
-                .authorize("PROFESOR")
-                .on(SUCCESS, redir("/ProfHome.addStuds.m"));
 
 
 
@@ -189,7 +187,6 @@ public class AppManager extends ApplicationManager {
         ioc(ExamItemDao.class, ExamItemDaoImpl.class);
         ioc(ExamItemAnswerDao.class, ExamItemAnswerDaoImpl.class);
         ioc(ExamGroupDao.class, ExamGroupDaoImpl.class);
-        ioc(ExamGroupUserDao.class, ExamGroupUserDaoImpl.class);
     }
 
     @Override
