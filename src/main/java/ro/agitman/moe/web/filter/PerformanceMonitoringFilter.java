@@ -1,9 +1,7 @@
 package ro.agitman.moe.web.filter;
 
-import org.mentawai.core.Action;
 import org.mentawai.core.Filter;
 import org.mentawai.core.InvocationChain;
-import org.mentawai.core.Output;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

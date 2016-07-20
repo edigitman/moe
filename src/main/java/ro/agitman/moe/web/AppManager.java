@@ -75,10 +75,10 @@ public class AppManager extends ApplicationManager {
 //--------------- ACTIONS RELATED TO EXAM ------------------------
         action("/ProfHome", ProfHomeAction.class, "newExam")
                 .authorize("PROFESOR")
-                .on(SUCCESS, fwd("/jsp/profEditExam.jsp"));
+                .on(SUCCESS, fwd("/jsp/prof/profEditExam.jsp"));
         action("/ProfHome", ProfHomeAction.class, "editExam")
                 .authorize("PROFESOR")
-                .on(SUCCESS, fwd("/jsp/profEditExam.jsp"));
+                .on(SUCCESS, fwd("/jsp/prof/profEditExam.jsp"));
         action("/ProfHome", ProfHomeAction.class, "saveExam")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("exam", Exam.class, "exam"))
@@ -106,7 +106,7 @@ public class AppManager extends ApplicationManager {
         action("/ProfHome", ProfHomeAction.class, "addItems")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("examItem", ExamItem.class, "item"))
-                .on(SUCCESS, fwd("/jsp/profAddItems.jsp"))
+                .on(SUCCESS, fwd("/jsp/prof/profAddItems.jsp"))
                 .on(CREATED, redir("/ProfHome.addItems.m"));
         action("/ProfHome", ProfHomeAction.class, "deleteAnswer")
                 .authorize("PROFESOR")
@@ -116,20 +116,20 @@ public class AppManager extends ApplicationManager {
 //--------------- ACTIONS RELATED TO GROUP -------------------
         action("/ProfHome", ProfHomeAction.class, "newGroup")
                 .authorize("PROFESOR")
-                .on(SUCCESS, fwd("/jsp/profAddGroup.jsp"));
+                .on(SUCCESS, fwd("/jsp/prof/profAddGroup.jsp"));
         action("/ProfHome", ProfHomeAction.class, "saveGroup")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("group", ExamGroup.class, "group"))
                 .on(SUCCESS, redir("/home.m"));
         action("/ProfHome", ProfHomeAction.class, "editGroup")
                 .authorize("PROFESOR")
-                .on(SUCCESS, fwd("/jsp/profAddGroup.jsp"));
+                .on(SUCCESS, fwd("/jsp/prof/profAddGroup.jsp"));
         action("/ProfHome", ProfHomeAction.class, "addStudsRedir")
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/ProfHome.addStuds.m"));
         action("/ProfHome", ProfHomeAction.class, "addStuds")
                 .authorize("PROFESOR")
-                .on(SUCCESS, fwd("/jsp/profAddStuds.jsp"))
+                .on(SUCCESS, fwd("/jsp/prof/profAddStuds.jsp"))
                 .on(CREATED, redir("/ProfHome.addStuds.m"));
         action("/ProfHome", ProfHomeAction.class, "deleteStuds")
                 .authorize("PROFESOR")
@@ -144,7 +144,7 @@ public class AppManager extends ApplicationManager {
                 .authorize("PROFESOR")
                 .filter(new VOFilter("exi", ExamInstance.class, "exi"))
                 .on(CREATED, redir("/ProfHome.addExamInst.m"))
-                .on(SUCCESS, fwd("/jsp/profAddExamInstance.jsp"));
+                .on(SUCCESS, fwd("/jsp/prof/profAddExamInstance.jsp"));
 
 
 //****************************************************************
@@ -153,10 +153,10 @@ public class AppManager extends ApplicationManager {
 //--------------- ACTIONS TO MANAGE USERS ------------------------
         action("/EditUser", AdminHomeAction.class, "editUser")
                 .authorize("ADMIN")
-                .on(SUCCESS, fwd("/jsp/adminEditUser.jsp"));
+                .on(SUCCESS, fwd("/jsp/admin/adminEditUser.jsp"));
         action("/EditUser", AdminHomeAction.class, "newUser")
                 .authorize("ADMIN")
-                .on(SUCCESS, fwd("/jsp/adminEditUser.jsp"));
+                .on(SUCCESS, fwd("/jsp/admin/adminEditUser.jsp"));
         action("/EditUser", AdminHomeAction.class, "saveUser")
                 .authorize("ADMIN")
                 .filter(new VOFilter("user", User.class, "user"))
