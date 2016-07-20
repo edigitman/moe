@@ -23,12 +23,6 @@
             <li role="presentation">
                 <a href="#exams" aria-controls="exams" role="tab" data-toggle="tab">Examene</a>
             </li>
-            <li role="presentation">
-                <a href="#history" aria-controls="history" role="tab" data-toggle="tab">Istoric</a>
-            </li>
-            <li role="presentation">
-                <a href="#students" aria-controls="students" role="tab" data-toggle="tab">Studenti</a>
-            </li>
 
         </ul>
 
@@ -134,8 +128,6 @@
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="history">Istoric</div>
-            <div role="tabpanel" class="tab-pane" id="students">Studenti</div>
             <div role="tabpanel" class="tab-pane" id="groups">
                 <mtw:list value="groups">
 

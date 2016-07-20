@@ -343,8 +343,11 @@ public class ProfHomeAction extends BaseAction {
             instance.setOwner(user.getId());
 
 //            TODO locked exam for editing
+//            TODO locked group for editing
 
 //            TODO implement logic to prevent editing of locked exams
+//            TODO implement logic to prevent editing of locked groups
+
 //            TODO implement logic to clone an exam
 
             if (instance.getId() == null) {
