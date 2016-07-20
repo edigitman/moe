@@ -12,6 +12,8 @@ public class Exam {
     private Integer owner;
     private Integer difficulty;
     private Long points;
+    //when a new exam instance is created the exam is blocked for editing
+    private Boolean locked;
     private Timestamp datecreated;
 
     public Exam() {
@@ -93,6 +95,14 @@ public class Exam {
 
     public void setDatecreated(Timestamp datecreated) {
         this.datecreated = datecreated;
+    }
+
+    public Boolean getLocked() {
+        return locked;
+    }
+
+    public void setLocked(Boolean locked) {
+        this.locked = locked;
     }
 
     public Long getPoints() {

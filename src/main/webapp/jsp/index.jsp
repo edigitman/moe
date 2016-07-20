@@ -19,14 +19,14 @@
      <div class="well">
          <div class="row">
              <div class="col-lg-12 col-md-12 col-sm-12 text-center">
-                 <h1>Examene online</h1>
+                 <%--<h1>Examene online</h1>--%>
              </div>
          </div>
 
          <div class="row">
              <div class="col-lg-12 col-md-12 col-sm-12 text-center">
                  <mtw:outError>
-                     <span color="red"><mtw:out/></span>
+                     <span style="color: red"><mtw:out/></span>
                  </mtw:outError>
 
                  <mtw:form klass="form-signin" action="/Login.m" method="post">

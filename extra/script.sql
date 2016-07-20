@@ -37,6 +37,7 @@ CREATE TABLE exams
   owner       INTEGER,
   difficulty  SMALLINT,
   points      INTEGER,
+  locked      BOOLEAN,
   datecreated TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
   CONSTRAINT exams_pkey PRIMARY KEY (id)
 )
@@ -79,9 +80,9 @@ CREATE TABLE exam_instances
   status      INTEGER,
   startdate   TIMESTAMP WITHOUT TIME ZONE,
   enddate     TIMESTAMP WITHOUT TIME ZONE,
-  points      INTEGER,
   examid      INTEGER,
   egroupid    INTEGER,
+  owner       INTEGER,
   datecreated TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
   CONSTRAINT exam_instances_pkey PRIMARY KEY (id)
 )

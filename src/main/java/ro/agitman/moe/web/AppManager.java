@@ -135,6 +135,16 @@ public class AppManager extends ApplicationManager {
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/ProfHome.addStuds.m"));
 
+//````````````````````````````````````````````````````````````````
+//--------------- ACTIONS RELATED TO EXAM INSTANCE ---------------
+        action("/ProfHome", ProfHomeAction.class, "addExamInstRedir")
+                .authorize("PROFESOR")
+                .on(SUCCESS, redir("/ProfHome.addExamInst.m"));
+        action("/ProfHome", ProfHomeAction.class, "addExamInst")
+                .authorize("PROFESOR")
+                .filter(new VOFilter("exi", ExamInstance.class, "exi"))
+                .on(CREATED, redir("/ProfHome.addExamInst.m"))
+                .on(SUCCESS, fwd("/jsp/profAddExamInstance.jsp"));
 
 
 //****************************************************************
@@ -176,7 +186,9 @@ public class AppManager extends ApplicationManager {
 
         filter(new AuthenticationFilter());
         filter(new PerformanceMonitoringFilter());
+
         on(LOGIN, redir("/jsp/index.jsp"));
+        on(ACCESSDENIED, redir("/jsp/error/accessDenied.jsp"));
     }
 
     @Override
@@ -190,6 +202,7 @@ public class AppManager extends ApplicationManager {
         ioc(ExamItemAnswerDao.class, ExamItemAnswerDaoImpl.class);
         ioc(ExamGroupDao.class, ExamGroupDaoImpl.class);
         ioc(ExamGroupUserDao.class, ExamGroupUserDaoImpl.class);
+        ioc(ExamInstanceDao.class, ExamInstanceDaoImpl.class);
     }
 
     @Override
@@ -254,9 +267,9 @@ public class AppManager extends ApplicationManager {
                 .field("status", DBTypes.INTEGER)
                 .field("startdate", DBTypes.TIMESTAMP)
                 .field("enddate", DBTypes.TIMESTAMP)
-                .field("points", DBTypes.LONG)
                 .field("examid", DBTypes.INTEGER)
                 .field("egroupid", DBTypes.INTEGER)
+                .field("owner", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(ExamGroupUser.class, "exam_group_user")
@@ -278,6 +291,7 @@ public class AppManager extends ApplicationManager {
                 .field("owner", DBTypes.INTEGER)
                 .field("points", DBTypes.LONG)
                 .field("difficulty", DBTypes.INTEGER)
+                .field("locked", DBTypes.BOOLEAN)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(User.class, "users")

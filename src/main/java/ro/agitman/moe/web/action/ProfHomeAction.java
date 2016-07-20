@@ -22,6 +22,7 @@ public class ProfHomeAction extends BaseAction {
     private final ExamItemDao examItemDao;
     private final ExamItemAnswerDao answerDao;
     private final UserDao userDao;
+    private final ExamInstanceDao instanceDao;
 
     //    static initialization
     {
@@ -36,13 +37,14 @@ public class ProfHomeAction extends BaseAction {
         diffs.put(3, "Greu");
     }
 
-    public ProfHomeAction(UserDao userDao, ExamDao examDao, ExamGroupDao examGroupDao, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao) {
+    public ProfHomeAction(ExamInstanceDao examInstanceDao, UserDao userDao, ExamDao examDao, ExamGroupDao examGroupDao, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao) {
         this.userDao = userDao;
         this.examDao = examDao;
         this.examGroupDao = examGroupDao;
         this.examItemDao = examItemDao;
         this.answerDao = answerDao;
         this.examGroupUserDao = examGroupUserDao;
+        this.instanceDao = examInstanceDao;
     }
 
     //******************************************************
@@ -300,7 +302,7 @@ public class ProfHomeAction extends BaseAction {
         return ERROR;
     }
 
-    public String deleteStuds(){
+    public String deleteStuds() {
         Integer studId = input().getInt("id");
         Integer groupId = (Integer) session().getAttribute("groupId");
 
@@ -314,7 +316,7 @@ public class ProfHomeAction extends BaseAction {
     }
 
     private void createGroupUser(String[] userIds, Integer groupId) {
-        for(String userId : userIds){
+        for (String userId : userIds) {
             createGroupUser(Integer.valueOf(userId), groupId);
         }
     }
@@ -324,5 +326,59 @@ public class ProfHomeAction extends BaseAction {
         examGroupUser.setStudentid(userId);
         examGroupUser.setGroupid(groupId);
         examGroupUserDao.insert(examGroupUser);
+    }
+
+//******************************************************
+//---------------- GROUPS ACTIONS ----------------------
+
+    public String addExamInstRedir() {
+        return SUCCESS;
+    }
+
+    public String addExamInst() {
+
+        if (isPost()) {
+            ExamInstance instance = (ExamInstance) input.getValue("exi");
+            User user = getSessionObj();
+            instance.setOwner(user.getId());
+
+//            TODO locked exam for editing
+
+//            TODO implement logic to prevent editing of locked exams
+//            TODO implement logic to clone an exam
+
+            if (instance.getId() == null) {
+                instanceDao.insert(instance);
+            } else {
+                instanceDao.save(instance);
+            }
+
+            session().setAttribute("examInstanceId", instance.getId());
+            return CREATED;
+        } else {
+            if (isGet()) {
+                Integer instanceId = (Integer) session().getAttribute("examInstanceId");
+                if (instanceId != null) {
+                    output.setValue("exi", instanceDao.findById(instanceId));
+                }
+
+                User user = getSessionObj();
+                List<Exam> exams = examDao.findForOwner(user.getId());
+                List<ExamGroup> groups = examGroupDao.findByOwner(user.getId());
+
+                Map<Integer, String> examsMap = new HashMap<>();
+                Map<Integer, String> groupsMap = new HashMap<>();
+
+
+                exams.stream().forEach(exam -> examsMap.put(exam.getId(), exam.getName()));
+                groups.stream().forEach(group -> groupsMap.put(group.getId(), group.getName()));
+
+                output.setValue("exams", examsMap);
+                output.setValue("groups", groupsMap);
+
+            }
+        }
+
+        return SUCCESS;
     }
 }

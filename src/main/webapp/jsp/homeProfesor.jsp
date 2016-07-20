@@ -74,7 +74,48 @@
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="exams">Examene</div>
+            <div role="tabpanel" class="tab-pane" id="exams">
+
+                <mtw:list value="instances">
+
+                    <mtw:isEmpty>
+                        <br/>
+                        Nu este nici o sesiune de examen creata
+                        <br/><br/><br/>
+                    </mtw:isEmpty>
+                    <mtw:isEmpty negate="true">
+                        <table class="table">
+                            <caption> Lista de sesiuni de examinare:</caption>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nume</th>
+                                <th>Grupa</th>
+                                <th>Data</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <mtw:loop var="i">
+                                <tr>
+                                    <th scope="row"><mtw:out value="i.id"/></th>
+                                    <td><mtw:out value="i.examid"/></td>
+                                    <td><mtw:out value="i.egroupid"/></td>
+                                    <td><mtw:out value="i.startdate"/></td>
+                                    <td>actiuni</td>
+                                </tr>
+                            </mtw:loop>
+                            </tbody>
+                        </table>
+                    </mtw:isEmpty>
+                </mtw:list>
+
+                <br/>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="btn btn-info" href="/ProfHome.addExamInstRedir.m">Adauga</a>
+                    </div>
+                </div>
+            </div>
             <div role="tabpanel" class="tab-pane" id="history">Istoric</div>
             <div role="tabpanel" class="tab-pane" id="students">Studenti</div>
             <div role="tabpanel" class="tab-pane" id="groups">
