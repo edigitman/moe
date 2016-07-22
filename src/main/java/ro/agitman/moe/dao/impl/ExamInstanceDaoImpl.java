@@ -56,7 +56,7 @@ public class ExamInstanceDaoImpl extends GenericDaoImpl<ExamInstance> implements
             query.append(" from exam_instances inst");
             query.append(" join exam_groups exgroup on inst.egroupid = exgroup.id");
             query.append(" join exam_group_user groupuser on groupuser.groupid = exgroup.id");
-            query.append(" where groupuser.studentid = ?");
+            query.append(" where groupuser.studentid = ? and inst.status > 1");
 
             stmt = SQLUtils.prepare(conn, query.toString(), studId);
             rset = stmt.executeQuery();

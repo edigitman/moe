@@ -2,7 +2,7 @@
   Created by IntelliJ IDEA.
   User: d-uu31cq
   Date: 22.07.2016
-  Time: 14:20
+  Time: 16:32
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -17,16 +17,9 @@
 
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-        <mtw:form action="/stud.launchExam.m">
-            <mtw:out value="exam.name"/>
-            <br/>
-            puncte totale: <mtw:out value="exam.points"/>
-            <br/>
-            numar subiecte: <mtw:out value="itemsNo"/>
-            <br/>
-            <button type="submit" class="btn btn-info">Start exam</button>
-            <a href="/home.m" class="btn btn-link">inapoi</a>
-        </mtw:form>
+
+        <%-- after exam is started, view a summary of items --%>
+
     </div>
 </div>
 

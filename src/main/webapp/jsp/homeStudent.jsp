@@ -38,7 +38,7 @@
                             <td>
                                 <c:if test="${i.status == 2}">
                                     <%-- TODO take exam --%>
-                                    <a href="#">Start exam</a>
+                                    <a href="/stud.startExam.m?id=<mtw:out value="i.id"/>">Start exam</a>
                                 </c:if>
                                 <c:if test="${i.status == 3}">
                                     <%-- TODO viziualizare --%>
