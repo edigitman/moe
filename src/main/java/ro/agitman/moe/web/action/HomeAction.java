@@ -34,11 +34,12 @@ public class HomeAction extends BaseAction {
     public String execute() {
 
         if (isGet()) {
-            if ("ADMIN".equals(getRole())) {
+            String role = getRole();
+            if ("ADMIN".equals(role)) {
                 output().setValue("users", userDao.findAll());
             }
 
-            if ("PROFESOR".equals(getRole())) {
+            if ("PROFESOR".equals(role)) {
 
                 User user = getSessionObj();
                 List<Exam> exams = examDao.findForOwner(user.getId());
@@ -48,9 +49,15 @@ public class HomeAction extends BaseAction {
                 output().setValue("groups", examGroups);
                 output().setValue("instances", instances);
             }
+
+            if("STUDENT".equals(role)){
+                User user = getSessionObj();
+
+                List<ExamInstance> instances = instanceDao.findByStudent(user.getId());
+                output().setValue("instances", instances);
+            }
             return SUCCESS;
         }
-
         return BLOCKED;
     }
 

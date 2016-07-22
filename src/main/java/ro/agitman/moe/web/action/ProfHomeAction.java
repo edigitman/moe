@@ -3,6 +3,7 @@ package ro.agitman.moe.web.action;
 import org.mentawai.core.BaseAction;
 import ro.agitman.moe.dao.*;
 import ro.agitman.moe.model.*;
+import ro.agitman.moe.service.EmailService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,8 @@ public class ProfHomeAction extends BaseAction {
     private final UserDao userDao;
     private final ExamInstanceDao instanceDao;
 
+    private final EmailService emailService;
+
     //    static initialization
     {
         examItemType = new HashMap<>();
@@ -37,7 +40,7 @@ public class ProfHomeAction extends BaseAction {
         diffs.put(3, "Greu");
     }
 
-    public ProfHomeAction(ExamInstanceDao examInstanceDao, UserDao userDao, ExamDao examDao, ExamGroupDao examGroupDao, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao) {
+    public ProfHomeAction(ExamInstanceDao examInstanceDao, UserDao userDao, ExamDao examDao, ExamGroupDao examGroupDao, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
         this.userDao = userDao;
         this.examDao = examDao;
         this.examGroupDao = examGroupDao;
@@ -45,6 +48,8 @@ public class ProfHomeAction extends BaseAction {
         this.answerDao = answerDao;
         this.examGroupUserDao = examGroupUserDao;
         this.instanceDao = examInstanceDao;
+
+        this.emailService = emailService;
     }
 
     //******************************************************
@@ -328,9 +333,8 @@ public class ProfHomeAction extends BaseAction {
         examGroupUserDao.insert(examGroupUser);
     }
 
-//******************************************************
-//---------------- GROUPS ACTIONS ----------------------
-
+//**************************************************************
+//---------------- EXAM INSTANCES ACTIONS ----------------------
     public String addExamInstRedir() {
         return SUCCESS;
     }
@@ -356,6 +360,8 @@ public class ProfHomeAction extends BaseAction {
             } else {
                 instanceDao.save(instance);
             }
+
+            emailService.sendExamCreated(user);
 
             session().setAttribute("examInstanceId", instance.getId());
             return CREATED;

@@ -14,6 +14,8 @@ import org.mentawai.mail.Email;
 import ro.agitman.moe.dao.*;
 import ro.agitman.moe.dao.impl.*;
 import ro.agitman.moe.model.*;
+import ro.agitman.moe.service.EmailService;
+import ro.agitman.moe.service.impl.EmailServiceImpl;
 import ro.agitman.moe.web.action.*;
 import ro.agitman.moe.web.filter.PerformanceMonitoringFilter;
 
@@ -206,6 +208,9 @@ public class AppManager extends ApplicationManager {
         ioc(ExamGroupDao.class, ExamGroupDaoImpl.class);
         ioc(ExamGroupUserDao.class, ExamGroupUserDaoImpl.class);
         ioc(ExamInstanceDao.class, ExamInstanceDaoImpl.class);
+
+//        services ----------------------------------------------------
+        ioc(EmailService.class, EmailServiceImpl.class);
     }
 
     @Override
