@@ -33,7 +33,7 @@
                     <mtw:loop var="i">
                         <tr>
                             <th scope="row"><mtw:out value="i.id"/></th>
-                            <td><mtw:out value="i.examid"/></td>
+                            <td><mtw:out value="i.name"/></td>
                             <td><mtw:out value="i.startdate"/></td>
                             <td>
                                 <c:if test="${i.status == 2}">

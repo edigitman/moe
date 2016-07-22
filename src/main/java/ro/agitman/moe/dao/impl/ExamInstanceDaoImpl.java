@@ -4,9 +4,7 @@ import org.mentabean.BeanException;
 import org.mentabean.BeanSession;
 import org.mentabean.util.SQLUtils;
 import ro.agitman.moe.dao.ExamInstanceDao;
-import ro.agitman.moe.model.Exam;
 import ro.agitman.moe.model.ExamInstance;
-import ro.agitman.moe.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,13 +35,13 @@ public class ExamInstanceDaoImpl extends GenericDaoImpl<ExamInstance> implements
         return instance;
     }
 
-    public List<ExamInstance> findByOwner(Integer id){
+    public List<ExamInstance> findByOwner(Integer id) {
         ExamInstance instance = new ExamInstance();
         instance.setOwner(id);
         return beanSession.loadList(instance);
     }
 
-    public List<ExamInstance> findByStudent(Integer studId){
+    public List<ExamInstance> findByStudent(Integer studId) {
 
         List<ExamInstance> result = new ArrayList<>();
 
@@ -51,28 +49,29 @@ public class ExamInstanceDaoImpl extends GenericDaoImpl<ExamInstance> implements
         PreparedStatement stmt = null;
         ResultSet rset = null;
 
-//        try {
-//            StringBuilder query = new StringBuilder(256);
-//            query.append("select ");
-//            query.append(beanSession.buildSelect(ExamInstance.class, "exi"));
-//            query.append(" from users u join exam_group_user gu on u.id = gu.studentid");
-//            query.append(" where gu.groupid = ?");
-//
-//            stmt = SQLUtils.prepare(conn, query.toString(), groupId);
-//            rset = stmt.executeQuery();
-//
-//            while (rset.next()) {
-//                User user = new User();
-//                beanSession.populateBean(rset, user, "u");
-//                result.add(user);
-//            }
-//
-//            return result;
-//        } catch(SQLException e) {
-//            throw new BeanException(e);
-//        } finally {
-//            SQLUtils.close(rset, stmt);
-//        }
-        return result;
+        try {
+            StringBuilder query = new StringBuilder(256);
+            query.append("select ");
+            query.append(beanSession.buildSelect(ExamInstance.class, "inst"));
+            query.append(" from exam_instances inst");
+            query.append(" join exam_groups exgroup on inst.egroupid = exgroup.id");
+            query.append(" join exam_group_user groupuser on groupuser.groupid = exgroup.id");
+            query.append(" where groupuser.studentid = ?");
+
+            stmt = SQLUtils.prepare(conn, query.toString(), studId);
+            rset = stmt.executeQuery();
+
+            while (rset.next()) {
+                ExamInstance instance = new ExamInstance();
+                beanSession.populateBean(rset, instance, "inst");
+                result.add(instance);
+            }
+
+            return result;
+        } catch (SQLException e) {
+            throw new BeanException(e);
+        } finally {
+            SQLUtils.close(rset, stmt);
+        }
     }
 }
