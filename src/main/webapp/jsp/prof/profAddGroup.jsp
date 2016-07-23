@@ -9,6 +9,12 @@
 <%@page pageEncoding="UTF-8" %>
 <%@taglib prefix="mtw" uri="http://www.mentaframework.org/tags-mtw/" %>
 
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<mtw:requiresAuthentication/>
+<mtw:requiresAuthorization group="PROFESOR"/>
+
+<t:layout title="index">
+    <jsp:attribute name="body">
  <div class="row">
      <div class="col-md-6 col-md-offset-3">
          <mtw:form action="/ProfHome.saveGroup.m" method="post">
@@ -24,3 +30,5 @@
          </mtw:form>
      </div>
  </div>
+</jsp:attribute>
+</t:layout>

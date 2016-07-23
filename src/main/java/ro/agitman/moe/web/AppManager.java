@@ -145,7 +145,7 @@ public class AppManager extends ApplicationManager {
         action("/ProfHome", ProfHomeAction.class, "addExamInst")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("exi", ExamInstance.class, "exi"))
-                .on(CREATED, redir("/ProfHome.addExamInst.m"))
+                .on(CREATED, redir("/home.m"))
                 .on(SUCCESS, fwd("/jsp/prof/profAddExamInstance.jsp"));
         action("/ProfHome", ProfHomeAction.class, "changeInstanceStatus")
                 .authorize("PROFESOR")

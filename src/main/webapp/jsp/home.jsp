@@ -38,6 +38,19 @@
             e.preventDefault();
             $(this).tab('show')
         });
+
+        //            decrypt exam dificulty
+        $('.examDiff').each(function (index) {
+            if ('1' == $.trim($(this).text())) {
+                $(this).text('Usor');
+            }
+            if ('2' == $.trim($(this).text())) {
+                $(this).text('Mediu');
+            }
+            if ('3' == $.trim($(this).text())) {
+                $(this).text('Dificil');
+            }
+        });
     </script>
 </jsp:attribute>
 </t:layout>

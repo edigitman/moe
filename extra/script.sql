@@ -172,4 +172,34 @@ INSERT INTO users (email, name, password, role, enabled)
 VALUES ('stud@mail.com', 'student', 'secret', 'STUDENT', TRUE);
 
 INSERT INTO users (email, name, password, role, enabled)
+VALUES ('stud1@mail.com', 'student1', 'secret', 'STUDENT', TRUE);
+
+INSERT INTO users (email, name, password, role, enabled)
+VALUES ('stud2@mail.com', 'student2', 'secret', 'STUDENT', TRUE);
+
+INSERT INTO users (email, name, password, role, enabled)
+VALUES ('stud3@mail.com', 'student3', 'secret', 'STUDENT', TRUE);
+
+INSERT INTO users (email, name, password, role, enabled)
+VALUES ('stud4@mail.com', 'student4', 'secret', 'STUDENT', TRUE);
+
+INSERT INTO users (email, name, password, role, enabled)
+VALUES ('stud5@mail.com', 'student5', 'secret', 'STUDENT', TRUE);
+
+INSERT INTO users (email, name, password, role, enabled)
+VALUES ('stud6@mail.com', 'student6', 'secret', 'STUDENT', TRUE);
+
+INSERT INTO users (email, name, password, role, enabled)
+VALUES ('stud7@mail.com', 'student7', 'secret', 'STUDENT', TRUE);
+
+INSERT INTO users (email, name, password, role, enabled)
+VALUES ('stud8@mail.com', 'studen8', 'secret', 'STUDENT', TRUE);
+
+INSERT INTO users (email, name, password, role, enabled)
+VALUES ('stud9@mail.com', 'student9', 'secret', 'STUDENT', TRUE);
+
+INSERT INTO users (email, name, password, role, enabled)
+VALUES ('stud0@mail.com', 'student0', 'secret', 'STUDENT', TRUE);
+
+INSERT INTO users (email, name, password, role, enabled)
 VALUES ('admin@mail.com', 'administrator', 'secret', 'ADMIN', TRUE);

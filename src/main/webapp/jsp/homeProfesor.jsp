@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@page pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core"  %>
 <%@taglib prefix="mtw" uri="http://www.mentaframework.org/tags-mtw/" %>
 
     <div id="myTabs">
@@ -43,6 +43,7 @@
                         <tr>
                             <th>#</th>
                             <th>Nume</th>
+                            <th>Puncte</th>
                             <th>Dificultatea</th>
                         </tr>
                         </thead>
@@ -51,7 +52,12 @@
                             <tr>
                                 <th scope="row"><mtw:out value="c.id"/></th>
                                 <td><mtw:out value="c.name"/></td>
-                                <td><mtw:out value="c.difficulty"/></td>
+                                <td><mtw:out value="c.points"/></td>
+                                <td>
+                                    <span class="examDiff">
+                                        <mtw:out value="c.difficulty"/>
+                                    </span>
+                                </td>
                                 <td>
                                     <c:if test="${!c.locked}">
                                         <a class="btn btn-link" href="/ProfHome.addItemsRedir.m?id=<mtw:out value="c.id"/>">Adauga Itemi</a>
@@ -90,6 +96,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nume</th>
+                                <th>Exam</th>
                                 <th>Grupa</th>
                                 <th>Data</th>
                             </tr>
@@ -98,6 +105,7 @@
                             <mtw:loop var="i">
                                 <tr>
                                     <th scope="row"><mtw:out value="i.id"/></th>
+                                    <td><mtw:out value="i.name"/></td>
                                     <td><mtw:out value="i.examid"/></td>
                                     <td><mtw:out value="i.egroupid"/></td>
                                     <td><mtw:out value="i.startdate"/></td>
@@ -173,3 +181,6 @@
 
     </div>
 
+<script type="text/javascript">
+
+</script>
