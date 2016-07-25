@@ -9,6 +9,10 @@ public class ExamInstance {
 
     private Integer id;
     private String name;
+    // 1 - ciorna
+    // 2 - pornit
+    // 3 - inchis
+    // 4 - spre corectare
     private Integer status;
     private Timestamp startdate;
     private Timestamp enddate;

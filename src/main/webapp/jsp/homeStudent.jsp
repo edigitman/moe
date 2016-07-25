@@ -37,12 +37,14 @@
                             <td><mtw:out value="i.startdate"/></td>
                             <td>
                                 <c:if test="${i.status == 2}">
-                                    <%-- TODO take exam --%>
                                     <a href="/stud.startExam.m?id=<mtw:out value="i.id"/>">Start exam</a>
                                 </c:if>
                                 <c:if test="${i.status == 3}">
                                     <%-- TODO viziualizare --%>
                                     <a href="#">Vizualizare</a>
+                                </c:if>
+                                <c:if test="${i.status == 4}">
+                                    pending
                                 </c:if>
                             </td>
                         </tr>

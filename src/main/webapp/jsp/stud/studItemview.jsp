@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@page pageEncoding="UTF-8" %>
 <%@taglib prefix="mtw" uri="http://www.mentaframework.org/tags-mtw/" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <mtw:requiresAuthentication/>
 <mtw:requiresAuthorization group="STUDENT"/>
@@ -19,55 +20,54 @@
     <div class="col-md-6 col-md-offset-3">
 
 
+        <div class="row">
+            <span>
+                <mtw:out value="item.assertion"/>
+            </span>
+        </div>
+        <br/>
 
-        <!-- "myList" is a list in the action output -->
-    <mtw:paginator size="5" value="myList">
+        <mtw:form action="/stud.saveAnswer.m" method="post">
+        <div class="row">
+                <%-- type 1 is unique --%>
+                <%-- type 2 is multiple --%>
+                <%-- type 3 is free text--%>
+            <c:if test="${item.type == 1}">
 
-        <mtw:isEmpty negate="true">
+                <c:forEach var="a" items="${answers}">
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="studAnswer" value="${a.key}">
+                            <span>${a.value}</span>
+                        </label>
+                    </div>
+                </c:forEach>
+            </c:if>
 
-            <h5>Results <mtw:resultFrom/> - <mtw:resultTo/> of <mtw:resultTotal/></h5>
 
-        </mtw:isEmpty>
+            <c:if test="${item.type == 2}">
+                <c:forEach var="a" items="${answers}">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="studAnswer" value="${a.key}">
+                            <span>${a.value}</span>
+                        </label>
+                    </div>
+                </c:forEach>
+            </c:if>
 
-        <mtw:hasPrevious>
 
-            <a href="/HelloPaginator.mtw?page=<mtw:out />"><b>Prev</b></a>
+            <c:if test="${item.type == 3}">
+                <mtw:textarea klass="form-control" name="studAnswer"/>
+                <br/>
+            </c:if>
+        </div>
 
-        </mtw:hasPrevious>
 
-    <mtw:pageNumbers pagesToShow="3">
+            <input type="submit" class="btn btn-success" value="Salveaza">
 
-        <mtw:isCurrPage>
-            <mtw:out/>
-        </mtw:isCurrPage>
+        </mtw:form>
 
-        <mtw:isCurrPage negate="true">
-            <a href="/HelloPaginator.mtw?page=<mtw:out />"><mtw:out/></a>
-        </mtw:isCurrPage>
-
-    </mtw:pageNumbers>
-
-    <mtw:hasNext>
-
-        <a href="/HelloPaginator.mtw?page=<mtw:out />"><b>Next</b></a>
-
-    </mtw:hasNext>
-
-    <br/><br/>
-
-    <font color="blue">
-
-    <mtw:loop>
-
-        <mtw:out/><br/>
-
-    </mtw:loop>
-
-    </font>
-
-    </mtw:paginator>
-
-        precedenta / salveaza / urmatoarea
     </div>
 </div>
 

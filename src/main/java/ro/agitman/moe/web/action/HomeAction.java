@@ -2,18 +2,11 @@ package ro.agitman.moe.web.action;
 
 import org.mentawai.action.BaseLoginAction;
 import org.mentawai.core.BaseAction;
-import ro.agitman.moe.dao.ExamDao;
-import ro.agitman.moe.dao.ExamGroupDao;
-import ro.agitman.moe.dao.ExamInstanceDao;
-import ro.agitman.moe.dao.UserDao;
-import ro.agitman.moe.model.Exam;
-import ro.agitman.moe.model.ExamGroup;
-import ro.agitman.moe.model.ExamInstance;
-import ro.agitman.moe.model.User;
+import ro.agitman.moe.dao.*;
+import ro.agitman.moe.model.*;
 import ro.agitman.moe.web.dto.ExamInstanceDTO;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by edi on 7/10/2016.
@@ -24,12 +17,14 @@ public class HomeAction extends BaseAction {
     private final ExamDao examDao;
     private final ExamGroupDao examGroupDao;
     private final ExamInstanceDao instanceDao;
+    private final StudExamInstanceDao studEXIDao;
 
-    public HomeAction(UserDao userDao, ExamDao examDao, ExamGroupDao examGroupDao, ExamInstanceDao instanceDao) {
+    public HomeAction(UserDao userDao, ExamDao examDao, ExamGroupDao examGroupDao, ExamInstanceDao instanceDao, StudExamInstanceDao studEXIDao) {
         this.userDao = userDao;
         this.examDao = examDao;
         this.examGroupDao = examGroupDao;
         this.instanceDao = instanceDao;
+        this.studEXIDao = studEXIDao;
     }
 
     public String execute() {
@@ -52,10 +47,28 @@ public class HomeAction extends BaseAction {
                 output().setValue("instances", instances);
             }
 
-            if("STUDENT".equals(role)){
+            if ("STUDENT".equals(role)) {
                 User user = getSessionObj();
 
+                // if student is in the middle of an exam, continue it
+                StudentExamInstance sexi = studEXIDao.findActiveByOwner(user.getId());
+                if (sexi != null) {
+                    session().setAttribute("studExi", sexi.getId());
+                    return EDIT;
+                }
+
                 List<ExamInstance> instances = instanceDao.findByStudent(user.getId());
+                List<StudentExamInstance> studInstances = studEXIDao.findByOwner(user.getId());
+
+                for(ExamInstance instance : instances){
+                    for(StudentExamInstance studInstance : studInstances){
+                        //examen in derulare, dar studentul a terminat examenul
+                        if(studInstance.getExamid().equals(instance.getId()) && instance.getStatus().equals(2)){
+                            instance.setStatus(4);
+                        }
+                    }
+                }
+
                 output().setValue("instances", instances);
             }
             return SUCCESS;

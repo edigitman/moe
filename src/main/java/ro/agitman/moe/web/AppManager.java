@@ -69,6 +69,7 @@ public class AppManager extends ApplicationManager {
 
         action("/home", HomeAction.class)
                 .filter(new AuthenticationFilter())
+                .on(EDIT, redir("/stud.launchExam.m"))
                 .on(SUCCESS, fwd("/jsp/home.jsp"));
 //****************************************************************
 //---------- PROFESSOR ACTIONS -----------------------------------
@@ -161,8 +162,15 @@ public class AppManager extends ApplicationManager {
                 .on(SUCCESS, fwd("/jsp/stud/studTakeExam.jsp"));
         action("/stud", StudHomeAction.class, "launchExam")
                 .authorize("STUDENT")
+                .on(CREATED, redir("/stud.launchExam.m"))
                 .on(SUCCESS, fwd("/jsp/stud/studItemview.jsp"));
-
+        action("/stud", StudHomeAction.class, "saveAnswer")
+                .authorize("STUDENT")
+                .on(SUCCESS, redir("/stud.viewResults.m"))
+                .on(ADD, redir("/stud.launchExam.m"));
+        action("/stud", StudHomeAction.class, "viewResults")
+                .authorize("STUDENT")
+                .on(SUCCESS, fwd("/jsp/stud/studExamSummary.jsp"));
 
 //****************************************************************
 //---------- ADMIN ACTIONS ---------------------------------------
@@ -220,6 +228,8 @@ public class AppManager extends ApplicationManager {
         ioc(ExamGroupDao.class, ExamGroupDaoImpl.class);
         ioc(ExamGroupUserDao.class, ExamGroupUserDaoImpl.class);
         ioc(ExamInstanceDao.class, ExamInstanceDaoImpl.class);
+        ioc(StudExamInstanceDao.class, StudExamInstanceDaoImpl.class);
+        ioc(StudExamAnswerDao.class, StudExamAnswerDaoImpl.class);
 
 //        services ----------------------------------------------------
         ioc(EmailService.class, EmailServiceImpl.class);

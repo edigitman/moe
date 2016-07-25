@@ -17,13 +17,13 @@
 
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-        <mtw:form action="/stud.launchExam.m">
+        <mtw:form action="/stud.launchExam.m" method="post">
             <mtw:out value="exam.name"/>
             <br/>
             puncte totale: <mtw:out value="exam.points"/>
             <br/>
             numar subiecte: <mtw:out value="itemsNo"/>
-            <br/>
+            <br/><br/>
             <button type="submit" class="btn btn-info">Start exam</button>
             <a href="/home.m" class="btn btn-link">inapoi</a>
         </mtw:form>
