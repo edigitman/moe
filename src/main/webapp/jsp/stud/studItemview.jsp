@@ -17,11 +17,55 @@
 
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-        examen nume ..., ora de inceput, total subiecte
 
-        intrebare curenta
 
-        raspunsuri posibile
+
+        <!-- "myList" is a list in the action output -->
+    <mtw:paginator size="5" value="myList">
+
+        <mtw:isEmpty negate="true">
+
+            <h5>Results <mtw:resultFrom/> - <mtw:resultTo/> of <mtw:resultTotal/></h5>
+
+        </mtw:isEmpty>
+
+        <mtw:hasPrevious>
+
+            <a href="/HelloPaginator.mtw?page=<mtw:out />"><b>Prev</b></a>
+
+        </mtw:hasPrevious>
+
+    <mtw:pageNumbers pagesToShow="3">
+
+        <mtw:isCurrPage>
+            <mtw:out/>
+        </mtw:isCurrPage>
+
+        <mtw:isCurrPage negate="true">
+            <a href="/HelloPaginator.mtw?page=<mtw:out />"><mtw:out/></a>
+        </mtw:isCurrPage>
+
+    </mtw:pageNumbers>
+
+    <mtw:hasNext>
+
+        <a href="/HelloPaginator.mtw?page=<mtw:out />"><b>Next</b></a>
+
+    </mtw:hasNext>
+
+    <br/><br/>
+
+    <font color="blue">
+
+    <mtw:loop>
+
+        <mtw:out/><br/>
+
+    </mtw:loop>
+
+    </font>
+
+    </mtw:paginator>
 
         precedenta / salveaza / urmatoarea
     </div>

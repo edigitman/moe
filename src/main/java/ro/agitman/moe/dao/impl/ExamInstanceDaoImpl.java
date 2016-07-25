@@ -4,7 +4,9 @@ import org.mentabean.BeanException;
 import org.mentabean.BeanSession;
 import org.mentabean.util.SQLUtils;
 import ro.agitman.moe.dao.ExamInstanceDao;
+import ro.agitman.moe.dao.PojoMapper;
 import ro.agitman.moe.model.ExamInstance;
+import ro.agitman.moe.web.dto.ExamInstanceDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -74,4 +76,44 @@ public class ExamInstanceDaoImpl extends GenericDaoImpl<ExamInstance> implements
             SQLUtils.close(rset, stmt);
         }
     }
+
+
+    public List<ExamInstanceDTO> findByOwnerToDTO(Integer id){
+        List<ExamInstanceDTO> result = new ArrayList<>();
+
+        Connection conn = beanSession.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rset = null;
+
+        try {
+            StringBuilder query = new StringBuilder(256);
+            query.append("select ");
+            query.append(" inst.id as id, inst.name as name, inst.status as status, " +
+                    "inst.startdate as startdate, g.name as groupName, e.name as examName");
+            query.append(" from exam_instances inst");
+            query.append(" join exam_groups g on inst.egroupid = g.id");
+            query.append(" join exams e on inst.examid = e.id");
+            query.append(" where inst.owner = ?");
+
+            stmt = SQLUtils.prepare(conn, query.toString(), id);
+            rset = stmt.executeQuery();
+
+            PojoMapper<ExamInstanceDTO> pojoMapper = new PojoMapper(ExamInstanceDTO.class);
+
+            result = pojoMapper.mapRersultSetToObject(rset);
+
+//            while (rset.next()) {
+//                ExamInstanceDTO instance = new ExamInstanceDTO();
+//                beanSession.populateBean(rset, instance);
+//                result.add(instance);
+//            }
+
+            return result;
+        } catch (SQLException e) {
+            throw new BeanException(e);
+        } finally {
+            SQLUtils.close(rset, stmt);
+        }
+    }
+
 }

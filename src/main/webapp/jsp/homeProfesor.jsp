@@ -41,7 +41,7 @@
                         <caption> Lista de concepte examene:</caption>
                         <thead>
                         <tr>
-                            <th>#</th>
+                            <%--<th>#</th>--%>
                             <th>Nume</th>
                             <th>Puncte</th>
                             <th>Dificultatea</th>
@@ -50,7 +50,7 @@
                         <tbody>
                         <mtw:loop var="c">
                             <tr>
-                                <th scope="row"><mtw:out value="c.id"/></th>
+                                <%--<th scope="row"><mtw:out value="c.id"/></th>--%>
                                 <td><mtw:out value="c.name"/></td>
                                 <td><mtw:out value="c.points"/></td>
                                 <td>
@@ -87,14 +87,14 @@
                     <mtw:isEmpty>
                         <br/>
                         Nu este nici o sesiune de examen creata
-                        <br/><br/><br/>
+                        <br/><br/>
                     </mtw:isEmpty>
                     <mtw:isEmpty negate="true">
                         <table class="table">
                             <caption> Lista de sesiuni de examinare:</caption>
                             <thead>
                             <tr>
-                                <th>#</th>
+                                <%--<th>#</th>--%>
                                 <th>Nume</th>
                                 <th>Exam</th>
                                 <th>Grupa</th>
@@ -104,10 +104,10 @@
                             <tbody>
                             <mtw:loop var="i">
                                 <tr>
-                                    <th scope="row"><mtw:out value="i.id"/></th>
+                                    <%--<th scope="row"><mtw:out value="i.id"/></th>--%>
                                     <td><mtw:out value="i.name"/></td>
-                                    <td><mtw:out value="i.examid"/></td>
-                                    <td><mtw:out value="i.egroupid"/></td>
+                                    <td><mtw:out value="i.examName"/></td>
+                                    <td><mtw:out value="i.groupName"/></td>
                                     <td><mtw:out value="i.startdate"/></td>
                                     <td>
                                         <c:if test="${i.status == 1}">
@@ -149,7 +149,7 @@
                             <caption> Lista de grupuri de studenti pentru examene:</caption>
                             <thead>
                             <tr>
-                                <th>#</th>
+                                <%--<th>#</th>--%>
                                 <th>Nume</th>
                                 <th>Nr. studenti</th>
                             </tr>
@@ -157,7 +157,7 @@
                             <tbody>
                             <mtw:loop var="g">
                                 <tr>
-                                    <th scope="row"><mtw:out value="g.id"/></th>
+                                    <%--<th scope="row"><mtw:out value="g.id"/></th>--%>
                                     <td><mtw:out value="g.name"/></td>
                                     <td><mtw:out value="g.students"/></td>
                                     <td>

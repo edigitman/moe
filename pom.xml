@@ -55,10 +55,10 @@
                     <groupId>mysql</groupId>
                     <artifactId>mysql-connector-java</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
+                <!--<exclusion>-->
+                    <!--<groupId>log4j</groupId>-->
+                    <!--<artifactId>log4j</artifactId>-->
+                <!--</exclusion>-->
             </exclusions>
         </dependency>
 

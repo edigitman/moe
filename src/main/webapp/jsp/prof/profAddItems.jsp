@@ -21,7 +21,14 @@
 
      <div class="row">
          <div class="col-md-6">
-             <mtw:list value="examItems">
+
+             <div class="form-group">
+                 <h3>Examen: <mtw:out value="exam.name"/></h3>
+                 <h4>Puncte totale: <mtw:out value="exam.points"/></h4>
+             </div>
+
+             <div style="overflow: auto; height: 550px" >
+                <mtw:list value="examItems">
                  <mtw:isEmpty>
                      Nu sunt subiecte!
                  </mtw:isEmpty>
@@ -31,10 +38,10 @@
                          <caption>Lista cu subiecte</caption>
                          <thead>
                          <tr>
-                             <th style="width: 35px">#</th>
-                             <th style="width: 330px">Enunt</th>
-                             <th style="width: 35px">Pct.</th>
-                             <th>Tip</th>
+                             <th style="width: 5%">#</th>
+                             <th style="width: 75%">Enunt</th>
+                             <th style="width: 10%">Pct.</th>
+                             <th style="width: 10%">Tip</th>
                          </tr>
                          </thead>
                          <tbody>
@@ -60,13 +67,9 @@
                      </table>
                  </mtw:isEmpty>
              </mtw:list>
+             </div>
          </div>
          <div class="col-md-6">
-
-             <div class="form-group">
-                 <span>Examen: <mtw:out value="exam.name"/></span><br/>
-                 <span>Puncte totale: <mtw:out value="exam.points"/></span>
-             </div>
 
              <mtw:form action="/ProfHome.addItems.m" method="post">
                  <mtw:input name="exam.id" type="hidden"/>
@@ -169,7 +172,7 @@
      </div>
 
 <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+    <div class="col-md-6">
         <a class="btn btn-link" href="/home.m">Inapoi</a>
     </div>
 </div>
@@ -178,6 +181,20 @@
 
     <jsp:attribute name="scripts">
         <script type="text/javascript" src="/js/switchButton.js"></script>
+
+        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+  <script>tinymce.init({
+      selector:'textarea',
+      statusbar: false,
+      menubar: false,
+      resize: false,
+      toolbar: 'undo redo | styleselect | bold italic underline | alignleft alignjustify | bullist numlist | preview'
+
+  });
+  </script>
+
+
+
         <script type="text/javascript">
             var check = $("input#correct");
             check.switchButton({

@@ -44,18 +44,21 @@
         </mtw:form>
     </div>
 
-    <script>
-        $(function () {
-            $("#dob").datepicker({
-                changeMonth: true,
-                changeYear: true,
-                dateFormat: 'dd/MM/yy',
-                minDate: '-0d',
-                maxDate: "+6m"
-            });
-        });
-    </script>
+
 </div>
         </jsp:attribute>
+    <jsp:attribute name="scripts">
+        <script>
+            $(function () {
+                $("#doe").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: 'dd/MM/yy',
+                    minDate: '-0d',
+                    maxDate: "+6m"
+                });
+            });
+        </script>
+    </jsp:attribute>
 </t:layout>
 

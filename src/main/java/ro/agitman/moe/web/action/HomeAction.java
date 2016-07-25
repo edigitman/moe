@@ -10,6 +10,7 @@ import ro.agitman.moe.model.Exam;
 import ro.agitman.moe.model.ExamGroup;
 import ro.agitman.moe.model.ExamInstance;
 import ro.agitman.moe.model.User;
+import ro.agitman.moe.web.dto.ExamInstanceDTO;
 
 import java.util.List;
 import java.util.Objects;
@@ -44,7 +45,8 @@ public class HomeAction extends BaseAction {
                 User user = getSessionObj();
                 List<Exam> exams = examDao.findForOwner(user.getId());
                 List<ExamGroup> examGroups = examGroupDao.findByOwner(user.getId());
-                List<ExamInstance> instances = instanceDao.findByOwner(user.getId());
+                List<ExamInstanceDTO> instances = instanceDao.findByOwnerToDTO(user.getId());
+
                 output().setValue("concepts", exams);
                 output().setValue("groups", examGroups);
                 output().setValue("instances", instances);
