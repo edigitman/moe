@@ -152,6 +152,14 @@ public class AppManager extends ApplicationManager {
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/home.m"));
 
+//````````````````````````````````````````````````````````````````
+//--------------- ACTIONS RELATED TO EXAM INSTANCE ---------------
+        action("/ProfHome", ProfHomeAction.class, "reviewExam")
+                .authorize("PROFESOR")
+                .on(SUCCESS, fwd("/jsp/prof/profReviewExam.jsp"));
+
+
+
 //****************************************************************
 //---------- STUDENT ACTIONS ---------------------------------------
 //````````````````````````````````````````````````````````````````

@@ -411,4 +411,22 @@ public class ProfHomeAction extends BaseAction {
         return SUCCESS;
     }
 
+    public String reviewExam(){
+
+        Integer exiId = input().getInt("id");
+        ExamInstance instance = instanceDao.findById(exiId);
+
+        Integer groupId = instance.getEgroupid();
+        Integer examId = instance.getExamid();
+        Exam exam = examDao.findById(examId);
+
+        List<ExamItem> items = examItemDao.findByExamId(examId);
+        List<User> students = examGroupUserDao.findByGroupId(groupId);
+
+        output().setValue("items", items);
+        output().setValue("students", students);
+        output().setValue("exam", exam);
+
+        return SUCCESS;
+    }
 }
