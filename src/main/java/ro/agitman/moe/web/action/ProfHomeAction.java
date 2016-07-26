@@ -24,6 +24,7 @@ public class ProfHomeAction extends BaseAction {
     private final ExamItemAnswerDao answerDao;
     private final UserDao userDao;
     private final ExamInstanceDao instanceDao;
+    private final StudExamAnswerDao studAnswerDao;
 
     private final EmailService emailService;
 
@@ -40,7 +41,7 @@ public class ProfHomeAction extends BaseAction {
         diffs.put(3, "Greu");
     }
 
-    public ProfHomeAction(ExamInstanceDao examInstanceDao, UserDao userDao, ExamDao examDao, ExamGroupDao examGroupDao, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
+    public ProfHomeAction(StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamDao examDao, ExamGroupDao examGroupDao, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
         this.userDao = userDao;
         this.examDao = examDao;
         this.examGroupDao = examGroupDao;
@@ -48,6 +49,7 @@ public class ProfHomeAction extends BaseAction {
         this.answerDao = answerDao;
         this.examGroupUserDao = examGroupUserDao;
         this.instanceDao = examInstanceDao;
+        this.studAnswerDao = studAnswerDao;
 
         this.emailService = emailService;
     }
@@ -333,7 +335,7 @@ public class ProfHomeAction extends BaseAction {
         examGroupUserDao.insert(examGroupUser);
     }
 
-//**************************************************************
+    //**************************************************************
 //---------------- EXAM INSTANCES ACTIONS ----------------------
     public String addExamInstRedir() {
         return SUCCESS;
@@ -392,18 +394,18 @@ public class ProfHomeAction extends BaseAction {
         return SUCCESS;
     }
 
-    public String changeInstanceStatus(){
+    public String changeInstanceStatus() {
         Integer instanceId = input().getInt("id");
         String action = input().getString("action");
 
         ExamInstance instance = instanceDao.findById(instanceId);
-        if("doStart".equals(action) && instance.getStatus().equals(1)){
+        if ("doStart".equals(action) && instance.getStatus().equals(1)) {
             instance.setStatus(2);
         }
-        if("doStop".equals(action) && instance.getStatus().equals(2)){
+        if ("doStop".equals(action) && instance.getStatus().equals(2)) {
             instance.setStatus(1);
         }
-        if("doFinish".equals(action) && instance.getStatus().equals(2)){
+        if ("doFinish".equals(action) && instance.getStatus().equals(2)) {
             instance.setStatus(3);
         }
 
@@ -411,9 +413,10 @@ public class ProfHomeAction extends BaseAction {
         return SUCCESS;
     }
 
-    public String reviewExam(){
+    public String reviewExam() {
 
         Integer exiId = input().getInt("id");
+        session().setAttribute("exiId", exiId);
         ExamInstance instance = instanceDao.findById(exiId);
 
         Integer groupId = instance.getEgroupid();
@@ -426,6 +429,18 @@ public class ProfHomeAction extends BaseAction {
         output().setValue("items", items);
         output().setValue("students", students);
         output().setValue("exam", exam);
+
+        return SUCCESS;
+    }
+
+    public String viewExamItemResult() {
+        Integer studId = input().getInt("studId");
+        Integer itemId = input().getInt("itemId");
+        Integer exiId = (Integer) session().getAttribute("exiId");
+
+        StudentExamAnswer answer = studAnswerDao.findByExiStudItem(exiId, studId, itemId);
+
+        output().setValue("answer", answer);
 
         return SUCCESS;
     }

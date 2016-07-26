@@ -112,11 +112,31 @@ public class StudHomeAction extends BaseAction {
         Boolean isLast = (Boolean) session().getAttribute("isLast");
         Integer studExi = (Integer) session().getAttribute("studExi");
         Integer itemId = (Integer) session().getAttribute("itemId");
+
+        ExamItem item = examItemDao.findById(itemId);
+        List<ExamItemAnswer> answers = answerDao.findForItem(itemId);
+
         Object studAnswerObj = input().getValue("studAnswer");
-        if(studAnswerObj instanceof String[]){
-            StringBuilder builder = new StringBuilder();
-            for(String s : (String[])studAnswerObj) {
-                builder.append(s).append(",");
+        StringBuilder actualAnswer = new StringBuilder();
+
+        // in case of free text selected
+        if (item.getType().equals(3)) {
+            actualAnswer.append(studAnswerObj.toString());
+        } else {
+            for (ExamItemAnswer itemAnswer : answers) {
+                // in case of multiple options, checkbox
+                if (studAnswerObj instanceof String[]) {
+                    for (String s : (String[]) studAnswerObj) {
+                        if (itemAnswer.getId().equals(Integer.valueOf(s))) {
+                            actualAnswer.append(itemAnswer.getValue()).append("#$");
+                        }
+                    }
+                } else {
+                    // in case only one answer selected, radiobox
+                    if (itemAnswer.getId().equals(Integer.valueOf(studAnswerObj.toString()))) {
+                        actualAnswer.append(itemAnswer.getValue()).append("#$");
+                    }
+                }
             }
         }
 
@@ -131,7 +151,7 @@ public class StudHomeAction extends BaseAction {
 
         examAnswerDao.insert(answer);
 
-        if (isLast){
+        if (isLast) {
 //          mark exam as completed by student
             StudentExamInstance instance = studEXIDao.findById(studExi);
             instance.setStatus(2);
@@ -144,7 +164,7 @@ public class StudHomeAction extends BaseAction {
         return ADD;
     }
 
-    public String viewResults(){
+    public String viewResults() {
         return SUCCESS;
     }
 }

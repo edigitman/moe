@@ -79,7 +79,7 @@ public class ExamInstanceDaoImpl extends GenericDaoImpl<ExamInstance> implements
 
 
     public List<ExamInstanceDTO> findByOwnerToDTO(Integer id){
-        List<ExamInstanceDTO> result = new ArrayList<>();
+        List<ExamInstanceDTO> result;
 
         Connection conn = beanSession.getConnection();
         PreparedStatement stmt = null;
@@ -98,7 +98,7 @@ public class ExamInstanceDaoImpl extends GenericDaoImpl<ExamInstance> implements
             stmt = SQLUtils.prepare(conn, query.toString(), id);
             rset = stmt.executeQuery();
 
-            PojoMapper<ExamInstanceDTO> pojoMapper = new PojoMapper(ExamInstanceDTO.class);
+            PojoMapper<ExamInstanceDTO> pojoMapper = PojoMapper.mapperFor(ExamInstanceDTO.class);
 
             result = pojoMapper.mapRersultSetToObject(rset);
 

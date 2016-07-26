@@ -20,8 +20,12 @@ public class PojoMapper<T> {
 
     private Class<T> clazz;
 
-    public PojoMapper(Class<T> clazz) {
+    private PojoMapper(Class<T> clazz) {
         this.clazz = clazz;
+    }
+
+    public static <T> PojoMapper mapperFor(Class<T> clazz){
+        return new PojoMapper(clazz);
     }
 
     @SuppressWarnings("unchecked")
@@ -43,7 +47,7 @@ public class PojoMapper<T> {
                     // get all the attributes of outputClass
                     Field[] fields = clazz.getDeclaredFields();
                     while (rs.next()) {
-                        T bean = (T) clazz.newInstance();
+                        T bean = clazz.newInstance();
                         for (int _iterator = 0; _iterator < rsmd.getColumnCount(); _iterator++) {
                             // getting the SQL column name
                             String columnName = rsmd.getColumnName(_iterator + 1);

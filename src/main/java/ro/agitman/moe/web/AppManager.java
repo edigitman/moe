@@ -157,7 +157,9 @@ public class AppManager extends ApplicationManager {
         action("/ProfHome", ProfHomeAction.class, "reviewExam")
                 .authorize("PROFESOR")
                 .on(SUCCESS, fwd("/jsp/prof/profReviewExam.jsp"));
-
+        action("/ProfHome", ProfHomeAction.class, "viewExamItemResult")
+                .authorize("PROFESOR")
+                .on(SUCCESS, ajax(new JsonRenderer()));
 
 
 //****************************************************************

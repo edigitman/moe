@@ -28,10 +28,19 @@ public class StudExamAnswerDaoImpl extends GenericDaoImpl<StudentExamAnswer> imp
         return studentExamAnswer;
     }
 
-    public List<StudentExamAnswer> findByStudent(Integer studId){
+    public List<StudentExamAnswer> findByStudent(Integer studId) {
         StudentExamAnswer answer = new StudentExamAnswer();
         answer.setOwnerId(studId);
 
         return beanSession.loadList(answer);
+    }
+
+    public StudentExamAnswer findByExiStudItem(Integer exiId, Integer studId, Integer itemId) {
+        StudentExamAnswer answer = new StudentExamAnswer();
+        answer.setOwnerId(studId);
+        answer.setExamItemId(exiId);
+        answer.setExamItemId(itemId);
+
+        return beanSession.loadUnique(answer);
     }
 }
