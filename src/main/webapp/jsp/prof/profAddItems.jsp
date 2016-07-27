@@ -105,68 +105,44 @@
              </mtw:form>
 
              <div class="well answersWell">
-                 <mtw:form action="/ProfHome.addItemsAnswer.m" method="post">
-                     <mtw:input name="item.id" type="hidden"/>
 
                      <div class="form-group">
                          <label for="answer">Adauga un raspuns</label>
-                         <mtw:textarea klass="form-control" name="answer.value" id="answer"/>
+                         <textarea class="form-control" name="answer.value" id="answer"></textarea>
                      </div>
 
                      <div class="row">
                          <div class="col-md-6">
                              <div class="form-group">
                                  <label for="correct">Status raspuns</label>
-                                 <mtw:input klass="form-control" style="display: none" name="answer.correct" id="mtwcorrect"/>
+                                 <input type="text" id="mtwcorrect" style="visibility: hidden;">
                                  <div class="switch-wrapper">
                                     <input type="checkbox" name="html.answer.correct" id="correct">
                                  </div>
                              </div>
                          </div>
                          <div class="col-md-3" style="height: 74px; padding-top: 25px">
-                             <button type="submit" class="btn btn-info">Adauga</button>
+                             <button type="submit" class="btn btn-info" id="addAnswerBtn">Adauga</button>
                          </div>
                      </div>
 
-                 </mtw:form>
 
-                 <mtw:list value="answers">
-                     <mtw:isEmpty>
+                     <span id="noAnswers" >
                          Nu sunt raspunsuri pentru acest subiect!
-                     </mtw:isEmpty>
-
-                     <mtw:isEmpty negate="true">
-                         <table class="table">
+                     </span>
+                     <div id="answerDiv" style="overflow: auto; height: 241px" >
+                         <table id="answersTable" class="table">
                              <caption>Lista cu raspunsuri</caption>
                              <thead>
                              <tr>
-                                 <th>#</th>
+                                 <%--<th>#</th>--%>
                                  <th style="width: 370px;">Raspuns</th>
                                  <th>Corect</th>
                              </tr>
                              </thead>
-                             <tbody>
-                             <mtw:loop var="a" counter="c" counterStart="1">
-                                 <tr>
-                                     <th scope="row"><mtw:out value="c"/></th>
-                                     <td><mtw:out value="a.value"/></td>
-                                     <td>
-                                         <span class="answerCorrect">
-                                            <mtw:out value="a.correct"/>
-                                         </span>
-                                     </td>
-                                     <td>
-                                         <a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.deleteAnswer.m?id=<mtw:out value="a.id"/>">
-                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                         </a>
-                                     </td>
-                                 </tr>
-                             </mtw:loop>
-                             </tbody>
+                             <tbody> </tbody>
                          </table>
-                     </mtw:isEmpty>
-                 </mtw:list>
-
+                     </div>
              </div>
          </div>
      </div>
@@ -181,10 +157,9 @@
 
     <jsp:attribute name="scripts">
         <script type="text/javascript" src="/js/switchButton.js"></script>
-
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   <script>tinymce.init({
-      selector:'textarea',
+      selector:'#assertion',
       statusbar: false,
       menubar: false,
       resize: false,
@@ -192,8 +167,6 @@
 
   });
   </script>
-
-
 
         <script type="text/javascript">
             var check = $("input#correct");
@@ -206,8 +179,54 @@
                 button_width: 20          // Width of the sliding part in pixels
             });
             check.change(function () {
-                $('#mtwcorrect').val(check.is(":checked") ? 1 : 0);
+                $('#mtwcorrect').val(check.is(":checked") ? 'true' : 'false');
             });
+
+//            add answer - ajax way
+            $('#addAnswerBtn').click(function(){
+                var answer = {value: $('#answer').val(), correct: $('#mtwcorrect').val()};
+
+                $('#answer').val('');
+                $('#mtwcorrect').val('');
+//                 TODO resent switch button
+
+                $.post( "/ProfHome.addItemsAnswer.m", { answer: JSON.stringify(answer) }, function(data) {
+                        addAnswerRow(data);
+                    }
+                );
+            });
+
+            var loadAllAnswers = function(){
+                $('table#answersTable tbody').empty();
+                $.get("/ProfHome.getAllAnswers.m", function(data){
+                    if(data.answers.length == 0){
+                        $('#noAnswers').show();
+                        $('#answerDiv').hide();
+                    } else {
+                        $.each(data.answers, function(index, value){
+                            addAnswerRow({answer: value});
+                        });
+                    }
+                });
+            };
+            loadAllAnswers();
+
+            var addAnswerRow = function(obj){
+                $('#noAnswers').hide();
+                $('#answerDiv').show();
+
+                var tr = $('<tr/>');
+                var value = $('<td/>').append($("<span/>").text(obj.answer.value));
+                var correct = $('<td/>').append($("<span/>").text( ('true' == $.trim(obj.answer.correct) ) ? 'Corect' : 'Gresit'));
+                var rem = $('<td/>').append($('<a/>').attr("href", "#").attr("answerId", obj.answer.id).on('click', function(event){event.preventDefault(); removeAnswer(obj.answer.id)})
+                                                .append($('<span/>').addClass("glyphicon glyphicon-remove").attr('aria-hidden', 'true')));
+                tr.append(value).append(correct).append(rem);
+                $('table#answersTable tbody').append(tr);
+            };
+
+            var removeAnswer = function(answerId){
+                $.post( "/ProfHome.deleteAnswer.m", { id: answerId }, function(data) { loadAllAnswers(); } );
+            };
 
 //          cut the assertion
             $('.assertionClass').each(function (index) {
@@ -258,15 +277,6 @@
                     $('#pointsDiv').addClass("has-error");
                 } else {
                     $('#pointsDiv').removeClass("has-error");
-                }
-            });
-
-//             decrypt answer correctness
-            $('.answerCorrect').each(function(index){
-                if ('true' == $.trim($(this).text())) {
-                    $(this).text('Corect');
-                } else {
-                    $(this).text('Gresit');
                 }
             });
 

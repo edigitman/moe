@@ -94,8 +94,10 @@ public class AppManager extends ApplicationManager {
                 .on(SUCCESS, redir("/ProfHome.addItems.m"));
         action("/ProfHome", ProfHomeAction.class, "addItemsAnswer")
                 .authorize("PROFESOR")
-                .filter(new VOFilter("answer", ExamItemAnswer.class, "answer"))
-                .on(SUCCESS, redir("/ProfHome.addItems.m"));
+                .on(SUCCESS, ajax(new JsonRenderer()));
+        action("/ProfHome", ProfHomeAction.class, "getAllAnswers")
+                .authorize("PROFESOR")
+                .on(SUCCESS, ajax(new JsonRenderer()));
         action("/ProfHome", ProfHomeAction.class, "editItem")
                 .authorize("PROFESOR")
                 .on(AJAX, ajax(new JsonRenderer()))
