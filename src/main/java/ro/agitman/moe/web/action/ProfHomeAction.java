@@ -438,9 +438,20 @@ public class ProfHomeAction extends BaseAction {
         Integer itemId = input().getInt("itemId");
         Integer exiId = (Integer) session().getAttribute("exiId");
 
+        ExamItem item = examItemDao.findById(itemId);
+        List<ExamItemAnswer> answers = answerDao.findForItem(itemId);
         StudentExamAnswer answer = studAnswerDao.findByExiStudItem(exiId, studId, itemId);
 
-        output().setValue("answer", answer);
+        output().setValue("item", item);
+        output().setValue("answers", answers);
+        if (answer != null) {
+            String val = answer.getValue();
+            val = val.replace("#$", "<br/>");
+            output().setValue("answer", val);
+        } else {
+            output().setValue("answer", "nimic");
+        }
+
 
         return SUCCESS;
     }

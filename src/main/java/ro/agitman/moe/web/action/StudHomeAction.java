@@ -147,7 +147,7 @@ public class StudHomeAction extends BaseAction {
         answer.setOwnerId(user.getId());
         answer.setExamItemId(itemId);
         answer.setStudentExamInstanceId(studExi);
-        answer.setValue(studAnswerObj.toString());
+        answer.setValue(actualAnswer.toString());
 
         examAnswerDao.insert(answer);
 

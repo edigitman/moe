@@ -184,7 +184,7 @@
 
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   <script>tinymce.init({
-      selector:'textarea',
+      selector:'#assertion',
       statusbar: false,
       menubar: false,
       resize: false,
@@ -211,6 +211,9 @@
 
 //          cut the assertion
             $('.assertionClass').each(function (index) {
+                // sanitize html assertion
+                $(this).text($(this).html(this.innerHTML).text());
+
                 if ($(this).text().trim().length > 40) {
                     $(this).text($(this).text().trim().substr(0, 40) + '...')
                 }

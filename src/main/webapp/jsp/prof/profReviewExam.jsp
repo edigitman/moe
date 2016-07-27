@@ -27,7 +27,7 @@
                 <mtw:list value="items">
                     <mtw:loop var="i">
                         <div class="row itemRow" itemId="<mtw:out value="i.id"/>">
-                            <div class="col-md-8"><mtw:out value="i.assertion"/></div>
+                            <div class="col-md-8 assertionClass"><mtw:out value="i.assertion"/></div>
                             <div class="col-md-2"><mtw:out value="i.points"/></div>
                             <div class="col-md-2"><mtw:out value="i.type"/></div>
                         </div>
@@ -49,11 +49,15 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
-                        item assertion
+                        <span id="itemAssertion"></span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">responses , mark the correct one</div>
+                    <div class="col-md-6">
+                        <ul id="itemAnswers">
+
+                        </ul>
+                    </div>
                     <div class="col-md-6">
                         <div class="row">
                             <span id="studentAnswer"></span>
@@ -102,8 +106,14 @@
                     console.log(actionOutput);
 
                     if (actionOutput.answer != null)
-                        $('#studentAnswer').html(actionOutput.answer.value);
+                        $('#studentAnswer').html(actionOutput.answer);
+                        $('#itemAssertion').html(actionOutput.item.assertion);
 
+                    $('#itemAnswers').html('');
+                        _.each(actionOutput.answers, function (t) {
+                            $('#itemAnswers').append($('<li/>').html(t.value));
+                        });
+//                        console.log();
 //                    if (result == 'success'){
 
                         // data.answers = list of answers objects
@@ -136,6 +146,12 @@
             });
 
             markCurrent();
+
+            //          cut the assertion
+            $('.assertionClass').each(function (index) {
+                // sanitize html assertion
+                $(this).text($(this).html(this.innerHTML).text());
+            });
 
             $( window ).unload(function() {
                 localStorage.removeItem("itemId");
