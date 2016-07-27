@@ -83,6 +83,7 @@ CREATE TABLE exam_instances
   examid      INTEGER,
   egroupid    INTEGER,
   owner       INTEGER,
+  autoSolved  BOOLEAN DEFAULT FALSE,
   datecreated TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
   CONSTRAINT exam_instances_pkey PRIMARY KEY (id)
 )
@@ -122,6 +123,9 @@ CREATE TABLE student_exam_answers
   examitemid            INTEGER,
   ownerid               INTEGER,
   value                 CHARACTER VARYING(200),
+  rawAnswer             CHARACTER VARYING(50),
+  solvable              BOOLEAN,
+  correct               BOOLEAN,
   datecreated           TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
   CONSTRAINT student_exam_answers_pkey PRIMARY KEY (id)
 )

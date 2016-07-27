@@ -12,6 +12,9 @@ public class StudentExamAnswer {
     private Integer examItemId;
     private Integer ownerId;
     private String value;
+    private String rawAnswer;
+    private Boolean solvable;
+    private Boolean correct;
     private Timestamp datecreated;
 
     public StudentExamAnswer(Integer id) {
@@ -106,5 +109,30 @@ public class StudentExamAnswer {
 
     public void setDatecreated(Timestamp datecreated) {
         this.datecreated = datecreated;
+    }
+
+    public String getRawAnswer() {
+        return rawAnswer;
+    }
+
+    public void setRawAnswer(String rawAnswer) {
+        this.rawAnswer = rawAnswer;
+    }
+
+    public Boolean getSolvable() {
+        return solvable;
+    }
+
+    public void setSolvable(Boolean solvable) {
+        this.solvable = solvable;
+    }
+
+
+    public Boolean getCorrect() {
+        return correct;
+    }
+
+    public void setCorrect(Boolean correct) {
+        this.correct = correct;
     }
 }

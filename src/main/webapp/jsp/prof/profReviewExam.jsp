@@ -29,7 +29,9 @@
                         <div class="row itemRow" itemId="<mtw:out value="i.id"/>">
                             <div class="col-md-8 assertionClass"><mtw:out value="i.assertion"/></div>
                             <div class="col-md-2"><mtw:out value="i.points"/></div>
-                            <div class="col-md-2"><mtw:out value="i.type"/></div>
+                            <div class="col-md-2">
+                                <span class="itemType"><mtw:out value="i.type"/></span>
+                            </div>
                         </div>
                     </mtw:loop>
                 </mtw:list>
@@ -54,9 +56,18 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <ul id="itemAnswers">
-
-                        </ul>
+                        <div id='answerDiv' style="overflow: auto; height: 241px" style="visibility: hidden">
+                            <table id="answersTable" class="table" >
+                                <caption>Lista cu raspunsuri</caption>
+                                <thead>
+                                <tr>
+                                    <th style="width: 370px;">Raspuns</th>
+                                    <th>Corect</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <div class="row">
@@ -76,54 +87,61 @@
     <jsp:attribute name="scripts">
         <script type="text/javascript">
 
-            var markCurrent = function(){
+            var markCurrent = function () {
                 var studId = localStorage.getItem("studId");
                 var itemId = localStorage.getItem("itemId");
 
-                if(itemId)
-                $('.itemRow').each(function(index){
-                    if($(this).attr('itemId') == itemId)
-                        $(this).addClass('currentItem');
-                    else
-                        $(this).removeClass('currentItem');
-                });
+                if (itemId)
+                    $('.itemRow').each(function (index) {
+                        if ($(this).attr('itemId') == itemId)
+                            $(this).addClass('currentItem');
+                        else
+                            $(this).removeClass('currentItem');
+                    });
 
-                if(studId)
-                $('.studRow').each(function(index){
-                    if($(this).attr('studId') == studId)
-                        $(this).addClass('currentItem');
-                    else
-                        $(this).removeClass('currentItem');
-                });
+                if (studId)
+                    $('.studRow').each(function (index) {
+                        if ($(this).attr('studId') == studId)
+                            $(this).addClass('currentItem');
+                        else
+                            $(this).removeClass('currentItem');
+                    });
             };
 
             var loadItem = function () {
                 var studId = localStorage.getItem("studId");
                 var itemId = localStorage.getItem("itemId");
                 console.log("studId: " + studId + ", itemId: " + itemId);
-                $.getJSON('<mtw:contextPath />/ProfHome.viewExamItemResult.m?studId=' + studId + '&itemId=' + itemId, function(actionOutput) {
+                $.getJSON('<mtw:contextPath />/ProfHome.viewExamItemResult.m?studId=' + studId + '&itemId=' + itemId, function (actionOutput) {
 
                     console.log(actionOutput);
 
                     if (actionOutput.answer != null)
                         $('#studentAnswer').html(actionOutput.answer);
-                        $('#itemAssertion').html(actionOutput.item.assertion);
 
-                    $('#itemAnswers').html('');
-                        _.each(actionOutput.answers, function (t) {
-                            $('#itemAnswers').append($('<li/>').html(t.value));
+                    $('#itemAssertion').html(actionOutput.item.assertion);
+
+                    $('table#answersTable tbody').empty();
+                    if (actionOutput.answers.length > 0) {
+                        $.each(actionOutput.answers, function (index, value) {
+                            addAnswerRow({answer: value});
                         });
-//                        console.log();
-//                    if (result == 'success'){
+                        $('#answerDiv').show();
+                    } else {
+                        $('#answerDiv').hide();
+                    }
 
-                        // data.answers = list of answers objects
-                        // data.studans = student answer value
-
-
-//                    }
                 });
             };
 
+            var addAnswerRow = function (obj) {
+                var tr = $('<tr/>');
+                var value = $('<td/>').append($("<span/>").html(obj.answer.value));
+                var correct = $('<td/>').append($("<span/>").text(('true' == $.trim(obj.answer.correct) ) ? 'Corect' : 'Gresit'));
+
+                tr.append(value).append(correct);
+                $('table#answersTable tbody').append(tr);
+            };
 
             $('.itemRow').click(function (event) {
                 event.preventDefault();
@@ -153,9 +171,21 @@
                 $(this).text($(this).html(this.innerHTML).text());
             });
 
-            $( window ).unload(function() {
+            $(window).unload(function () {
                 localStorage.removeItem("itemId");
                 localStorage.removeItem("studId");
+            });
+
+            $('.itemType').each(function (index) {
+                if ('1' == $.trim($(this).text())) {
+                    $(this).text('S.U.');
+                }
+                if ('2' == $.trim($(this).text())) {
+                    $(this).text('S.M.');
+                }
+                if ('3' == $.trim($(this).text())) {
+                    $(this).text('T.');
+                }
             });
         </script>
     </jsp:attribute>

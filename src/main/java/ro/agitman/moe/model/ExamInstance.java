@@ -13,12 +13,14 @@ public class ExamInstance {
     // 2 - pornit
     // 3 - inchis
     // 4 - spre corectare
+    // 5 - corectat
     private Integer status;
     private Timestamp startdate;
     private Timestamp enddate;
     private Integer examid;
     private Integer egroupid;
     private Integer owner;
+    private Boolean autoSolved;
     private Timestamp datecreated;
 
     public ExamInstance(Integer id) {
@@ -139,5 +141,13 @@ public class ExamInstance {
 
     public void setDatecreated(Timestamp datecreated) {
         this.datecreated = datecreated;
+    }
+
+    public Boolean getAutoSolved() {
+        return autoSolved;
+    }
+
+    public void setAutoSolved(Boolean autoSolved) {
+        this.autoSolved = autoSolved;
     }
 }

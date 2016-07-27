@@ -277,6 +277,9 @@ public class AppManager extends ApplicationManager {
                 .field("examItemId", DBTypes.INTEGER)
                 .field("ownerId", DBTypes.INTEGER)
                 .field("value", DBTypes.STRING)
+                .field("rawAnswer", DBTypes.STRING)
+                .field("solvable", DBTypes.BOOLEAN)
+                .field("correct", DBTypes.BOOLEAN)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(StudentExamInstance.class, "student_exam_instances")
@@ -312,6 +315,7 @@ public class AppManager extends ApplicationManager {
                 .field("examid", DBTypes.INTEGER)
                 .field("egroupid", DBTypes.INTEGER)
                 .field("owner", DBTypes.INTEGER)
+                .field("autoSolved", DBTypes.BOOLEAN)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(ExamGroupUser.class, "exam_group_user")

@@ -29,6 +29,7 @@ public class ProfHomeAction extends BaseAction {
 
     private final EmailService emailService;
     private Gson gson = new Gson();
+
     //    static initialization
     {
         examItemType = new HashMap<>();
@@ -157,7 +158,7 @@ public class ProfHomeAction extends BaseAction {
     //***********************************************************
 //---------------- EXAM ITEM ACTIONS ------------------------
 
-    public String getAllAnswers(){
+    public String getAllAnswers() {
         Integer examItemId = (Integer) session().getAttribute("examItemId");
         List<ExamItemAnswer> examAnswers = answerDao.findForItem(examItemId);
 
@@ -212,17 +213,17 @@ public class ProfHomeAction extends BaseAction {
         return SUCCESS;
     }
 
-    public String updateExam(){
+    public String updateExam() {
 
         String name = input().getString("name");
         String value = input().getString("value");
         Integer pk = input().getInt("pk");
 
         Exam exam = examDao.findById(pk);
-        if("examName".equals(name))
+        if ("examName".equals(name))
             exam.setName(value);
 
-        if("examDiff".equals(name))
+        if ("examDiff".equals(name))
             exam.setDifficulty(Integer.valueOf(value));
 
         examDao.save(exam);
@@ -470,4 +471,31 @@ public class ProfHomeAction extends BaseAction {
 
         return SUCCESS;
     }
+
+    public String solveExamInstance() {
+        Integer exiId = (Integer) session().getAttribute("exiId");
+        ExamInstance instance = instanceDao.findById(exiId);
+
+        List<User> students = examGroupUserDao.findByGroupId(instance.getEgroupid());
+        List<ExamItem> items = examItemDao.findByExamId(instance.getExamid());
+
+        for(User user : students){
+            for(ExamItem item : items){
+                StudentExamAnswer answer = studAnswerDao.findByExiStudItem(exiId, user.getId(), item.getId());
+                if(answer.getSolvable()){
+                    List<ExamItemAnswer> itemAnswers = answerDao.findForItem(item.getId());
+                    solveItem(answer, itemAnswers, item);
+                }
+            }
+        }
+
+        return SUCCESS;
+    }
+
+    private void solveItem(StudentExamAnswer studAnswer, List<ExamItemAnswer> itemAnswers, ExamItem item){
+        String answer = studAnswer.getRawAnswer();
+        //todo if radio simple decision
+        //todo if checkbox % maybe or all or nothing
+    }
+
 }

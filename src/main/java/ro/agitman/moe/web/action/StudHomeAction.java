@@ -4,6 +4,7 @@ import org.mentawai.core.BaseAction;
 import ro.agitman.moe.dao.*;
 import ro.agitman.moe.model.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,39 +117,43 @@ public class StudHomeAction extends BaseAction {
         ExamItem item = examItemDao.findById(itemId);
         List<ExamItemAnswer> answers = answerDao.findForItem(itemId);
 
+        StudentExamAnswer answer = new StudentExamAnswer();
+        answer.setOwnerId(user.getId());
+        answer.setExamItemId(itemId);
+        answer.setStudentExamInstanceId(studExi);
+
         Object studAnswerObj = input().getValue("studAnswer");
         StringBuilder actualAnswer = new StringBuilder();
 
         // in case of free text selected
         if (item.getType().equals(3)) {
             actualAnswer.append(studAnswerObj.toString());
+            answer.setSolvable(false);
         } else {
-            for (ExamItemAnswer itemAnswer : answers) {
-                // in case of multiple options, checkbox
-                if (studAnswerObj instanceof String[]) {
-                    for (String s : (String[]) studAnswerObj) {
-                        if (itemAnswer.getId().equals(Integer.valueOf(s))) {
-                            actualAnswer.append(itemAnswer.getValue()).append("#$");
-                        }
-                    }
-                } else {
-                    // in case only one answer selected, radiobox
-                    if (itemAnswer.getId().equals(Integer.valueOf(studAnswerObj.toString()))) {
-                        actualAnswer.append(itemAnswer.getValue()).append("#$");
-                    }
+            answer.setSolvable(true);
+            // in case of multiple options, checkbox
+            if (studAnswerObj instanceof String[]) {
+                String[] studAnswerArr = (String[]) studAnswerObj;
+                answer.setRawAnswer(Arrays.toString(studAnswerArr));
+
+                for (String s : studAnswerArr) {
+                    ExamItemAnswer foundAnswer = matchWithAnswer(s, answers);
+                    actualAnswer.append(foundAnswer.getValue()).append("#$");
                 }
+            } else {
+                // in case only one answer selected, radiobox
+                answer.setRawAnswer(studAnswerObj.toString());
+
+                ExamItemAnswer foundAnswer = matchWithAnswer(studAnswerObj, answers);
+                actualAnswer.append(foundAnswer.getValue()).append("#$");
             }
+
         }
 
         session().removeAttribute("itemId");
         session().removeAttribute("isLast");
 
-        StudentExamAnswer answer = new StudentExamAnswer();
-        answer.setOwnerId(user.getId());
-        answer.setExamItemId(itemId);
-        answer.setStudentExamInstanceId(studExi);
         answer.setValue(actualAnswer.toString());
-
         examAnswerDao.insert(answer);
 
         if (isLast) {
@@ -162,6 +167,15 @@ public class StudHomeAction extends BaseAction {
         }
 
         return ADD;
+    }
+
+    private ExamItemAnswer matchWithAnswer(Object id, List<ExamItemAnswer> answers) {
+        for (ExamItemAnswer itemAnswer : answers) {
+            if (itemAnswer.getId().equals(Integer.valueOf(id.toString()))) {
+                return itemAnswer;
+            }
+        }
+        throw new IllegalStateException("Answer not found for id " + id);
     }
 
     public String viewResults() {
