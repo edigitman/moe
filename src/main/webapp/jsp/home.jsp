@@ -34,9 +34,17 @@
   <jsp:attribute name="scripts">
     <script type="text/javascript" src="/js/jquery-picklist.min.js"></script>
     <script type="text/javascript">
-        $('#myTabs a.role[tab]').click(function (e) {
-            e.preventDefault();
-            $(this).tab('show')
+        $('.tabMenu').click(function(event){
+            localStorage.setItem('profActiveTab', event.currentTarget.attributes.href.value);
+        });
+
+        $(document).ready(function(){
+           var tab = localStorage.getItem('profActiveTab');
+            if(tab){
+                $( 'a[href="'+tab+'"]' ).trigger( "click" );
+            } else {
+                $( '#concepts' ).trigger( "click" );
+            }
         });
 
         //            decrypt exam dificulty
