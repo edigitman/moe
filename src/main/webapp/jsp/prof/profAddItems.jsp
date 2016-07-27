@@ -14,7 +14,7 @@
 <t:layout title="index">
 
     <jsp:attribute name="head">
-        <link rel="stylesheet" type="text/css" href="/css/switchButton.css">
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap-switch.min.css">
     </jsp:attribute>
 
   <jsp:attribute name="body">
@@ -105,26 +105,28 @@
              </mtw:form>
 
              <div class="well answersWell">
-
-                     <div class="form-group">
-                         <label for="answer">Adauga un raspuns</label>
-                         <textarea class="form-control" name="answer.value" id="answer"></textarea>
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label for="answer">Adauga un raspuns</label>
+                            <textarea class="form-control" name="answer.value" id="answer"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="answerCorrect">Status raspuns</label>
+                                <br/>
+                                <input type="checkbox" name="checkbox" id="answerCorrect">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="row">
+                     <div class="col-md-3">
+                         <button type="submit" class="btn btn-info" id="addAnswerBtn">Adauga</button>
                      </div>
-
-                     <div class="row">
-                         <div class="col-md-6">
-                             <div class="form-group">
-                                 <label for="correct">Status raspuns</label>
-                                 <input type="text" id="mtwcorrect" style="visibility: hidden;">
-                                 <div class="switch-wrapper">
-                                    <input type="checkbox" name="html.answer.correct" id="correct">
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-3" style="height: 74px; padding-top: 25px">
-                             <button type="submit" class="btn btn-info" id="addAnswerBtn">Adauga</button>
-                         </div>
-                     </div>
+                 </div>
 
 
                      <span id="noAnswers" >
@@ -156,7 +158,7 @@
   </jsp:attribute>
 
     <jsp:attribute name="scripts">
-        <script type="text/javascript" src="/js/switchButton.js"></script>
+        <script type="text/javascript" src="/js/bootstrap-switch.min.js"></script>
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   <script>tinymce.init({
       selector:'#assertion',
@@ -169,26 +171,27 @@
   </script>
 
         <script type="text/javascript">
-            var check = $("input#correct");
-            check.switchButton({
-                checked: false,
-                on_label: "Corect",            // Text to be displayed when checked
-                off_label: "Gresit",          // Text to be displayed when unchecked
-                width: 35,                 // Width of the button in pixels
-                height: 25,                // Height of the button in pixels
-                button_width: 20          // Width of the sliding part in pixels
+            $("#answerCorrect").bootstrapSwitch({
+                onText: 'Corect', offText: 'Gresit',
+                handleWidth : 60
             });
-            check.change(function () {
-                $('#mtwcorrect').val(check.is(":checked") ? 'true' : 'false');
+            $('#answerCorrect').on('switchChange.bootstrapSwitch', function(event, state) {
+                $('#answerCorrect').val(state); // true | false
             });
 
 //            add answer - ajax way
             $('#addAnswerBtn').click(function(){
-                var answer = {value: $('#answer').val(), correct: $('#mtwcorrect').val()};
+                var text = $('#answer');
+                var correct = $('#answerCorrect');
+                text.removeClass('has-error');
 
-                $('#answer').val('');
-                $('#mtwcorrect').val('');
-//                 TODO resent switch button
+                if($.trim(text.val()) == ''){
+                    text.addClass('has-error');
+                    return;
+                }
+                var answer = {value: text.val(), correct: correct.val()};
+                text.val('');
+                correct.bootstrapSwitch('state', false);
 
                 $.post( "/ProfHome.addItemsAnswer.m", { answer: JSON.stringify(answer) }, function(data) {
                         addAnswerRow(data);
