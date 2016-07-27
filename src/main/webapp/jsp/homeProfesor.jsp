@@ -60,8 +60,7 @@
                                 </td>
                                 <td>
                                     <c:if test="${!c.locked}">
-                                        <a class="btn btn-link" href="/ProfHome.addItemsRedir.m?id=<mtw:out value="c.id"/>">Adauga Itemi</a>
-                                        <a class="btn btn-link" href="/ProfHome.editExam.m?id=<mtw:out value="c.id"/>">Modifica</a>
+                                        <a class="btn btn-link" href="/ProfHome.addItemsRedir.m?id=<mtw:out value="c.id"/>">Modifica</a>
                                     </c:if>
                                     <c:if test="${c.locked}">
                                         <a class="btn btn-link" href="/ProfHome.editExam.m?id=<mtw:out value="c.id"/>">Cloneaza</a>

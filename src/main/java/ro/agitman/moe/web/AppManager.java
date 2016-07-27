@@ -79,9 +79,6 @@ public class AppManager extends ApplicationManager {
         action("/ProfHome", ProfHomeAction.class, "newExam")
                 .authorize("PROFESOR")
                 .on(SUCCESS, fwd("/jsp/prof/profEditExam.jsp"));
-        action("/ProfHome", ProfHomeAction.class, "editExam")
-                .authorize("PROFESOR")
-                .on(SUCCESS, fwd("/jsp/prof/profEditExam.jsp"));
         action("/ProfHome", ProfHomeAction.class, "saveExam")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("exam", Exam.class, "exam"))

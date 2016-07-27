@@ -194,23 +194,6 @@ public class ProfHomeAction extends BaseAction {
         return SUCCESS;
     }
 
-    public String editExam() {
-        Integer examId = input.getInt("id");
-
-        if (examId < 1000) {
-            return ERROR;
-        }
-
-        Exam exam = examDao.findById(examId);
-        if (exam == null) {
-            return ERROR;
-        }
-
-        output.setValue("exam", exam);
-        output.setValue("difficulties", diffs);
-        return SUCCESS;
-    }
-
     public String saveExam() {
         Exam exam = (Exam) input.getValue("exam");
 
