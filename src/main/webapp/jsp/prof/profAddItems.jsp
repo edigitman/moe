@@ -15,6 +15,7 @@
 
     <jsp:attribute name="head">
         <link rel="stylesheet" type="text/css" href="/css/bootstrap-switch.min.css">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
     </jsp:attribute>
 
   <jsp:attribute name="body">
@@ -23,7 +24,26 @@
          <div class="col-md-6">
 
              <div class="form-group">
-                 <h3>Examen: <mtw:out value="exam.name"/></h3>
+                 <h3>Examen:
+                     <a href="#" id="examName"
+                        data-type="text"
+                        data-pk="<mtw:out value="exam.id"/>"
+                        data-url="/ProfHome.updateExam.m"
+                        data-title="Modifica numele">
+                         <mtw:out value="exam.name"/>
+                     </a>
+                 </h3>
+
+                 <h4>Dificultate:
+                     <a href="#" id="examDiff"
+                        data-source="[{value: 1, text: 'Usor'}, {value: 2, text: 'Mediu'}, {value: 3, text: 'Dificil'}]"
+                        data-type="select"
+                        data-pk="<mtw:out value="exam.id"/>"
+                        data-url="/ProfHome.updateExam.m"
+                        data-title="Enter username">
+                         <mtw:out value="exam.difficulty"/>
+                     </a>
+                 </h4>
                  <h4>Puncte totale: <mtw:out value="exam.points"/></h4>
              </div>
 
@@ -160,6 +180,7 @@
     <jsp:attribute name="scripts">
         <script type="text/javascript" src="/js/bootstrap-switch.min.js"></script>
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
   <script>tinymce.init({
       selector:'#assertion',
       statusbar: false,
@@ -171,6 +192,27 @@
   </script>
 
         <script type="text/javascript">
+
+            $.fn.editable.defaults.mode = 'inline';
+            $(document).ready(function() {
+                $('#examName').editable();
+                var diff = $('#examDiff');
+                diff.editable();
+
+//            decrypt exam dificulty
+                var val = diff.text();
+                if ('1' == $.trim(val)) {
+                    diff.text('Usor');
+                }
+                if ('2' == $.trim(val)) {
+                    diff.text('Mediu');
+                }
+                if ('3' == $.trim(val)) {
+                    diff.text('Dificil');
+                }
+            });
+
+
             $("#answerCorrect").bootstrapSwitch({
                 onText: 'Corect', offText: 'Gresit',
                 handleWidth : 60

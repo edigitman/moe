@@ -86,6 +86,9 @@ public class AppManager extends ApplicationManager {
                 .authorize("PROFESOR")
                 .filter(new VOFilter("exam", Exam.class, "exam"))
                 .on(SUCCESS, redir("/home.m"));
+        action("/ProfHome", ProfHomeAction.class, "updateExam")
+                .authorize("PROFESOR")
+                .on(SUCCESS, ajax(new JsonRenderer()));
 
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS RELATED TO EXAM ITEM -------------------

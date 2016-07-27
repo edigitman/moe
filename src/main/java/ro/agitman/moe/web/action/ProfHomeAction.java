@@ -229,6 +229,24 @@ public class ProfHomeAction extends BaseAction {
         return SUCCESS;
     }
 
+    public String updateExam(){
+
+        String name = input().getString("name");
+        String value = input().getString("value");
+        Integer pk = input().getInt("pk");
+
+        Exam exam = examDao.findById(pk);
+        if("examName".equals(name))
+            exam.setName(value);
+
+        if("examDiff".equals(name))
+            exam.setDifficulty(Integer.valueOf(value));
+
+        examDao.save(exam);
+
+        return SUCCESS;
+    }
+
     //******************************************************
 //---------------- GROUPS ACTIONS ----------------------
     public String newGroup() {
