@@ -1,5 +1,6 @@
 package ro.agitman.moe.web.action;
 
+import com.google.gson.Gson;
 import org.mentawai.core.BaseAction;
 import ro.agitman.moe.dao.*;
 import ro.agitman.moe.model.*;
@@ -27,7 +28,7 @@ public class ProfHomeAction extends BaseAction {
     private final StudExamAnswerDao studAnswerDao;
 
     private final EmailService emailService;
-
+    private Gson gson = new Gson();
     //    static initialization
     {
         examItemType = new HashMap<>();
@@ -155,14 +156,27 @@ public class ProfHomeAction extends BaseAction {
 
     //***********************************************************
 //---------------- EXAM ITEM ACTIONS ------------------------
+
+    public String getAllAnswers(){
+        Integer examItemId = (Integer) session().getAttribute("examItemId");
+        List<ExamItemAnswer> examAnswers = answerDao.findForItem(examItemId);
+
+        output().setValue("answers", examAnswers);
+
+        return SUCCESS;
+    }
+
     public String addItemsAnswer() {
 
-        ExamItemAnswer answer = (ExamItemAnswer) input.getValue("answer");
-        Integer itemId = input.getInt("item.id");
+        String answerString = input.getString("answer");
+        ExamItemAnswer answer = gson.fromJson(answerString, ExamItemAnswer.class);
+        Integer examItemId = (Integer) session().getAttribute("examItemId");
 
-        answer.setItemid(itemId);
+        answer.setItemid(examItemId);
 
         answerDao.insert(answer);
+
+        output().setValue("answer", answer);
 
         return SUCCESS;
     }
@@ -176,23 +190,6 @@ public class ProfHomeAction extends BaseAction {
     //******************************************************
 //---------------- EXAM ACTIONS ------------------------
     public String newExam() {
-        output.setValue("difficulties", diffs);
-        return SUCCESS;
-    }
-
-    public String editExam() {
-        Integer examId = input.getInt("id");
-
-        if (examId < 1000) {
-            return ERROR;
-        }
-
-        Exam exam = examDao.findById(examId);
-        if (exam == null) {
-            return ERROR;
-        }
-
-        output.setValue("exam", exam);
         output.setValue("difficulties", diffs);
         return SUCCESS;
     }
@@ -211,6 +208,24 @@ public class ProfHomeAction extends BaseAction {
         } else {
             examDao.save(exam);
         }
+
+        return SUCCESS;
+    }
+
+    public String updateExam(){
+
+        String name = input().getString("name");
+        String value = input().getString("value");
+        Integer pk = input().getInt("pk");
+
+        Exam exam = examDao.findById(pk);
+        if("examName".equals(name))
+            exam.setName(value);
+
+        if("examDiff".equals(name))
+            exam.setDifficulty(Integer.valueOf(value));
+
+        examDao.save(exam);
 
         return SUCCESS;
     }

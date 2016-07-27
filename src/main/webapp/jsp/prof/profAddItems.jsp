@@ -14,7 +14,8 @@
 <t:layout title="index">
 
     <jsp:attribute name="head">
-        <link rel="stylesheet" type="text/css" href="/css/switchButton.css">
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap-switch.min.css">
+        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
     </jsp:attribute>
 
   <jsp:attribute name="body">
@@ -23,7 +24,26 @@
          <div class="col-md-6">
 
              <div class="form-group">
-                 <h3>Examen: <mtw:out value="exam.name"/></h3>
+                 <h3>Examen:
+                     <a href="#" id="examName"
+                        data-type="text"
+                        data-pk="<mtw:out value="exam.id"/>"
+                        data-url="/ProfHome.updateExam.m"
+                        data-title="Modifica numele">
+                         <mtw:out value="exam.name"/>
+                     </a>
+                 </h3>
+
+                 <h4>Dificultate:
+                     <a href="#" id="examDiff"
+                        data-source="[{value: 1, text: 'Usor'}, {value: 2, text: 'Mediu'}, {value: 3, text: 'Dificil'}]"
+                        data-type="select"
+                        data-pk="<mtw:out value="exam.id"/>"
+                        data-url="/ProfHome.updateExam.m"
+                        data-title="Enter username">
+                         <mtw:out value="exam.difficulty"/>
+                     </a>
+                 </h4>
                  <h4>Puncte totale: <mtw:out value="exam.points"/></h4>
              </div>
 
@@ -105,68 +125,46 @@
              </mtw:form>
 
              <div class="well answersWell">
-                 <mtw:form action="/ProfHome.addItemsAnswer.m" method="post">
-                     <mtw:input name="item.id" type="hidden"/>
-
-                     <div class="form-group">
-                         <label for="answer">Adauga un raspuns</label>
-                         <mtw:textarea klass="form-control" name="answer.value" id="answer"/>
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label for="answer">Adauga un raspuns</label>
+                            <textarea class="form-control" name="answer.value" id="answer"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="answerCorrect">Status raspuns</label>
+                                <br/>
+                                <input type="checkbox" name="checkbox" id="answerCorrect">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="row">
+                     <div class="col-md-3">
+                         <button type="submit" class="btn btn-info" id="addAnswerBtn">Adauga</button>
                      </div>
+                 </div>
 
-                     <div class="row">
-                         <div class="col-md-6">
-                             <div class="form-group">
-                                 <label for="correct">Status raspuns</label>
-                                 <mtw:input klass="form-control" style="display: none" name="answer.correct" id="mtwcorrect"/>
-                                 <div class="switch-wrapper">
-                                    <input type="checkbox" name="html.answer.correct" id="correct">
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-3" style="height: 74px; padding-top: 25px">
-                             <button type="submit" class="btn btn-info">Adauga</button>
-                         </div>
-                     </div>
 
-                 </mtw:form>
-
-                 <mtw:list value="answers">
-                     <mtw:isEmpty>
+                     <span id="noAnswers" >
                          Nu sunt raspunsuri pentru acest subiect!
-                     </mtw:isEmpty>
-
-                     <mtw:isEmpty negate="true">
-                         <table class="table">
+                     </span>
+                     <div id="answerDiv" style="overflow: auto; height: 241px" >
+                         <table id="answersTable" class="table">
                              <caption>Lista cu raspunsuri</caption>
                              <thead>
                              <tr>
-                                 <th>#</th>
+                                 <%--<th>#</th>--%>
                                  <th style="width: 370px;">Raspuns</th>
                                  <th>Corect</th>
                              </tr>
                              </thead>
-                             <tbody>
-                             <mtw:loop var="a" counter="c" counterStart="1">
-                                 <tr>
-                                     <th scope="row"><mtw:out value="c"/></th>
-                                     <td><mtw:out value="a.value"/></td>
-                                     <td>
-                                         <span class="answerCorrect">
-                                            <mtw:out value="a.correct"/>
-                                         </span>
-                                     </td>
-                                     <td>
-                                         <a class="btn btn-link" href="<mtw:contextPath/>/ProfHome.deleteAnswer.m?id=<mtw:out value="a.id"/>">
-                                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                         </a>
-                                     </td>
-                                 </tr>
-                             </mtw:loop>
-                             </tbody>
+                             <tbody> </tbody>
                          </table>
-                     </mtw:isEmpty>
-                 </mtw:list>
-
+                     </div>
              </div>
          </div>
      </div>
@@ -180,9 +178,9 @@
   </jsp:attribute>
 
     <jsp:attribute name="scripts">
-        <script type="text/javascript" src="/js/switchButton.js"></script>
-
+        <script type="text/javascript" src="/js/bootstrap-switch.min.js"></script>
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
   <script>tinymce.init({
       selector:'#assertion',
       statusbar: false,
@@ -193,21 +191,87 @@
   });
   </script>
 
-
-
         <script type="text/javascript">
-            var check = $("input#correct");
-            check.switchButton({
-                checked: false,
-                on_label: "Corect",            // Text to be displayed when checked
-                off_label: "Gresit",          // Text to be displayed when unchecked
-                width: 35,                 // Width of the button in pixels
-                height: 25,                // Height of the button in pixels
-                button_width: 20          // Width of the sliding part in pixels
+
+            $.fn.editable.defaults.mode = 'inline';
+            $(document).ready(function() {
+                $('#examName').editable();
+                var diff = $('#examDiff');
+                diff.editable();
+
+//            decrypt exam dificulty
+                var val = diff.text();
+                if ('1' == $.trim(val)) {
+                    diff.text('Usor');
+                }
+                if ('2' == $.trim(val)) {
+                    diff.text('Mediu');
+                }
+                if ('3' == $.trim(val)) {
+                    diff.text('Dificil');
+                }
             });
-            check.change(function () {
-                $('#mtwcorrect').val(check.is(":checked") ? 1 : 0);
+
+
+            $("#answerCorrect").bootstrapSwitch({
+                onText: 'Corect', offText: 'Gresit',
+                handleWidth : 60
             });
+            $('#answerCorrect').on('switchChange.bootstrapSwitch', function(event, state) {
+                $('#answerCorrect').val(state); // true | false
+            });
+
+//            add answer - ajax way
+            $('#addAnswerBtn').click(function(){
+                var text = $('#answer');
+                var correct = $('#answerCorrect');
+                text.removeClass('has-error');
+
+                if($.trim(text.val()) == ''){
+                    text.addClass('has-error');
+                    return;
+                }
+                var answer = {value: text.val(), correct: correct.val()};
+                text.val('');
+                correct.bootstrapSwitch('state', false);
+
+                $.post( "/ProfHome.addItemsAnswer.m", { answer: JSON.stringify(answer) }, function(data) {
+                        addAnswerRow(data);
+                    }
+                );
+            });
+
+            var loadAllAnswers = function(){
+                $('table#answersTable tbody').empty();
+                $.get("/ProfHome.getAllAnswers.m", function(data){
+                    if(data.answers.length == 0){
+                        $('#noAnswers').show();
+                        $('#answerDiv').hide();
+                    } else {
+                        $.each(data.answers, function(index, value){
+                            addAnswerRow({answer: value});
+                        });
+                    }
+                });
+            };
+            loadAllAnswers();
+
+            var addAnswerRow = function(obj){
+                $('#noAnswers').hide();
+                $('#answerDiv').show();
+
+                var tr = $('<tr/>');
+                var value = $('<td/>').append($("<span/>").text(obj.answer.value));
+                var correct = $('<td/>').append($("<span/>").text( ('true' == $.trim(obj.answer.correct) ) ? 'Corect' : 'Gresit'));
+                var rem = $('<td/>').append($('<a/>').attr("href", "#").attr("answerId", obj.answer.id).on('click', function(event){event.preventDefault(); removeAnswer(obj.answer.id)})
+                                                .append($('<span/>').addClass("glyphicon glyphicon-remove").attr('aria-hidden', 'true')));
+                tr.append(value).append(correct).append(rem);
+                $('table#answersTable tbody').append(tr);
+            };
+
+            var removeAnswer = function(answerId){
+                $.post( "/ProfHome.deleteAnswer.m", { id: answerId }, function(data) { loadAllAnswers(); } );
+            };
 
 //          cut the assertion
             $('.assertionClass').each(function (index) {
@@ -261,15 +325,6 @@
                     $('#pointsDiv').addClass("has-error");
                 } else {
                     $('#pointsDiv').removeClass("has-error");
-                }
-            });
-
-//             decrypt answer correctness
-            $('.answerCorrect').each(function(index){
-                if ('true' == $.trim($(this).text())) {
-                    $(this).text('Corect');
-                } else {
-                    $(this).text('Gresit');
                 }
             });
 

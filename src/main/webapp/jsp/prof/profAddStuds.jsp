@@ -74,12 +74,14 @@
                          </mtw:isEmpty>
                      </mtw:list>
                  </div>
-
-
-             <a href="/home.m" class="btn btn-link">Inapoi</a>
          </mtw:form>
      </div>
  </div>
+<div class="row">
+    <div class="col-md-offset-2">
+        <a href="/home.m" class="btn btn-link">Inapoi</a>
+    </div>
+</div>
 
         </jsp:attribute>
 </t:layout>

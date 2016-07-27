@@ -69,7 +69,7 @@
                 </div>
             </div>
         </div>
-
+        <a href="/home.m" class="btn btn-link">Inapoi</a>
     </jsp:attribute>
 
 

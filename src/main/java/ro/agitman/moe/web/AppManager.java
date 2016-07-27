@@ -79,13 +79,13 @@ public class AppManager extends ApplicationManager {
         action("/ProfHome", ProfHomeAction.class, "newExam")
                 .authorize("PROFESOR")
                 .on(SUCCESS, fwd("/jsp/prof/profEditExam.jsp"));
-        action("/ProfHome", ProfHomeAction.class, "editExam")
-                .authorize("PROFESOR")
-                .on(SUCCESS, fwd("/jsp/prof/profEditExam.jsp"));
         action("/ProfHome", ProfHomeAction.class, "saveExam")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("exam", Exam.class, "exam"))
                 .on(SUCCESS, redir("/home.m"));
+        action("/ProfHome", ProfHomeAction.class, "updateExam")
+                .authorize("PROFESOR")
+                .on(SUCCESS, ajax(new JsonRenderer()));
 
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS RELATED TO EXAM ITEM -------------------
@@ -94,8 +94,10 @@ public class AppManager extends ApplicationManager {
                 .on(SUCCESS, redir("/ProfHome.addItems.m"));
         action("/ProfHome", ProfHomeAction.class, "addItemsAnswer")
                 .authorize("PROFESOR")
-                .filter(new VOFilter("answer", ExamItemAnswer.class, "answer"))
-                .on(SUCCESS, redir("/ProfHome.addItems.m"));
+                .on(SUCCESS, ajax(new JsonRenderer()));
+        action("/ProfHome", ProfHomeAction.class, "getAllAnswers")
+                .authorize("PROFESOR")
+                .on(SUCCESS, ajax(new JsonRenderer()));
         action("/ProfHome", ProfHomeAction.class, "editItem")
                 .authorize("PROFESOR")
                 .on(AJAX, ajax(new JsonRenderer()))

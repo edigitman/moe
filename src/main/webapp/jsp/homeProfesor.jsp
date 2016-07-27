@@ -14,14 +14,14 @@
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
 
-            <li role="presentation" class="active">
-                <a href="#concepts" aria-controls="concepts" role="tab" data-toggle="tab">Concepte</a>
+            <li role="presentation">
+                <a href="#concepts" class="tabMenu" aria-controls="concepts" role="tab" data-toggle="tab">Concepte</a>
             </li>
             <li role="presentation">
-                <a href="#groups" aria-controls="groups" role="tab" data-toggle="tab">Grupe</a>
+                <a href="#groups" class="tabMenu" aria-controls="groups" role="tab" data-toggle="tab">Grupe</a>
             </li>
-            <li role="presentation">
-                <a href="#exams" aria-controls="exams" role="tab" data-toggle="tab">Examene</a>
+            <li role="presentation" >
+                <a href="#exams" class="tabMenu" aria-controls="exams" role="tab" data-toggle="tab">Examene</a>
             </li>
 
         </ul>
@@ -60,8 +60,7 @@
                                 </td>
                                 <td>
                                     <c:if test="${!c.locked}">
-                                        <a class="btn btn-link" href="/ProfHome.addItemsRedir.m?id=<mtw:out value="c.id"/>">Adauga Itemi</a>
-                                        <a class="btn btn-link" href="/ProfHome.editExam.m?id=<mtw:out value="c.id"/>">Modifica</a>
+                                        <a class="btn btn-link" href="/ProfHome.addItemsRedir.m?id=<mtw:out value="c.id"/>">Modifica</a>
                                     </c:if>
                                     <c:if test="${c.locked}">
                                         <a class="btn btn-link" href="/ProfHome.editExam.m?id=<mtw:out value="c.id"/>">Cloneaza</a>
