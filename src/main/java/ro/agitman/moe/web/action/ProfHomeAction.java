@@ -451,6 +451,7 @@ public class ProfHomeAction extends BaseAction {
 
         output().setValue("items", items);
         output().setValue("students", students);
+        output().setValue("alreadySolved", instance.getAutoSolved());
 
         session().setAttribute("exam", exam);
 
@@ -479,6 +480,18 @@ public class ProfHomeAction extends BaseAction {
         return SUCCESS;
     }
 
+    public String markAnswer(){
+
+        Integer studAnswerId = input().getInt("id");
+        String action = input().getString("r");
+
+        StudentExamAnswer answer = studAnswerDao.findById(studAnswerId);
+        answer.setCorrect("ok".equals(action));
+        studAnswerDao.save(answer);
+
+        return SUCCESS;
+    }
+
     public String solveExamInstance() {
         Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
         ExamInstance instance = instanceDao.findById(exiId);
@@ -496,6 +509,9 @@ public class ProfHomeAction extends BaseAction {
                 }
             }
         }
+
+        instance.setAutoSolved(true);
+        instanceDao.save(instance);
 
         output().setValue("id", exiId);
 

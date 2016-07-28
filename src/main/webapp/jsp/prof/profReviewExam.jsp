@@ -23,7 +23,7 @@
                 <h3>Examen: <mtw:out value="exam.name"/></h3>
                 <h4>Dificultate: <mtw:out value="exam.difficulty"/></h4>
                 <h4>Puncte totale: <mtw:out value="exam.points"/></h4>
-                <a href="/ProfHome.solveExamInstance.m" class="btn btn-info btn-sm">auto-corecteaza ? </a>
+                <a id="autoSolve" href="/ProfHome.solveExamInstance.m" class="btn btn-info btn-sm">auto-corecteaza ? </a>
             </div>
         </div>
         <div class="row">
@@ -69,8 +69,12 @@
                         <div class="row">
                             <span id="studentAnswer"></span>
                         </div>
+                        <br/>
                         <div class="row">
-                            <%--form to mark if correct or not--%>
+                            <div id="answerAction">
+                                <a id="markAnswerOK" class="btn btn-link" href="#">Mark Corect</a>
+                                <a id="markAnswerKO" class="btn btn-link" href="#">Mark Gresit</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -82,6 +86,13 @@
 
     <jsp:attribute name="scripts">
         <script type="text/javascript">
+            $('#answerAction').hide();
+            var hideSolveBtn = function(){
+                if('<mtw:out value="alreadySolved"/>' == 'true'){
+                    $('#autoSolve').hide();
+                }
+            };
+            hideSolveBtn();
 
             var markCurrent = function () {
                 var studId = localStorage.getItem("studId");
@@ -107,18 +118,22 @@
             var loadItem = function () {
                 var studId = localStorage.getItem("studId");
                 var itemId = localStorage.getItem("itemId");
-                console.log("studId: " + studId + ", itemId: " + itemId);
                 $.getJSON('<mtw:contextPath />/ProfHome.viewExamItemResult.m?studId=' + studId + '&itemId=' + itemId, function (actionOutput) {
                     if (actionOutput.answer != null){
+                        $('#answerAction').hide();
+
                         var span = $('<span/>');
                         span.append(actionOutput.answer.value);
                         if(actionOutput.answer.solvable){
                             span.append(actionOutput.answer.correct == true ? "Corect" : "Gresit")
+                        }else{
+                            $('#markAnswerOK').attr("href", "/ProfHome.markAnswer.m?id="+actionOutput.answer.id+'&r=ok');
+                            $('#markAnswerKO').attr("href", "/ProfHome.markAnswer.m?id="+actionOutput.answer.id+'&r=ko');
+                            $('#answerAction').show();
                         }
                         $('#studentAnswer').html(span);
                     }
 
-                    console.log(actionOutput.answer.correct);
                     $('#itemAssertion').html(actionOutput.item.assertion);
 
                     loadAllAnswers();

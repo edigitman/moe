@@ -165,7 +165,9 @@ public class AppManager extends ApplicationManager {
         action("/ProfHome", ProfHomeAction.class, "solveExamInstance")
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/ProfHome.reviewExam.m"));
-
+        action("/ProfHome", ProfHomeAction.class, "markAnswer")
+                .authorize("PROFESOR")
+                .on(SUCCESS, redir("/ProfHome.reviewExam.m"));
 
 //****************************************************************
 //---------- STUDENT ACTIONS ---------------------------------------
