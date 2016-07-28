@@ -17,10 +17,14 @@
     <jsp:attribute name="body">
 
         <div class="row">
-            <button class="btn btn-info">auto-corecteaza</button>
+
             <br/>
-            exam status: <mtw:out value="exam.status"/><br/>
-            pdf export
+            <div class="form-group">
+                <h3>Examen: <mtw:out value="exam.name"/></h3>
+                <h4>Dificultate: <mtw:out value="exam.difficulty"/></h4>
+                <h4>Puncte totale: <mtw:out value="exam.points"/></h4>
+                <a href="/ProfHome.solveExamInstance.m" class="btn btn-info btn-sm">auto-corecteaza ? </a>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-5 well">
@@ -56,25 +60,17 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div id='answerDiv' style="overflow: auto; height: 241px" style="visibility: hidden">
-                            <table id="answersTable" class="table" >
-                                <caption>Lista cu raspunsuri</caption>
-                                <thead>
-                                <tr>
-                                    <th style="width: 370px;">Raspuns</th>
-                                    <th>Corect</th>
-                                </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
+
+                        <t:itemAnswerList delete="false">
+                        </t:itemAnswerList>
+
                     </div>
                     <div class="col-md-6">
                         <div class="row">
                             <span id="studentAnswer"></span>
                         </div>
                         <div class="row">
-                            form to mark if correct or not
+                            <%--form to mark if correct or not--%>
                         </div>
                     </div>
                 </div>
@@ -113,34 +109,20 @@
                 var itemId = localStorage.getItem("itemId");
                 console.log("studId: " + studId + ", itemId: " + itemId);
                 $.getJSON('<mtw:contextPath />/ProfHome.viewExamItemResult.m?studId=' + studId + '&itemId=' + itemId, function (actionOutput) {
-
-                    console.log(actionOutput);
-
-                    if (actionOutput.answer != null)
-                        $('#studentAnswer').html(actionOutput.answer);
-
-                    $('#itemAssertion').html(actionOutput.item.assertion);
-
-                    $('table#answersTable tbody').empty();
-                    if (actionOutput.answers.length > 0) {
-                        $.each(actionOutput.answers, function (index, value) {
-                            addAnswerRow({answer: value});
-                        });
-                        $('#answerDiv').show();
-                    } else {
-                        $('#answerDiv').hide();
+                    if (actionOutput.answer != null){
+                        var span = $('<span/>');
+                        span.append(actionOutput.answer.value);
+                        if(actionOutput.answer.solvable){
+                            span.append(actionOutput.answer.correct == true ? "Corect" : "Gresit")
+                        }
+                        $('#studentAnswer').html(span);
                     }
 
+                    console.log(actionOutput.answer.correct);
+                    $('#itemAssertion').html(actionOutput.item.assertion);
+
+                    loadAllAnswers();
                 });
-            };
-
-            var addAnswerRow = function (obj) {
-                var tr = $('<tr/>');
-                var value = $('<td/>').append($("<span/>").html(obj.answer.value));
-                var correct = $('<td/>').append($("<span/>").text(('true' == $.trim(obj.answer.correct) ) ? 'Corect' : 'Gresit'));
-
-                tr.append(value).append(correct);
-                $('table#answersTable tbody').append(tr);
             };
 
             $('.itemRow').click(function (event) {

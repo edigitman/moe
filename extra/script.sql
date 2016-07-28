@@ -1,3 +1,25 @@
+DROP TABLE users;
+DROP TABLE verification_token;
+DROP TABLE exams;
+DROP TABLE exam_items;
+DROP TABLE exam_item_answers;
+DROP TABLE exam_groups;
+DROP TABLE exam_group_user;
+DROP TABLE exam_instances;
+DROP TABLE student_exam_answers;
+DROP TABLE student_exam_instances;
+
+DROP SEQUENCE users_seq;
+DROP SEQUENCE verification_token_seq;
+DROP SEQUENCE exams_seq;
+DROP SEQUENCE exam_items_seq;
+DROP SEQUENCE exam_item_answers_seq;
+DROP SEQUENCE exam_groups_seq;
+DROP SEQUENCE exam_group_user_seq;
+DROP SEQUENCE exam_instances_seq;
+DROP SEQUENCE student_exam_answers_seq;
+DROP SEQUENCE student_exam_instances_seq;
+
 CREATE TABLE users
 (
   id          INTEGER NOT NULL,
@@ -83,7 +105,7 @@ CREATE TABLE exam_instances
   examid      INTEGER,
   egroupid    INTEGER,
   owner       INTEGER,
-  autoSolved  BOOLEAN DEFAULT FALSE,
+  autoSolved  BOOLEAN                     DEFAULT FALSE,
   datecreated TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
   CONSTRAINT exam_instances_pkey PRIMARY KEY (id)
 )
@@ -96,7 +118,7 @@ CREATE TABLE exam_groups
   id          INTEGER NOT NULL,
   name        CHARACTER VARYING(200),
   owner       INTEGER,
-  students    INTEGER DEFAULT 0,
+  students    INTEGER                     DEFAULT 0,
   datecreated TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
   CONSTRAINT exam_groups_pkey PRIMARY KEY (id)
 )
@@ -207,3 +229,42 @@ VALUES ('stud0@mail.com', 'student0', 'secret', 'STUDENT', TRUE);
 
 INSERT INTO users (email, name, password, role, enabled)
 VALUES ('admin@mail.com', 'administrator', 'secret', 'ADMIN', TRUE);
+
+
+INSERT INTO exams (owner, name, difficulty, points) VALUES (1000, 'exam 1', 2, 100); -- id 1000
+
+INSERT INTO exam_items (assertion, points, type, examid)
+VALUES ('se da problema 1', 15, 1, 1000); -- id 1000
+INSERT INTO exam_items (assertion, points, type, examid)
+VALUES ('se da problema 2', 26, 2, 1000); -- id 1001
+INSERT INTO exam_items (assertion, points, type, examid)
+VALUES ('se da problema 3', 19, 2, 1000); -- id 1002
+INSERT INTO exam_items (assertion, points, type, examid)
+VALUES ('se da problema 4', 30, 3, 1000); -- id 1003
+INSERT INTO exam_items (assertion, points, type, examid)
+VALUES ('se da problema 5', 10, 1, 1000); -- id 1004
+
+INSERT INTO exam_item_answers (correct, value, itemid) VALUES (FALSE, 'raspuns 1', 1000);
+INSERT INTO exam_item_answers (correct, value, itemid) VALUES (TRUE, 'raspuns 2', 1000);
+INSERT INTO exam_item_answers (correct, value, itemid) VALUES (FALSE, 'raspuns 3', 1000);
+
+INSERT INTO exam_item_answers (correct, value, itemid) VALUES (TRUE, 'raspuns 1', 1001);
+INSERT INTO exam_item_answers (correct, value, itemid) VALUES (FALSE, 'raspuns 2', 1001);
+INSERT INTO exam_item_answers (correct, value, itemid) VALUES (FALSE, 'raspuns 3', 1001);
+
+INSERT INTO exam_item_answers (correct, value, itemid) VALUES (FALSE, 'raspuns 1', 1002);
+INSERT INTO exam_item_answers (correct, value, itemid) VALUES (TRUE, 'raspuns 2', 1002);
+INSERT INTO exam_item_answers (correct, value, itemid) VALUES (TRUE, 'raspuns 3', 1002);
+
+INSERT INTO exam_item_answers (correct, value, itemid) VALUES (FALSE, 'raspuns 1', 1004);
+INSERT INTO exam_item_answers (correct, value, itemid) VALUES (TRUE, 'raspuns 2', 1004);
+INSERT INTO exam_item_answers (correct, value, itemid) VALUES (FALSE , 'raspuns 3', 1004);
+
+INSERT INTO exam_groups (name, owner, students) VALUES ('class IX', 1000, 3);
+
+INSERT INTO exam_group_user (groupid, studentid) VALUES (1000, 1001);
+INSERT INTO exam_group_user (groupid, studentid) VALUES (1000, 1002);
+INSERT INTO exam_group_user (groupid, studentid) VALUES (1000, 1003);
+
+INSERT INTO exam_instances (name, status, examid, egroupid, owner)
+    VALUES ('exam instance', 2, 1000, 1000, 1000);

@@ -148,23 +148,8 @@
                      </div>
                  </div>
 
-
-                     <span id="noAnswers" >
-                         Nu sunt raspunsuri pentru acest subiect!
-                     </span>
-                     <div id="answerDiv" style="overflow: auto; height: 241px" >
-                         <table id="answersTable" class="table">
-                             <caption>Lista cu raspunsuri</caption>
-                             <thead>
-                             <tr>
-                                 <%--<th>#</th>--%>
-                                 <th style="width: 370px;">Raspuns</th>
-                                 <th>Corect</th>
-                             </tr>
-                             </thead>
-                             <tbody> </tbody>
-                         </table>
-                     </div>
+                    <t:itemAnswerList delete="true">
+                    </t:itemAnswerList>
              </div>
          </div>
      </div>
@@ -241,34 +226,6 @@
                 );
             });
 
-            var loadAllAnswers = function(){
-                $('table#answersTable tbody').empty();
-                $.get("/ProfHome.getAllAnswers.m", function(data){
-                    if(data.answers.length == 0){
-                        $('#noAnswers').show();
-                        $('#answerDiv').hide();
-                    } else {
-                        $.each(data.answers, function(index, value){
-                            addAnswerRow({answer: value});
-                        });
-                    }
-                });
-            };
-            loadAllAnswers();
-
-            var addAnswerRow = function(obj){
-                $('#noAnswers').hide();
-                $('#answerDiv').show();
-
-                var tr = $('<tr/>');
-                var value = $('<td/>').append($("<span/>").text(obj.answer.value));
-                var correct = $('<td/>').append($("<span/>").text( ('true' == $.trim(obj.answer.correct) ) ? 'Corect' : 'Gresit'));
-                var rem = $('<td/>').append($('<a/>').attr("href", "#").attr("answerId", obj.answer.id).on('click', function(event){event.preventDefault(); removeAnswer(obj.answer.id)})
-                                                .append($('<span/>').addClass("glyphicon glyphicon-remove").attr('aria-hidden', 'true')));
-                tr.append(value).append(correct).append(rem);
-                $('table#answersTable tbody').append(tr);
-            };
-
             var removeAnswer = function(answerId){
                 $.post( "/ProfHome.deleteAnswer.m", { id: answerId }, function(data) { loadAllAnswers(); } );
             };
@@ -288,10 +245,13 @@
                 event.preventDefault();
                 var itemId = event.currentTarget.attributes.itemId.value;
                 $.get('/ProfHome.editItem.m?id=' + itemId, function (data, result) {
-                    if (result == 'success')
+                    if (result == 'success'){
                         location.reload();
+                    }
                 });
             });
+
+            loadAllAnswers();
 
 //            highlight the selected item
             var itemId = $('#itemId').val();

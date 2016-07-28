@@ -134,7 +134,7 @@ public class StudHomeAction extends BaseAction {
             // in case of multiple options, checkbox
             if (studAnswerObj instanceof String[]) {
                 String[] studAnswerArr = (String[]) studAnswerObj;
-                answer.setRawAnswer(Arrays.toString(studAnswerArr));
+                answer.setRawAnswer(buildAnswerArray(studAnswerArr));
 
                 for (String s : studAnswerArr) {
                     ExamItemAnswer foundAnswer = matchWithAnswer(s, answers);
@@ -167,6 +167,15 @@ public class StudHomeAction extends BaseAction {
         }
 
         return ADD;
+    }
+
+    private String buildAnswerArray(String[] keys){
+        StringBuilder sb = new StringBuilder();
+        for(String k : keys){
+            sb.append(k).append("-");
+        }
+
+        return sb.toString();
     }
 
     private ExamItemAnswer matchWithAnswer(Object id, List<ExamItemAnswer> answers) {

@@ -1,12 +1,14 @@
 package ro.agitman.moe.web.action;
 
 import com.google.gson.Gson;
+import org.apache.commons.lang3.StringUtils;
 import org.mentawai.core.BaseAction;
 import ro.agitman.moe.dao.*;
 import ro.agitman.moe.model.*;
 import ro.agitman.moe.service.EmailService;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +32,11 @@ public class ProfHomeAction extends BaseAction {
     private final EmailService emailService;
     private Gson gson = new Gson();
 
+    public static final String EXAM_ID_SK = "examId";
+    public static final String EXAM_ITEM_ID_SK = "examItemId";
+    public static final String GROUP_ID_SK = "groupId";
+    public static final String EXAM_INST_ID_SK = "examInstanceId";
+
     //    static initialization
     {
         examItemType = new HashMap<>();
@@ -40,7 +47,7 @@ public class ProfHomeAction extends BaseAction {
         diffs = new HashMap<>();
         diffs.put(1, "Usor");
         diffs.put(2, "Mediu");
-        diffs.put(3, "Greu");
+        diffs.put(3, "Dificil");
     }
 
     public ProfHomeAction(StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamDao examDao, ExamGroupDao examGroupDao, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
@@ -65,7 +72,7 @@ public class ProfHomeAction extends BaseAction {
             return ERROR;
         }
 
-        session().setAttribute("examId", examId);
+        session().setAttribute(EXAM_ID_SK, examId);
 
         return SUCCESS;
     }
@@ -75,7 +82,7 @@ public class ProfHomeAction extends BaseAction {
         if (isPost()) {
 //            save and redir
             ExamItem examItem = (ExamItem) input.getValue("examItem");
-            Integer examId = (Integer) session().getAttribute("examId");
+            Integer examId = (Integer) session().getAttribute(EXAM_ID_SK);
             examItem.setExamid(examId);
 
             if (examItem.getId() == null) {
@@ -86,13 +93,13 @@ public class ProfHomeAction extends BaseAction {
 
             recomputeExamPoints();
 
-            session().setAttribute("examItemId", examItem.getId());
+            session().setAttribute(EXAM_ITEM_ID_SK, examItem.getId());
 
             return CREATED;
         } else {
             if (isGet()) {
-                Integer examId = (Integer) session().getAttribute("examId");
-                Integer examItemId = (Integer) session().getAttribute("examItemId");
+                Integer examId = (Integer) session().getAttribute(EXAM_ID_SK);
+                Integer examItemId = (Integer) session().getAttribute(EXAM_ITEM_ID_SK);
                 Exam exam = examDao.findById(examId);
                 if (exam == null) {
                     return ERROR;
@@ -121,7 +128,7 @@ public class ProfHomeAction extends BaseAction {
     }
 
     public String editItem() {
-        session().setAttribute("examItemId", input.getInt("id"));
+        session().setAttribute(EXAM_ITEM_ID_SK, input.getInt("id"));
         if (isAjaxRequest()) {
             return AJAX;
         }
@@ -131,18 +138,18 @@ public class ProfHomeAction extends BaseAction {
     public String deleteItem() {
         Integer itemId = input.getInt("id");
         examItemDao.delete(examItemDao.findById(itemId));
-        session().removeAttribute("examItemId");
+        session().removeAttribute(EXAM_ITEM_ID_SK);
         recomputeExamPoints();
         return SUCCESS;
     }
 
     public String removeEditItem() {
-        session().removeAttribute("examItemId");
+        session().removeAttribute(EXAM_ITEM_ID_SK);
         return SUCCESS;
     }
 
     private void recomputeExamPoints() {
-        Integer examId = (Integer) session().getAttribute("examId");
+        Integer examId = (Integer) session().getAttribute(EXAM_ID_SK);
         Exam exam = examDao.findById(examId);
         List<ExamItem> items = examItemDao.findByExamId(examId);
 
@@ -159,7 +166,7 @@ public class ProfHomeAction extends BaseAction {
 //---------------- EXAM ITEM ACTIONS ------------------------
 
     public String getAllAnswers() {
-        Integer examItemId = (Integer) session().getAttribute("examItemId");
+        Integer examItemId = (Integer) session().getAttribute(EXAM_ITEM_ID_SK);
         List<ExamItemAnswer> examAnswers = answerDao.findForItem(examItemId);
 
         output().setValue("answers", examAnswers);
@@ -171,7 +178,7 @@ public class ProfHomeAction extends BaseAction {
 
         String answerString = input.getString("answer");
         ExamItemAnswer answer = gson.fromJson(answerString, ExamItemAnswer.class);
-        Integer examItemId = (Integer) session().getAttribute("examItemId");
+        Integer examItemId = (Integer) session().getAttribute(EXAM_ITEM_ID_SK);
 
         answer.setItemid(examItemId);
 
@@ -273,18 +280,18 @@ public class ProfHomeAction extends BaseAction {
     }
 
     public String addStudsRedir() {
-        Integer examId = input.getInt("id");
-        if (examId < 1000) {
+        Integer groupId = input.getInt("id");
+        if (groupId < 1000) {
             return ERROR;
         }
-        session().setAttribute("groupId", examId);
+        session().setAttribute(GROUP_ID_SK, groupId);
         return SUCCESS;
     }
 
     public String addStuds() {
         if (isPost()) {
 
-            Integer groupId = (Integer) session().getAttribute("groupId");
+            Integer groupId = (Integer) session().getAttribute(GROUP_ID_SK);
             Object user = input().getValue("selectedStudents");
 
             if (user instanceof String[]) {
@@ -301,7 +308,7 @@ public class ProfHomeAction extends BaseAction {
         } else {
             if (isGet()) {
                 //populate page
-                Integer groupId = (Integer) session().getAttribute("groupId");
+                Integer groupId = (Integer) session().getAttribute(GROUP_ID_SK);
 
                 List<User> users = userDao.findAllStudents();
                 List<User> used = examGroupUserDao.findByGroupId(groupId);
@@ -327,7 +334,7 @@ public class ProfHomeAction extends BaseAction {
 
     public String deleteStuds() {
         Integer studId = input().getInt("id");
-        Integer groupId = (Integer) session().getAttribute("groupId");
+        Integer groupId = (Integer) session().getAttribute(GROUP_ID_SK);
 
         examGroupUserDao.deleteByKeys(studId, groupId);
         updateGroupStudents(groupId);
@@ -381,11 +388,11 @@ public class ProfHomeAction extends BaseAction {
 
             emailService.sendExamCreated(user);
 
-            session().setAttribute("examInstanceId", instance.getId());
+            session().setAttribute(EXAM_INST_ID_SK, instance.getId());
             return CREATED;
         } else {
             if (isGet()) {
-                Integer instanceId = (Integer) session().getAttribute("examInstanceId");
+                Integer instanceId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
                 if (instanceId != null) {
                     output.setValue("exi", instanceDao.findById(instanceId));
                 }
@@ -432,7 +439,7 @@ public class ProfHomeAction extends BaseAction {
     public String reviewExam() {
 
         Integer exiId = input().getInt("id");
-        session().setAttribute("exiId", exiId);
+        session().setAttribute(EXAM_INST_ID_SK, exiId);
         ExamInstance instance = instanceDao.findById(exiId);
 
         Integer groupId = instance.getEgroupid();
@@ -444,7 +451,8 @@ public class ProfHomeAction extends BaseAction {
 
         output().setValue("items", items);
         output().setValue("students", students);
-        output().setValue("exam", exam);
+
+        session().setAttribute("exam", exam);
 
         return SUCCESS;
     }
@@ -452,50 +460,100 @@ public class ProfHomeAction extends BaseAction {
     public String viewExamItemResult() {
         Integer studId = input().getInt("studId");
         Integer itemId = input().getInt("itemId");
-        Integer exiId = (Integer) session().getAttribute("exiId");
+        Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
 
         ExamItem item = examItemDao.findById(itemId);
-        List<ExamItemAnswer> answers = answerDao.findForItem(itemId);
         StudentExamAnswer answer = studAnswerDao.findByExiStudItem(exiId, studId, itemId);
 
+        session().setAttribute(EXAM_ITEM_ID_SK, itemId);
+
         output().setValue("item", item);
-        output().setValue("answers", answers);
         if (answer != null) {
             String val = answer.getValue();
             val = val.replace("#$", "<br/>");
-            output().setValue("answer", val);
+            answer.setValue(val);
+            output().setValue("answer", answer);
         } else {
             output().setValue("answer", "nimic");
         }
-
-
         return SUCCESS;
     }
 
     public String solveExamInstance() {
-        Integer exiId = (Integer) session().getAttribute("exiId");
+        Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
         ExamInstance instance = instanceDao.findById(exiId);
 
         List<User> students = examGroupUserDao.findByGroupId(instance.getEgroupid());
         List<ExamItem> items = examItemDao.findByExamId(instance.getExamid());
 
-        for(User user : students){
-            for(ExamItem item : items){
+        for (User user : students) {
+            for (ExamItem item : items) {
                 StudentExamAnswer answer = studAnswerDao.findByExiStudItem(exiId, user.getId(), item.getId());
-                if(answer.getSolvable()){
+                if (answer != null && answer.getSolvable()) {
                     List<ExamItemAnswer> itemAnswers = answerDao.findForItem(item.getId());
                     solveItem(answer, itemAnswers, item);
+                    studAnswerDao.save(answer);
                 }
             }
         }
 
+        output().setValue("id", exiId);
+
         return SUCCESS;
     }
 
-    private void solveItem(StudentExamAnswer studAnswer, List<ExamItemAnswer> itemAnswers, ExamItem item){
+    private void solveItem(StudentExamAnswer studAnswer, List<ExamItemAnswer> itemAnswers, ExamItem item) {
+        switch (item.getType()) {
+            case 1:
+                solveUniqueSel(studAnswer, itemAnswers);
+                break;
+            case 2:
+                solveMultiSel(studAnswer, itemAnswers);
+                break;
+            default:
+                throw new IllegalStateException("Item type unclear");
+        }
+    }
+
+    private void solveMultiSel(StudentExamAnswer studAnswer, List<ExamItemAnswer> itemAnswers) {
+        String[] answers = studAnswer.getRawAnswer().split("-");
+        boolean correct = true;
+        Iterator<ExamItemAnswer> eiaIt = itemAnswers.iterator();
+        while (eiaIt.hasNext() && correct) {
+            ExamItemAnswer itemAnswer = eiaIt.next();
+            if (itemAnswer.getCorrect()) {
+                boolean found = false;
+                for (String answer : answers) {
+                    if (!StringUtils.isEmpty(answer) && itemAnswer.getId().equals(Integer.valueOf(answer))) {
+                        found = true;
+                        break;
+                    }
+                }
+                correct = found;
+            } else {
+                boolean found = false;
+                for (String answer : answers) {
+                    if (!StringUtils.isEmpty(answer) && itemAnswer.getId().equals(Integer.valueOf(answer))) {
+                        found = true;
+                        break;
+                    }
+                }
+                correct = !found;
+            }
+        }
+
+        studAnswer.setCorrect(correct);
+    }
+
+    private void solveUniqueSel(StudentExamAnswer studAnswer, List<ExamItemAnswer> itemAnswers) {
         String answer = studAnswer.getRawAnswer();
-        //todo if radio simple decision
-        //todo if checkbox % maybe or all or nothing
+        studAnswer.setCorrect(false);
+        for (ExamItemAnswer itemAnswer : itemAnswers) {
+            if (itemAnswer.getCorrect() && itemAnswer.getId().equals(Integer.valueOf(answer))) {
+                studAnswer.setCorrect(true);
+                break;
+            }
+        }
     }
 
 }

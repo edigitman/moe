@@ -162,6 +162,9 @@ public class AppManager extends ApplicationManager {
         action("/ProfHome", ProfHomeAction.class, "viewExamItemResult")
                 .authorize("PROFESOR")
                 .on(SUCCESS, ajax(new JsonRenderer()));
+        action("/ProfHome", ProfHomeAction.class, "solveExamInstance")
+                .authorize("PROFESOR")
+                .on(SUCCESS, redir("/ProfHome.reviewExam.m"));
 
 
 //****************************************************************
