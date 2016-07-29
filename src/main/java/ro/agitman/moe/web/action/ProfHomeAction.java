@@ -32,10 +32,10 @@ public class ProfHomeAction extends BaseAction {
     private final EmailService emailService;
     private Gson gson = new Gson();
 
-    public static final String EXAM_ID_SK = "examId";
-    public static final String EXAM_ITEM_ID_SK = "examItemId";
-    public static final String GROUP_ID_SK = "groupId";
-    public static final String EXAM_INST_ID_SK = "examInstanceId";
+    private static final String EXAM_ID_SK = "examId";
+    private static final String EXAM_ITEM_ID_SK = "examItemId";
+    private static final String GROUP_ID_SK = "groupId";
+    private static final String EXAM_INST_ID_SK = "examInstanceId";
 
     //    static initialization
     {
@@ -439,7 +439,12 @@ public class ProfHomeAction extends BaseAction {
     public String reviewExam() {
 
         Integer exiId = input().getInt("id");
-        session().setAttribute(EXAM_INST_ID_SK, exiId);
+        if (exiId < 0) {
+            exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
+        } else {
+            session().setAttribute(EXAM_INST_ID_SK, exiId);
+        }
+
         ExamInstance instance = instanceDao.findById(exiId);
 
         Integer groupId = instance.getEgroupid();
@@ -480,7 +485,7 @@ public class ProfHomeAction extends BaseAction {
         return SUCCESS;
     }
 
-    public String markAnswer(){
+    public String markAnswer() {
 
         Integer studAnswerId = input().getInt("id");
         String action = input().getString("r");

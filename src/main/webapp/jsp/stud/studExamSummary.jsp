@@ -17,11 +17,11 @@
 
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-
-        <%-- after exam is started, view a summary of items --%>
-        multumim pentru participare
-        <br/>
-        <a href="/home.m">Index</a>
+        <div class="well">
+            Multumim pentru participare
+            <br/>
+            <a href="/home.m">Acasa</a>
+        </div>
     </div>
 </div>
 

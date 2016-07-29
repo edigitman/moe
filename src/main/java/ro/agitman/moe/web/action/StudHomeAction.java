@@ -39,7 +39,7 @@ public class StudHomeAction extends BaseAction {
         List<ExamItem> items = examItemDao.findByExamId(exam.getId());
 
         output().setValue("exam", exam);
-        output().setValue("itemsNo", items.size());
+        session.setAttribute("itemsNo", items.size());
 
         return SUCCESS;
     }
@@ -98,6 +98,7 @@ public class StudHomeAction extends BaseAction {
                     session().setAttribute("itemId", chosenItem.getId());
                     output().setValue("item", chosenItem);
                     output().setValue("answers", answers);
+                    output().setValue("itemIndex", studAnswers.size() + 1);
                 }
 
                 session().setAttribute("isLast", items.size() == (studAnswers.size() + 1));

@@ -19,15 +19,19 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
 
+        <div class="well">
+            <div class="row">
+                subiectul <mtw:out value="itemIndex"/> din <mtw:out value="itemsNo"/>
+            </div>
+            <hr/>
+            <div class="row">
+                <span>
+                    <mtw:out value="item.assertion"/>
+                </span>
+            </div>
+            <hr/>
 
-        <div class="row">
-            <span>
-                <mtw:out value="item.assertion"/>
-            </span>
-        </div>
-        <br/>
-
-        <mtw:form action="/stud.saveAnswer.m" method="post">
+            <mtw:form action="/stud.saveAnswer.m" method="post">
         <div class="row">
                 <%-- type 1 is unique --%>
                 <%-- type 2 is multiple --%>
@@ -62,12 +66,13 @@
                 <br/>
             </c:if>
         </div>
-
+<hr/>
 
             <input type="submit" class="btn btn-success" value="Salveaza">
 
         </mtw:form>
 
+        </div>
     </div>
 </div>
 
