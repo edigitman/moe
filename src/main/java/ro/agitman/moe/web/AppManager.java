@@ -167,7 +167,7 @@ public class AppManager extends ApplicationManager {
                 .on(SUCCESS, redir("/ProfHome.reviewExam.m"));
         action("/ProfHome", ProfHomeAction.class, "markAnswer")
                 .authorize("PROFESOR")
-                .on(SUCCESS, redir("/ProfHome.reviewExam.m"));
+                .on(SUCCESS, ajax(new JsonRenderer()));
 
 //****************************************************************
 //---------- STUDENT ACTIONS ---------------------------------------
@@ -285,6 +285,7 @@ public class AppManager extends ApplicationManager {
                 .field("rawAnswer", DBTypes.STRING)
                 .field("solvable", DBTypes.BOOLEAN)
                 .field("correct", DBTypes.BOOLEAN)
+                .field("reviewed", DBTypes.BOOLEAN)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(StudentExamInstance.class, "student_exam_instances")

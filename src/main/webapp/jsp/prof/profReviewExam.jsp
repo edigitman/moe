@@ -124,11 +124,12 @@
 
                         var span = $('<span/>');
                         span.append(actionOutput.answer.value);
-                        if(actionOutput.answer.solvable){
+                        if(actionOutput.answer.reviewed){
+                            span.append($('<br/>'));
                             span.append(actionOutput.answer.correct == true ? "Corect" : "Gresit")
                         }else{
-                            $('#markAnswerOK').attr("href", "/ProfHome.markAnswer.m?id="+actionOutput.answer.id+'&r=ok');
-                            $('#markAnswerKO').attr("href", "/ProfHome.markAnswer.m?id="+actionOutput.answer.id+'&r=ko');
+                            $('#markAnswerOK').attr("aid", actionOutput.answer.id);
+                            $('#markAnswerKO').attr("aid", actionOutput.answer.id);
                             $('#answerAction').show();
                         }
                         $('#studentAnswer').html(span);
@@ -139,6 +140,19 @@
                     loadAllAnswers();
                 });
             };
+
+            $('#markAnswerOK').click(function(){
+                var aid = $('#markAnswerOK').attr('aid');
+                $.get('/ProfHome.markAnswer.m?id=' + aid + '&r=ok', function(data){
+                    loadItem();
+                });
+            });
+            $('#markAnswerKO').click(function(){
+                var aid = $('#markAnswerKO').attr('aid');
+                $.get('/ProfHome.markAnswer.m?id=' + aid + '&r=1', function(data){
+                    loadItem();
+                });
+            });
 
             $('.itemRow').click(function (event) {
                 event.preventDefault();

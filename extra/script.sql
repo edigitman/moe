@@ -148,6 +148,7 @@ CREATE TABLE student_exam_answers
   rawAnswer             CHARACTER VARYING(50),
   solvable              BOOLEAN,
   correct               BOOLEAN,
+  reviewed              BOOLEAN DEFAULT FALSE,
   datecreated           TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
   CONSTRAINT student_exam_answers_pkey PRIMARY KEY (id)
 )

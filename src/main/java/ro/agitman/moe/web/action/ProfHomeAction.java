@@ -492,6 +492,7 @@ public class ProfHomeAction extends BaseAction {
 
         StudentExamAnswer answer = studAnswerDao.findById(studAnswerId);
         answer.setCorrect("ok".equals(action));
+        answer.setReviewed(true);
         studAnswerDao.save(answer);
 
         return SUCCESS;
@@ -510,6 +511,7 @@ public class ProfHomeAction extends BaseAction {
                 if (answer != null && answer.getSolvable()) {
                     List<ExamItemAnswer> itemAnswers = answerDao.findForItem(item.getId());
                     solveItem(answer, itemAnswers, item);
+                    answer.setReviewed(true);
                     studAnswerDao.save(answer);
                 }
             }
@@ -562,7 +564,6 @@ public class ProfHomeAction extends BaseAction {
                 correct = !found;
             }
         }
-
         studAnswer.setCorrect(correct);
     }
 

@@ -14,6 +14,7 @@ public class StudentExamAnswer {
     private String value;
     private String rawAnswer;
     private Boolean solvable;
+    private Boolean reviewed;
     private Boolean correct;
     private Timestamp datecreated;
 
@@ -134,5 +135,13 @@ public class StudentExamAnswer {
 
     public void setCorrect(Boolean correct) {
         this.correct = correct;
+    }
+
+    public Boolean getReviewed() {
+        return reviewed;
+    }
+
+    public void setReviewed(Boolean reviewd) {
+        this.reviewed = reviewd;
     }
 }
