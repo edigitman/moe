@@ -23,7 +23,8 @@
                 <h3>Examen: <mtw:out value="exam.name"/></h3>
                 <h4>Dificultate: <mtw:out value="exam.difficulty"/></h4>
                 <h4>Puncte totale: <mtw:out value="exam.points"/></h4>
-                <a id="autoSolve" href="/ProfHome.solveExamInstance.m" class="btn btn-info btn-sm">auto-corecteaza ? </a>
+                <a id="autoSolve" href="/ProfHome.solveExamInstance.m" class="btn btn-info btn-sm">auto-corecteaza
+                    ? </a>
             </div>
         </div>
         <div class="row">
@@ -72,6 +73,7 @@
                         <br/>
                         <div class="row">
                             <div id="answerAction">
+                                <span><input type="number" id="scorePC" style="width: 45px"/> &percnt;</span>
                                 <a id="markAnswerOK" class="btn btn-link" href="#">Mark Corect</a>
                                 <a id="markAnswerKO" class="btn btn-link" href="#">Mark Gresit</a>
                             </div>
@@ -87,8 +89,8 @@
     <jsp:attribute name="scripts">
         <script type="text/javascript">
             $('#answerAction').hide();
-            var hideSolveBtn = function(){
-                if('<mtw:out value="alreadySolved"/>' == 'true'){
+            var hideSolveBtn = function () {
+                if ('<mtw:out value="alreadySolved"/>' == 'true') {
                     $('#autoSolve').hide();
                 }
             };
@@ -119,15 +121,21 @@
                 var studId = localStorage.getItem("studId");
                 var itemId = localStorage.getItem("itemId");
                 $.getJSON('<mtw:contextPath />/ProfHome.viewExamItemResult.m?studId=' + studId + '&itemId=' + itemId, function (actionOutput) {
-                    if (actionOutput.answer != null){
+                    if (actionOutput.answer != null) {
                         $('#answerAction').hide();
 
                         var span = $('<span/>');
                         span.append(actionOutput.answer.value);
-                        if(actionOutput.answer.reviewed){
+
+                        if (actionOutput.answer.reviewed || actionOutput.answer.solvable) {
                             span.append($('<br/>'));
-                            span.append(actionOutput.answer.correct == true ? "Corect" : "Gresit")
-                        }else{
+                            span.append(actionOutput.answer.correct == true ? "Corect" : "Gresit");
+                            if(!actionOutput.answer.solvable && actionOutput.answer.reviewed && actionOutput.answer.correct){
+                                span.append(" cu " + actionOutput.answer.points + " puncte");
+                            }
+                        }
+
+                        if (!actionOutput.answer.solvable) {
                             $('#markAnswerOK').attr("aid", actionOutput.answer.id);
                             $('#markAnswerKO').attr("aid", actionOutput.answer.id);
                             $('#answerAction').show();
@@ -141,15 +149,16 @@
                 });
             };
 
-            $('#markAnswerOK').click(function(){
+            $('#markAnswerOK').click(function () {
                 var aid = $('#markAnswerOK').attr('aid');
-                $.get('/ProfHome.markAnswer.m?id=' + aid + '&r=ok', function(data){
+                var percentage = $('#scorePC').val();
+                $.get('/ProfHome.markAnswer.m?id=' + aid + '&r=ok' + '&p=' + percentage, function (data) {
                     loadItem();
                 });
             });
-            $('#markAnswerKO').click(function(){
+            $('#markAnswerKO').click(function () {
                 var aid = $('#markAnswerKO').attr('aid');
-                $.get('/ProfHome.markAnswer.m?id=' + aid + '&r=1', function(data){
+                $.get('/ProfHome.markAnswer.m?id=' + aid + '&r=1', function (data) {
                     loadItem();
                 });
             });

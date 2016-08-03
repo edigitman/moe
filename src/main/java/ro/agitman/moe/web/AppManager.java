@@ -286,6 +286,7 @@ public class AppManager extends ApplicationManager {
                 .field("solvable", DBTypes.BOOLEAN)
                 .field("correct", DBTypes.BOOLEAN)
                 .field("reviewed", DBTypes.BOOLEAN)
+                .field("points", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(StudentExamInstance.class, "student_exam_instances")
@@ -307,7 +308,7 @@ public class AppManager extends ApplicationManager {
                 .pk("id", DBTypes.SEQUENCE)
                 .field("assertion", DBTypes.STRING)
                 .field("difficulty", DBTypes.INTEGER)
-                .field("points", DBTypes.LONG)
+                .field("points", DBTypes.INTEGER)
                 .field("type", DBTypes.INTEGER)
                 .field("examid", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);

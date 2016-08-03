@@ -16,6 +16,7 @@ public class StudentExamAnswer {
     private Boolean solvable;
     private Boolean reviewed;
     private Boolean correct;
+    private Integer points;
     private Timestamp datecreated;
 
     public StudentExamAnswer(Integer id) {
@@ -143,5 +144,13 @@ public class StudentExamAnswer {
 
     public void setReviewed(Boolean reviewd) {
         this.reviewed = reviewd;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
     }
 }

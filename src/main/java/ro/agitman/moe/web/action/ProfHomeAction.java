@@ -489,9 +489,19 @@ public class ProfHomeAction extends BaseAction {
 
         Integer studAnswerId = input().getInt("id");
         String action = input().getString("r");
+        Integer perc = input().getInt("p");
 
         StudentExamAnswer answer = studAnswerDao.findById(studAnswerId);
-        answer.setCorrect("ok".equals(action));
+        ExamItem item = examItemDao.findById(answer.getExamItemId());
+
+        if ("ok".equals(action)) {
+            answer.setCorrect(true);
+            answer.setPoints(item.getPoints() * perc / 100);
+        } else{
+            answer.setCorrect(false);
+            answer.setPoints(0);
+        }
+
         answer.setReviewed(true);
         studAnswerDao.save(answer);
 

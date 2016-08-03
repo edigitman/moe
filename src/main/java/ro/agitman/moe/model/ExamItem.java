@@ -10,7 +10,7 @@ public class ExamItem {
     private Integer id;
     private String assertion;
     private Integer difficulty;
-    private Long points;
+    private Integer points;
     private Integer type;
     private Integer examid;
     private Timestamp datecreated;
@@ -85,11 +85,11 @@ public class ExamItem {
         this.difficulty = difficulty;
     }
 
-    public Long getPoints() {
+    public Integer getPoints() {
         return points;
     }
 
-    public void setPoints(Long points) {
+    public void setPoints(Integer points) {
         this.points = points;
     }
 

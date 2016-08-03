@@ -149,6 +149,7 @@ CREATE TABLE student_exam_answers
   solvable              BOOLEAN,
   correct               BOOLEAN,
   reviewed              BOOLEAN DEFAULT FALSE,
+  points                INTEGER DEFAULT 0,
   datecreated           TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
   CONSTRAINT student_exam_answers_pkey PRIMARY KEY (id)
 )
