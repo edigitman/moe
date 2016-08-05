@@ -17,9 +17,11 @@ import ro.agitman.moe.model.*;
 import ro.agitman.moe.service.EmailService;
 import ro.agitman.moe.service.ExamGroupService;
 import ro.agitman.moe.service.ExamService;
+import ro.agitman.moe.service.StudExamAnswerService;
 import ro.agitman.moe.service.impl.EmailServiceImpl;
 import ro.agitman.moe.service.impl.ExamGroupServiceImpl;
 import ro.agitman.moe.service.impl.ExamServiceImpl;
+import ro.agitman.moe.service.impl.StudExamAnswerServiceImpl;
 import ro.agitman.moe.web.action.*;
 import ro.agitman.moe.web.filter.PerformanceMonitoringFilter;
 
@@ -249,6 +251,7 @@ public class AppManager extends ApplicationManager {
         ioc(EmailService.class, EmailServiceImpl.class);
         ioc(ExamService.class, ExamServiceImpl.class);
         ioc(ExamGroupService.class, ExamGroupServiceImpl.class);
+        ioc(StudExamAnswerService.class, StudExamAnswerServiceImpl.class);
     }
 
     @Override

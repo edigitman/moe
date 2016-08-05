@@ -18,8 +18,36 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="well">
-            Multumim pentru participare
+            Sumarul Examenului
             <br/>
+
+            <mtw:list value="results">
+
+                <table class="table">
+                    <caption>Subiecte examen</caption>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Enunt</th>
+                        <th>Puncte</th>
+                        <th>Raspuns</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <mtw:loop var="r" counter="index" counterStart="1">
+                        <tr>
+                            <th scope="row"><mtw:out value="index"/></th>
+                            <td><mtw:out value="r.item.assertion"/></td>
+                            <td><mtw:out value="r.item.points"/></td>
+                            <td><mtw:out value="r.answer.value"/></td>
+                        </tr>
+                    </mtw:loop>
+                    </tbody>
+                </table>
+
+            </mtw:list>
+
+
             <a href="/home.m">Acasa</a>
         </div>
     </div>

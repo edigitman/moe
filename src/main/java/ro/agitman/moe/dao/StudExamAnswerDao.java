@@ -1,6 +1,7 @@
 package ro.agitman.moe.dao;
 
 import ro.agitman.moe.model.StudentExamAnswer;
+import ro.agitman.moe.web.dto.StudentItemAnswerDTO;
 
 import java.util.List;
 
@@ -10,6 +11,8 @@ import java.util.List;
 public interface StudExamAnswerDao extends GenericDao<StudentExamAnswer> {
 
     List<StudentExamAnswer> findByStudent(Integer studId);
+
+    List<StudentItemAnswerDTO> findWithItemByStudentInstance(Integer exiId);
 
     StudentExamAnswer findByExiStudItem(Integer exiId, Integer studId, Integer itemId);
 }

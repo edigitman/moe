@@ -4,8 +4,9 @@ import org.mentawai.core.BaseAction;
 import ro.agitman.moe.dao.*;
 import ro.agitman.moe.model.*;
 import ro.agitman.moe.service.ExamService;
+import ro.agitman.moe.service.StudExamAnswerService;
+import ro.agitman.moe.web.dto.StudentItemAnswerDTO;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,15 +20,15 @@ public class StudentAction extends BaseAction {
     private final ExamInstanceDao instanceDao;
     private final ExamItemDao examItemDao;
     private final StudExamInstanceDao studEXIDao;
-    private final StudExamAnswerDao examAnswerDao;
+    private final StudExamAnswerService examAnswerService;
     private final ExamItemAnswerDao answerDao;
 
-    public StudentAction(ExamItemDao examItemDao, ExamService examService, ExamInstanceDao instanceDao, StudExamInstanceDao studExamInstanceDao, StudExamAnswerDao studExamAnswerDao, ExamItemAnswerDao answerDao) {
+    public StudentAction(ExamItemDao examItemDao, ExamService examService, ExamInstanceDao instanceDao, StudExamInstanceDao studExamInstanceDao, StudExamAnswerService studExamAnswerService, ExamItemAnswerDao answerDao) {
         this.examService = examService;
         this.instanceDao = instanceDao;
         this.examItemDao = examItemDao;
         this.studEXIDao = studExamInstanceDao;
-        this.examAnswerDao = studExamAnswerDao;
+        this.examAnswerService = studExamAnswerService;
         this.answerDao = answerDao;
     }
 
@@ -72,7 +73,7 @@ public class StudentAction extends BaseAction {
 
 //              todo make a query to optimise this
                 List<ExamItem> items = examItemDao.findByExamId(studExi.getExamid());
-                List<StudentExamAnswer> studAnswers = examAnswerDao.findByStudent(user.getId());
+                List<StudentExamAnswer> studAnswers = examAnswerService.findByStudent(user.getId());
 
                 ExamItem chosenItem = null;
                 for (ExamItem item : items) {
@@ -120,83 +121,18 @@ public class StudentAction extends BaseAction {
         session().removeAttribute("itemId");
         session().removeAttribute("isLast");
 
-        StudentExamAnswer answer = new StudentExamAnswer();
-        answer.setOwnerId(user.getId());
-        answer.setExamItemId(itemId);
-        answer.setStudentExamInstanceId(studExi);
+        examAnswerService.createAnswer(input().getValue("studAnswer"), skip, user.getId(), studExi, itemId, isLast);
 
-        if(!skip){
-            parseAnswer(answer, itemId);
-        }
-
-        examAnswerDao.insert(answer);
-
-        if (isLast) {
-//          mark exam as completed by student
-            StudentExamInstance instance = studEXIDao.findById(studExi);
-            instance.setStatus(2);
-            studEXIDao.save(instance);
-
-            session().removeAttribute("studExi");
-            return SUCCESS;
-        }
-
-        return ADD;
-    }
-
-    private void parseAnswer(StudentExamAnswer answer, Integer itemId){
-
-        ExamItem item = examItemDao.findById(itemId);
-        List<ExamItemAnswer> answers = answerDao.findForItem(itemId);
-
-        Object studAnswerObj = input().getValue("studAnswer");
-        StringBuilder actualAnswer = new StringBuilder();
-
-        // in case of free text selected
-        if (item.getType().equals(3)) {
-            actualAnswer.append(studAnswerObj);
-            answer.setSolvable(false);
-        } else {
-            answer.setSolvable(true);
-            // in case of multiple options, checkbox
-            if (studAnswerObj instanceof String[]) {
-                String[] studAnswerArr = (String[]) studAnswerObj;
-                answer.setRawAnswer(buildAnswerArray(studAnswerArr));
-
-                for (String s : studAnswerArr) {
-                    ExamItemAnswer foundAnswer = matchWithAnswer(s, answers);
-                    actualAnswer.append(foundAnswer.getValue()).append("#$");
-                }
-            } else {
-                // in case only one answer selected, radiobox
-                answer.setRawAnswer(String.valueOf(studAnswerObj));
-
-                ExamItemAnswer foundAnswer = matchWithAnswer(studAnswerObj, answers);
-                actualAnswer.append(foundAnswer.getValue()).append("#$");
-            }
-        }
-        answer.setValue(actualAnswer.toString());
-    }
-
-    private String buildAnswerArray(String[] keys){
-        StringBuilder sb = new StringBuilder();
-        for(String k : keys){
-            sb.append(k).append("-");
-        }
-
-        return sb.toString();
-    }
-
-    private ExamItemAnswer matchWithAnswer(Object id, List<ExamItemAnswer> answers) {
-        for (ExamItemAnswer itemAnswer : answers) {
-            if (itemAnswer.getId().equals(Integer.valueOf(id.toString()))) {
-                return itemAnswer;
-            }
-        }
-        throw new IllegalStateException("Answer not found for id " + id);
+        return  isLast ? SUCCESS : ADD;
     }
 
     public String viewResults() {
+
+        Integer studExi = (Integer) session().getAttribute("studExi");
+        List<StudentItemAnswerDTO> results = examAnswerService.loadStudentItemAsnwers(studExi);
+
+        output().setValue("results", results);
+
         return SUCCESS;
     }
 }
