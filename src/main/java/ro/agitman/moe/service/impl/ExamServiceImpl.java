@@ -43,10 +43,7 @@ public class ExamServiceImpl implements ExamService {
             Exam exam = examDao.findById(examId);
             List<ExamItem> items = examItemDao.findByExamId(examId);
 
-            Long total = 0L;
-            for (ExamItem ei : items) {
-                total += ei.getPoints();
-            }
+            Integer total = items.stream().mapToInt(ExamItem::getPoints).sum();
 
             exam.setPoints(total);
             examDao.save(exam);

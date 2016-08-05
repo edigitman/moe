@@ -3,6 +3,7 @@ package ro.agitman.moe.web.action;
 import org.mentawai.core.BaseAction;
 import ro.agitman.moe.dao.*;
 import ro.agitman.moe.model.*;
+import ro.agitman.moe.service.ExamService;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,15 +15,15 @@ import java.util.Map;
  */
 public class StudHomeAction extends BaseAction {
 
-    private final ExamDao examDao;
+    private final ExamService examService;
     private final ExamInstanceDao instanceDao;
     private final ExamItemDao examItemDao;
     private final StudExamInstanceDao studEXIDao;
     private final StudExamAnswerDao examAnswerDao;
     private final ExamItemAnswerDao answerDao;
 
-    public StudHomeAction(ExamItemDao examItemDao, ExamDao examDao, ExamInstanceDao instanceDao, StudExamInstanceDao studExamInstanceDao, StudExamAnswerDao studExamAnswerDao, ExamItemAnswerDao answerDao) {
-        this.examDao = examDao;
+    public StudHomeAction(ExamItemDao examItemDao, ExamService examService, ExamInstanceDao instanceDao, StudExamInstanceDao studExamInstanceDao, StudExamAnswerDao studExamAnswerDao, ExamItemAnswerDao answerDao) {
+        this.examService = examService;
         this.instanceDao = instanceDao;
         this.examItemDao = examItemDao;
         this.studEXIDao = studExamInstanceDao;
@@ -35,7 +36,7 @@ public class StudHomeAction extends BaseAction {
         session().setAttribute("exiId", examInstanceId);
 
         ExamInstance instance = instanceDao.findById(examInstanceId);
-        Exam exam = examDao.findById(instance.getExamid());
+        Exam exam = examService.findById(instance.getExamid());
         List<ExamItem> items = examItemDao.findByExamId(exam.getId());
 
         output().setValue("exam", exam);

@@ -11,7 +11,7 @@ public class Exam {
     private String name;
     private Integer owner;
     private Integer difficulty;
-    private Long points;
+    private Integer points;
     //when a new exam instance is created the exam is blocked for editing
     private Boolean locked;
     private Timestamp datecreated;
@@ -105,11 +105,11 @@ public class Exam {
         this.locked = locked;
     }
 
-    public Long getPoints() {
+    public Integer getPoints() {
         return points;
     }
 
-    public void setPoints(Long points) {
+    public void setPoints(Integer points) {
         this.points = points;
     }
 }

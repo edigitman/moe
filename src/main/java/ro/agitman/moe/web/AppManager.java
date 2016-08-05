@@ -346,7 +346,7 @@ public class AppManager extends ApplicationManager {
                 .pk("id", DBTypes.SEQUENCE)
                 .field("name", DBTypes.STRING)
                 .field("owner", DBTypes.INTEGER)
-                .field("points", DBTypes.LONG)
+                .field("points", DBTypes.INTEGER)
                 .field("difficulty", DBTypes.INTEGER)
                 .field("locked", DBTypes.BOOLEAN)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
