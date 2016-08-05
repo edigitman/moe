@@ -80,9 +80,6 @@ public class AppManager extends ApplicationManager {
 
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS RELATED TO EXAM ------------------------
-        action("/prof", ProfessorAction.class, "newExam")
-                .authorize("PROFESOR")
-                .on(SUCCESS, fwd("/jsp/prof/profEditExam.jsp"));
         action("/prof", ProfessorAction.class, "saveExam")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("exam", Exam.class, "exam"))
@@ -123,9 +120,6 @@ public class AppManager extends ApplicationManager {
 
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS RELATED TO GROUP -------------------
-        action("/prof", ProfessorAction.class, "newGroup")
-                .authorize("PROFESOR")
-                .on(SUCCESS, fwd("/jsp/prof/profAddGroup.jsp"));
         action("/prof", ProfessorAction.class, "saveGroup")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("group", ExamGroup.class, "group"))
@@ -146,14 +140,13 @@ public class AppManager extends ApplicationManager {
 
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS RELATED TO EXAM INSTANCE ---------------
-        action("/prof", ProfessorAction.class, "addExamInstRedir")
+        action("/prof", ProfessorAction.class, "getMyConcepts")
                 .authorize("PROFESOR")
-                .on(SUCCESS, redir("/prof.addExamInst.m"));
+                .on(SUCCESS, ajax(new JsonRenderer()));
         action("/prof", ProfessorAction.class, "addExamInst")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("exi", ExamInstance.class, "exi"))
-                .on(CREATED, redir("/home.m"))
-                .on(SUCCESS, fwd("/jsp/prof/profAddExamInstance.jsp"));
+                .on(CREATED, redir("/home.m"));
         action("/prof", ProfessorAction.class, "changeInstanceStatus")
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/home.m"));
@@ -350,6 +343,7 @@ public class AppManager extends ApplicationManager {
                 .field("name", DBTypes.STRING)
                 .field("owner", DBTypes.INTEGER)
                 .field("points", DBTypes.INTEGER)
+                .field("items", DBTypes.INTEGER)
                 .field("difficulty", DBTypes.INTEGER)
                 .field("locked", DBTypes.BOOLEAN)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);

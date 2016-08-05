@@ -53,9 +53,19 @@
                 </mtw:hasAuthorization>
                 <mtw:hasAuthorization groups="PROFESOR">
                     <ul class="nav navbar-nav">
-                        <li><a href="#">Examen nou</a></li>
-                        <li><a href="#about">List Examene</a></li>
-                        <li><a href="#contact">Statistici</a></li>
+
+
+                        <li role="presentation">
+                            <a href="#concepts" class="tabMenu" aria-controls="concepts" role="tab" data-toggle="tab">Concepte</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#groups" class="tabMenu" aria-controls="groups" role="tab" data-toggle="tab">Grupe</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#exams" class="tabMenu" aria-controls="exams" role="tab" data-toggle="tab">Examene</a>
+                        </li>
+
+
                     </ul>
                 </mtw:hasAuthorization>
                 

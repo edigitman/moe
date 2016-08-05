@@ -59,6 +59,7 @@ CREATE TABLE exams
   owner       INTEGER,
   difficulty  SMALLINT,
   points      INTEGER,
+  items      INTEGER,
   locked      BOOLEAN DEFAULT FALSE ,
   datecreated TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
   CONSTRAINT exams_pkey PRIMARY KEY (id)
@@ -234,7 +235,7 @@ INSERT INTO users (email, name, password, role, enabled)
 VALUES ('admin@mail.com', 'administrator', 'secret', 'ADMIN', TRUE);
 
 
-INSERT INTO exams (owner, name, difficulty, points) VALUES (1000, 'exam 1', 2, 100); -- id 1000
+INSERT INTO exams (owner, name, difficulty, points, items) VALUES (1000, 'exam 1', 2, 100, 5); -- id 1000
 
 INSERT INTO exam_items (assertion, points, type, examid)
 VALUES ('se da problema 1', 15, 1, 1000); -- id 1000

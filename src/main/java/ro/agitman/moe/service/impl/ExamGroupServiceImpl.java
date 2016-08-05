@@ -43,7 +43,6 @@ public class ExamGroupServiceImpl implements ExamGroupService {
             group.setLocked(true);
             groupDao.save(group);
 
-            session.getConnection().setAutoCommit(true);
             session.getConnection().commit();
         }catch (SQLException e){
             e.printStackTrace();

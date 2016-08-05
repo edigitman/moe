@@ -12,6 +12,7 @@ public class Exam {
     private Integer owner;
     private Integer difficulty;
     private Integer points;
+    private Integer items;
     //when a new exam instance is created the exam is blocked for editing
     private Boolean locked;
     private Timestamp datecreated;
@@ -111,5 +112,13 @@ public class Exam {
 
     public void setPoints(Integer points) {
         this.points = points;
+    }
+
+    public Integer getItems() {
+        return items;
+    }
+
+    public void setItems(Integer items) {
+        this.items = items;
     }
 }

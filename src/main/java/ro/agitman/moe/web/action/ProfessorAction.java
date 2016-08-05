@@ -19,7 +19,6 @@ import java.util.Map;
  */
 public class ProfessorAction extends BaseAction {
 
-    private final Map<Integer, String> diffs;// = new ArrayList<String>(Arrays.asList("USOR", "MEDIU", "GREU"));
     private final Map<Integer, String> examItemType;// = new ArrayList<String>(Arrays.asList("Selectie unica", "Selectie multipla", "Text liber"));
 
     private final ExamService examService;
@@ -45,11 +44,6 @@ public class ProfessorAction extends BaseAction {
         examItemType.put(1, "Selectie unica");
         examItemType.put(2, "Selectie multipla");
         examItemType.put(3, "Text liber");
-
-        diffs = new HashMap<>();
-        diffs.put(1, "Usor");
-        diffs.put(2, "Mediu");
-        diffs.put(3, "Dificil");
     }
 
     public ProfessorAction(StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamService examService, ExamGroupService examGroupService, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
@@ -190,11 +184,6 @@ public class ProfessorAction extends BaseAction {
 
     //******************************************************
 //---------------- EXAM ACTIONS ------------------------
-    public String newExam() {
-        output.setValue("difficulties", diffs);
-        return SUCCESS;
-    }
-
     public String saveExam() {
         Exam exam = (Exam) input.getValue("exam");
 
@@ -222,10 +211,6 @@ public class ProfessorAction extends BaseAction {
 
     //******************************************************
 //---------------- GROUPS ACTIONS ----------------------
-    public String newGroup() {
-        return SUCCESS;
-    }
-
     public String saveGroup() {
         ExamGroup group = (ExamGroup) input.getValue("group");
 
@@ -341,10 +326,6 @@ public class ProfessorAction extends BaseAction {
 
     //**************************************************************
 //---------------- EXAM INSTANCES ACTIONS ----------------------
-    public String addExamInstRedir() {
-        return SUCCESS;
-    }
-
     public String addExamInst() {
 
         if (isPost()) {
@@ -364,9 +345,6 @@ public class ProfessorAction extends BaseAction {
             examService.lockExam(instance.getExamid());
             examGroupService.lockGroup(instance.getEgroupid());
 
-//            TODO implement logic to prevent editing of locked exams
-//            TODO implement logic to prevent editing of locked groups
-
 //            TODO implement logic to clone an exam
 
 
@@ -374,27 +352,47 @@ public class ProfessorAction extends BaseAction {
             return CREATED;
         } else {
             if (isGet()) {
-                Integer instanceId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
-                if (instanceId != null) {
-                    output.setValue("exi", instanceDao.findById(instanceId));
-                }
 
-                User user = getSessionObj();
-                List<Exam> exams = examService.findForOwner(user.getId());
-                List<ExamGroup> groups = examGroupService.findByOwner(user.getId());
+                throw new IllegalAccessError("This should not happen anymore");
 
-                Map<Integer, String> examsMap = new HashMap<>();
-                Map<Integer, String> groupsMap = new HashMap<>();
-
-
-                exams.stream().forEach(exam -> examsMap.put(exam.getId(), exam.getName()));
-                groups.stream().forEach(group -> groupsMap.put(group.getId(), group.getName()));
-
-                output.setValue("exams", examsMap);
-                output.setValue("groups", groupsMap);
+//                Integer instanceId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
+//                if (instanceId != null) {
+//                    output.setValue("exi", instanceDao.findById(instanceId));
+//                }
+//
+//                User user = getSessionObj();
+//                List<Exam> exams = examService.findForOwner(user.getId());
+//                List<ExamGroup> groups = examGroupService.findByOwner(user.getId());
+//
+//                Map<Integer, String> examsMap = new HashMap<>();
+//                Map<Integer, String> groupsMap = new HashMap<>();
+//
+//
+//                exams.stream().forEach(exam -> examsMap.put(exam.getId(), exam.getName()));
+//                groups.stream().forEach(group -> groupsMap.put(group.getId(), group.getName()));
+//
+//                output.setValue("exams", examsMap);
+//                output.setValue("groups", groupsMap);
 
             }
         }
+        return SUCCESS;
+    }
+
+    public String getMyConcepts(){
+        User user = getSessionObj();
+        List<Exam> exams = examService.findForOwner(user.getId());
+        List<ExamGroup> groups = examGroupService.findByOwner(user.getId());
+
+        Map<String, String> examsMap = new HashMap<>();
+        Map<String, String> groupsMap = new HashMap<>();
+
+
+        exams.stream().forEach(exam -> examsMap.put("" + exam.getId(), exam.getName()));
+        groups.stream().forEach(group -> groupsMap.put("" + group.getId(), group.getName()));
+
+        output.setValue("exams", examsMap);
+        output.setValue("groups", groupsMap);
 
         return SUCCESS;
     }

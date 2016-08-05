@@ -46,9 +46,9 @@ public class ExamServiceImpl implements ExamService {
             Integer total = items.stream().mapToInt(ExamItem::getPoints).sum();
 
             exam.setPoints(total);
+            exam.setItems(items.size());
             examDao.save(exam);
 
-            this.session.getConnection().setAutoCommit(true);
             this.session.getConnection().commit();
 
         } catch (SQLException e) {
@@ -69,7 +69,6 @@ public class ExamServiceImpl implements ExamService {
 
             examDao.save(exam);
 
-            session.getConnection().setAutoCommit(true);
             session.getConnection().commit();
 
         } catch (SQLException e) {

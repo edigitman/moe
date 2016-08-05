@@ -26,7 +26,7 @@
          <div class="row">
              <h3>Grupa:
                  <c:if test="${group.locked}">
-                     <mtw:out value="exam.name"/>
+                     <mtw:out value="group.name"/>
                  </c:if>
                  <c:if test="${!group.locked}">
                      <a href="#" id="groupName"

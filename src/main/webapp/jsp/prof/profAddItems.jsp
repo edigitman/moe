@@ -16,7 +16,8 @@
 
     <jsp:attribute name="head">
         <link rel="stylesheet" type="text/css" href="/css/bootstrap-switch.min.css">
-        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+        <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css"
+              rel="stylesheet"/>
     </jsp:attribute>
 
   <jsp:attribute name="body">
@@ -58,111 +59,115 @@
                  <h4>Puncte totale: <mtw:out value="exam.points"/></h4>
              </div>
 
-             <div style="overflow: auto; height: 550px" >
-                <mtw:list value="examItems">
-                 <mtw:isEmpty>
-                     Nu sunt subiecte!
-                 </mtw:isEmpty>
+             <div style="overflow: auto; height: 550px">
+                 <mtw:list value="examItems">
+                     <mtw:isEmpty>
+                         Nu sunt subiecte!
+                     </mtw:isEmpty>
 
-                 <mtw:isEmpty negate="true">
-                     <table class="table">
-                         <caption>Lista cu subiecte</caption>
-                         <thead>
-                         <tr>
-                             <th style="width: 5%">#</th>
-                             <th style="width: 75%">Enunt</th>
-                             <th style="width: 10%">Pct.</th>
-                             <th style="width: 10%">Tip</th>
-                         </tr>
-                         </thead>
-                         <tbody>
-                         <mtw:loop var="i" counter="c" counterStart="1">
-                             <tr class="itemRow" itemId="<mtw:out value="i.id"/>">
-                                 <td scope="row">
-                                     <mtw:out value="c"/>
-                                 </td>
-                                 <td>
+                     <mtw:isEmpty negate="true">
+                         <table class="table">
+                             <caption>Lista cu subiecte</caption>
+                             <thead>
+                             <tr>
+                                 <th style="width: 5%">#</th>
+                                 <th style="width: 75%">Enunt</th>
+                                 <th style="width: 10%">Pct.</th>
+                                 <th style="width: 10%">Tip</th>
+                             </tr>
+                             </thead>
+                             <tbody>
+                             <mtw:loop var="i" counter="c" counterStart="1">
+                                 <tr class="itemRow" itemId="<mtw:out value="i.id"/>">
+                                     <td scope="row">
+                                         <mtw:out value="c"/>
+                                     </td>
+                                     <td>
                                      <span class="assertionClass">
                                         <mtw:out value="i.assertion"/>
                                      </span>
-                                 </td>
-                                 <td><mtw:out value="i.points"/></td>
-                                 <td>
+                                     </td>
+                                     <td><mtw:out value="i.points"/></td>
+                                     <td>
                                      <span class="itemType">
                                          <mtw:out value="i.type"/>
                                      </span>
-                                 </td>
-                             </tr>
-                         </mtw:loop>
-                         </tbody>
-                     </table>
-                 </mtw:isEmpty>
-             </mtw:list>
+                                     </td>
+                                 </tr>
+                             </mtw:loop>
+                             </tbody>
+                         </table>
+                     </mtw:isEmpty>
+                 </mtw:list>
              </div>
          </div>
-         <div class="col-md-6">
+         <c:if test="${!exam.locked}">
+             <div class="col-md-6">
 
-             <mtw:form action="/prof.addItems.m" method="post">
-                 <mtw:input name="exam.id" type="hidden"/>
-                 <mtw:input id="itemId" name="item.id" type="hidden"/>
+                 <mtw:form action="/prof.addItems.m" method="post">
+                     <mtw:input name="exam.id" type="hidden"/>
+                     <mtw:input id="itemId" name="item.id" type="hidden"/>
 
-                 <div class="form-group">
-                     <label for="assertion">Enunt</label>
-                     <mtw:textarea klass="form-control" name="item.assertion" id="assertion"/>
-                 </div>
-                 <div class="row">
-                     <div class="col-md-2">
-                         <div class="form-group" id="pointsDiv">
-                             <label for="points">Puncte</label>
-                             <mtw:input klass="form-control" name="item.points" id="points"/>
+                     <div class="form-group">
+                         <label for="assertion">Enunt</label>
+                         <mtw:textarea klass="form-control" name="item.assertion" id="assertion"/>
+                     </div>
+                     <div class="row">
+                         <div class="col-md-2">
+                             <div class="form-group" id="pointsDiv">
+                                 <label for="points">Puncte</label>
+                                 <mtw:input klass="form-control" name="item.points" id="points"/>
+                             </div>
+                         </div>
+                         <div class="col-md-4">
+                             <div class="form-group">
+                                 <label for="type">Tip item</label>
+                                 <mtw:select klass="form-control" id="type" name="item.type" list="itemTypes"/>
+                             </div>
+                         </div>
+                         <div class="col-md-2" style="height: 74px; padding-top: 25px">
+                             <button type="submit" class="btn btn-info" id="addItemBtn">Adauga</button>
+                         </div>
+                         <div class="col-md-2" style="height: 74px; padding-top: 25px">
+                             <a href="/prof.removeEditItem.m" id="clearItemForm" class="btn btn-link">Curata</a>
+                         </div>
+                         <div class="col-md-2" style="height: 74px; padding-top: 25px">
+                             <a href="/prof.deleteItem.m?id=<mtw:out value="item.id"/>" id="delete"
+                                class="btn btn-danger">Sterge</a>
                          </div>
                      </div>
-                     <div class="col-md-4">
-                         <div class="form-group">
-                             <label for="type">Tip item</label>
-                             <mtw:select klass="form-control" id="type" name="item.type" list="itemTypes"/>
+                 </mtw:form>
+
+                 <div class="well answersWell">
+                     <div class="row">
+                         <div class="col-md-9">
+                             <div class="form-group">
+                                 <label for="answer">Adauga un raspuns</label>
+                                 <textarea class="form-control" name="answer.value" id="answer"></textarea>
+                             </div>
+                         </div>
+                         <div class="col-md-3">
+                             <div class="row">
+                                 <div class="form-group">
+                                     <label for="answerCorrect">Status raspuns</label>
+                                     <br/>
+                                     <input type="checkbox" name="checkbox" id="answerCorrect">
+                                 </div>
+                             </div>
                          </div>
                      </div>
-                     <div class="col-md-2" style="height: 74px; padding-top: 25px">
-                         <button type="submit" class="btn btn-info" id="addItemBtn">Adauga</button>
+                     <div class="row">
+                         <div class="col-md-3">
+                             <button type="submit" class="btn btn-info" id="addAnswerBtn">Adauga</button>
+                         </div>
                      </div>
-                     <div class="col-md-2" style="height: 74px; padding-top: 25px">
-                         <a href="/prof.removeEditItem.m" id="clearItemForm" class="btn btn-link">Curata</a>
-                     </div>
-                     <div class="col-md-2" style="height: 74px; padding-top: 25px">
-                         <a href="/prof.deleteItem.m?id=<mtw:out value="item.id"/>" id="delete" class="btn btn-danger">Sterge</a>
-                     </div>
-                 </div>
-             </mtw:form>
 
-             <div class="well answersWell">
-                <div class="row">
-                    <div class="col-md-9">
-                        <div class="form-group">
-                            <label for="answer">Adauga un raspuns</label>
-                            <textarea class="form-control" name="answer.value" id="answer"></textarea>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="row">
-                            <div class="form-group">
-                                <label for="answerCorrect">Status raspuns</label>
-                                <br/>
-                                <input type="checkbox" name="checkbox" id="answerCorrect">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                 <div class="row">
-                     <div class="col-md-3">
-                         <button type="submit" class="btn btn-info" id="addAnswerBtn">Adauga</button>
-                     </div>
+                     <t:itemAnswerList delete="true">
+                     </t:itemAnswerList>
                  </div>
 
-                    <t:itemAnswerList delete="true">
-                    </t:itemAnswerList>
              </div>
-         </div>
+         </c:if>
      </div>
 
 <div class="row">
@@ -178,7 +183,7 @@
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
   <script>tinymce.init({
-      selector:'#assertion',
+      selector: '#assertion',
       statusbar: false,
       menubar: false,
       resize: false,
@@ -190,7 +195,7 @@
         <script type="text/javascript">
 
             $.fn.editable.defaults.mode = 'inline';
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#examName').editable();
                 var diff = $('#examDiff');
                 diff.editable();
@@ -211,19 +216,19 @@
 
             $("#answerCorrect").bootstrapSwitch({
                 onText: 'Corect', offText: 'Gresit',
-                handleWidth : 60
+                handleWidth: 60
             });
-            $('#answerCorrect').on('switchChange.bootstrapSwitch', function(event, state) {
+            $('#answerCorrect').on('switchChange.bootstrapSwitch', function (event, state) {
                 $('#answerCorrect').val(state); // true | false
             });
 
-//            add answer - ajax way
-            $('#addAnswerBtn').click(function(){
+            //            add answer - ajax way
+            $('#addAnswerBtn').click(function () {
                 var text = $('#answer');
                 var correct = $('#answerCorrect');
                 text.removeClass('has-error');
 
-                if($.trim(text.val()) == ''){
+                if ($.trim(text.val()) == '') {
                     text.addClass('has-error');
                     return;
                 }
@@ -231,17 +236,19 @@
                 text.val('');
                 correct.bootstrapSwitch('state', false);
 
-                $.post( "/prof.addItemsAnswer.m", { answer: JSON.stringify(answer) }, function(data) {
-                        addAnswerRow(data);
-                    }
+                $.post("/prof.addItemsAnswer.m", {answer: JSON.stringify(answer)}, function (data) {
+                            addAnswerRow(data);
+                        }
                 );
             });
 
-            var removeAnswer = function(answerId){
-                $.post( "/prof.deleteAnswer.m", { id: answerId }, function(data) { loadAllAnswers(); } );
+            var removeAnswer = function (answerId) {
+                $.post("/prof.deleteAnswer.m", {id: answerId}, function (data) {
+                    loadAllAnswers();
+                });
             };
 
-//          cut the assertion
+            //          cut the assertion
             $('.assertionClass').each(function (index) {
                 // sanitize html assertion
                 $(this).text($(this).html(this.innerHTML).text());
@@ -256,7 +263,7 @@
                 event.preventDefault();
                 var itemId = event.currentTarget.attributes.itemId.value;
                 $.get('/prof.editItem.m?id=' + itemId, function (data, result) {
-                    if (result == 'success'){
+                    if (result == 'success') {
                         location.reload();
                     }
                 });
@@ -264,11 +271,11 @@
 
             loadAllAnswers();
 
-//            highlight the selected item
+            //            highlight the selected item
             var itemId = $('#itemId').val();
             if (itemId != '') {
-                $('.itemRow').each(function(index){
-                    if($(this).attr('itemId') == itemId)
+                $('.itemRow').each(function (index) {
+                    if ($(this).attr('itemId') == itemId)
                         $(this).addClass('currentItem');
                 });
                 $('#addItemBtn').text('Modifica');
@@ -277,29 +284,29 @@
                 $('#delete').hide();
             }
 
-//          disable responses if item type is free text
-            $('#type').change(function(){
-                if(itemId == '') return;
+            //          disable responses if item type is free text
+            $('#type').change(function () {
+                if (itemId == '') return;
 
-                if($(this).val() == 3){
+                if ($(this).val() == 3) {
                     $('.answersWell').hide();
                 } else {
                     $('.answersWell').show();
                 }
             });
-            if($('#type').val() == 3) $('.answersWell').hide();
+            if ($('#type').val() == 3) $('.answersWell').hide();
 
-//          show error on points not a number
-            $( "#points" ).keyup(function() {
+            //          show error on points not a number
+            $("#points").keyup(function () {
                 var email = new RegExp('^[0-9]+$');
-                if(!email.test($(this).val())){
+                if (!email.test($(this).val())) {
                     $('#pointsDiv').addClass("has-error");
                 } else {
                     $('#pointsDiv').removeClass("has-error");
                 }
             });
 
-//            decrypt item type
+            //            decrypt item type
             $('.itemType').each(function (index) {
                 if ('1' == $.trim($(this).text())) {
                     $(this).text('S.U.');
