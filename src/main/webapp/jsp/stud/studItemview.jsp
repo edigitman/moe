@@ -24,7 +24,7 @@
                 subiectul <mtw:out value="itemIndex"/> din <mtw:out value="itemsNo"/>
             </div>
             <hr/>
-            <div class="row">
+            <div class="row" style="background: white;">
                 <span>
                     <mtw:out value="item.assertion"/>
                 </span>
@@ -32,49 +32,51 @@
             <hr/>
 
             <mtw:form action="/stud.saveAnswer.m" method="post">
-        <div class="row">
-                <%-- type 1 is unique --%>
-                <%-- type 2 is multiple --%>
-                <%-- type 3 is free text--%>
-            <c:if test="${item.type == 1}">
+                <div class="row" style="background: white;">
+                        <%-- type 1 is unique --%>
+                        <%-- type 2 is multiple --%>
+                        <%-- type 3 is free text--%>
+                    <c:if test="${item.type == 1}">
 
-                <c:forEach var="a" items="${answers}">
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="studAnswer" value="${a.key}">
-                            <span>${a.value}</span>
-                        </label>
-                    </div>
-                </c:forEach>
-            </c:if>
-
-
-            <c:if test="${item.type == 2}">
-                <c:forEach var="a" items="${answers}">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="studAnswer" value="${a.key}">
-                            <span>${a.value}</span>
-                        </label>
-                    </div>
-                </c:forEach>
-            </c:if>
+                        <c:forEach var="a" items="${answers}">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="studAnswer" value="${a.key}">
+                                    <span>${a.value}</span>
+                                </label>
+                            </div>
+                        </c:forEach>
+                    </c:if>
 
 
-            <c:if test="${item.type == 3}">
-                <mtw:textarea klass="form-control" name="studAnswer"/>
+                    <c:if test="${item.type == 2}">
+                        <c:forEach var="a" items="${answers}">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="studAnswer" value="${a.key}">
+                                    <span>${a.value}</span>
+                                </label>
+                            </div>
+                        </c:forEach>
+                    </c:if>
+
+
+                    <c:if test="${item.type == 3}">
+                        <mtw:textarea klass="form-control" name="studAnswer"/>
+                        <br/>
+                    </c:if>
+                </div>
+
                 <br/>
-            </c:if>
-        </div>
-<hr/>
+                <input type="submit" class="btn btn-success" value="Salveaza">
+                <a href="/stud.saveAnswer.m?skip=true" id="skipAnswer" class="btn btn-link">Sari peste</a>
 
-            <input type="submit" class="btn btn-success" value="Salveaza">
-
-        </mtw:form>
+            </mtw:form>
 
         </div>
     </div>
 </div>
 
     </jsp:attribute>
+
 </t:layout>

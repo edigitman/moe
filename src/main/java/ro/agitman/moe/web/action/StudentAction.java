@@ -112,24 +112,49 @@ public class StudentAction extends BaseAction {
     public String saveAnswer() {
 
         User user = getSessionObj();
+        Boolean skip = input().getBoolean("skip");
         Boolean isLast = (Boolean) session().getAttribute("isLast");
         Integer studExi = (Integer) session().getAttribute("studExi");
         Integer itemId = (Integer) session().getAttribute("itemId");
 
-        ExamItem item = examItemDao.findById(itemId);
-        List<ExamItemAnswer> answers = answerDao.findForItem(itemId);
+        session().removeAttribute("itemId");
+        session().removeAttribute("isLast");
 
         StudentExamAnswer answer = new StudentExamAnswer();
         answer.setOwnerId(user.getId());
         answer.setExamItemId(itemId);
         answer.setStudentExamInstanceId(studExi);
 
+        if(!skip){
+            parseAnswer(answer, itemId);
+        }
+
+        examAnswerDao.insert(answer);
+
+        if (isLast) {
+//          mark exam as completed by student
+            StudentExamInstance instance = studEXIDao.findById(studExi);
+            instance.setStatus(2);
+            studEXIDao.save(instance);
+
+            session().removeAttribute("studExi");
+            return SUCCESS;
+        }
+
+        return ADD;
+    }
+
+    private void parseAnswer(StudentExamAnswer answer, Integer itemId){
+
+        ExamItem item = examItemDao.findById(itemId);
+        List<ExamItemAnswer> answers = answerDao.findForItem(itemId);
+
         Object studAnswerObj = input().getValue("studAnswer");
         StringBuilder actualAnswer = new StringBuilder();
 
         // in case of free text selected
         if (item.getType().equals(3)) {
-            actualAnswer.append(studAnswerObj.toString());
+            actualAnswer.append(studAnswerObj);
             answer.setSolvable(false);
         } else {
             answer.setSolvable(true);
@@ -144,31 +169,13 @@ public class StudentAction extends BaseAction {
                 }
             } else {
                 // in case only one answer selected, radiobox
-                answer.setRawAnswer(studAnswerObj.toString());
+                answer.setRawAnswer(String.valueOf(studAnswerObj));
 
                 ExamItemAnswer foundAnswer = matchWithAnswer(studAnswerObj, answers);
                 actualAnswer.append(foundAnswer.getValue()).append("#$");
             }
-
         }
-
-        session().removeAttribute("itemId");
-        session().removeAttribute("isLast");
-
         answer.setValue(actualAnswer.toString());
-        examAnswerDao.insert(answer);
-
-        if (isLast) {
-//          mark exam as completed by student
-            StudentExamInstance instance = studEXIDao.findById(studExi);
-            instance.setStatus(2);
-            studEXIDao.save(instance);
-
-            session().removeAttribute("studExi");
-            return SUCCESS;
-        }
-
-        return ADD;
     }
 
     private String buildAnswerArray(String[] keys){

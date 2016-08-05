@@ -24,7 +24,7 @@
                     <caption> Lista de sesiuni de examinare:</caption>
                     <thead>
                     <tr>
-                        <th>#</th>
+                        <%--<th>#</th>--%>
                         <th>Nume</th>
                         <th>Data</th>
                     </tr>
@@ -32,7 +32,7 @@
                     <tbody>
                     <mtw:loop var="i">
                         <tr>
-                            <th scope="row"><mtw:out value="i.id"/></th>
+                            <%--<th scope="row"><mtw:out value="i.id"/></th>--%>
                             <td><mtw:out value="i.name"/></td>
                             <td><mtw:out value="i.startdate"/></td>
                             <td>
