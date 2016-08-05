@@ -241,17 +241,19 @@ public class ProfessorAction extends BaseAction {
     }
 
     public String editGroup() {
-        Integer groupId = input.getInt("id");
 
-        if (groupId < 1000) {
-            return ERROR;
-        }
+        String name = input().getString("name");
+        String value = input().getString("value");
+        Integer pk = input().getInt("pk");
 
-        ExamGroup examGroup = examGroupService.findById(groupId);
+
+        ExamGroup examGroup = examGroupService.findById(pk);
         if (examGroup == null) {
             return ERROR;
         }
-        output.setValue("group", examGroup);
+
+        examGroup.setName(value);
+        examGroupService.saveInsert(examGroup);
 
         return SUCCESS;
     }
@@ -289,6 +291,7 @@ public class ProfessorAction extends BaseAction {
 
                 List<User> users = userDao.findAllStudents();
                 List<User> used = examGroupUserDao.findByGroupId(groupId);
+                ExamGroup group = examGroupService.findById(groupId);
                 users.removeAll(used);
 
                 Map<Integer, String> freeUserMap = new HashMap<>();
@@ -302,6 +305,7 @@ public class ProfessorAction extends BaseAction {
 
                 output().setValue("freeStudents", freeUserMap);
                 output().setValue("usedStudents", used);
+                output().setValue("group", group);
 
                 return SUCCESS;
             }

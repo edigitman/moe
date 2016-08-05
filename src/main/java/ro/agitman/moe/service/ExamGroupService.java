@@ -14,6 +14,8 @@ public interface ExamGroupService {
 
     ExamGroup saveInsert(Integer userId, ExamGroup exam);
 
+    ExamGroup saveInsert(ExamGroup exam);
+
     ExamGroup findById(Integer groupId);
 
     void updateStudentsNo(Integer groupId);

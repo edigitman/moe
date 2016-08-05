@@ -132,7 +132,7 @@ public class AppManager extends ApplicationManager {
                 .on(SUCCESS, redir("/home.m"));
         action("/prof", ProfessorAction.class, "editGroup")
                 .authorize("PROFESOR")
-                .on(SUCCESS, fwd("/jsp/prof/profAddGroup.jsp"));
+                .on(SUCCESS, ajax(new JsonRenderer()));
         action("/prof", ProfessorAction.class, "addStudsRedir")
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/prof.addStuds.m"));

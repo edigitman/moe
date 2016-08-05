@@ -53,6 +53,12 @@ public class ExamGroupServiceImpl implements ExamGroupService {
     public ExamGroup saveInsert(Integer userId, ExamGroup group) {
 
         group.setOwner(userId);
+
+        return this.saveInsert(group);
+    }
+
+    public ExamGroup saveInsert(ExamGroup group){
+
         if (group.getId() == null) {
             groupDao.insert(group);
         } else {
