@@ -6,6 +6,7 @@ import org.mentawai.core.BaseAction;
 import ro.agitman.moe.dao.*;
 import ro.agitman.moe.model.*;
 import ro.agitman.moe.service.EmailService;
+import ro.agitman.moe.service.ExamGroupService;
 import ro.agitman.moe.service.ExamService;
 
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class ProfHomeAction extends BaseAction {
     private final Map<Integer, String> examItemType;// = new ArrayList<String>(Arrays.asList("Selectie unica", "Selectie multipla", "Text liber"));
 
     private final ExamService examService;
-    private final ExamGroupDao examGroupDao;
+    private final ExamGroupService examGroupService;
     private final ExamGroupUserDao examGroupUserDao;
     private final ExamItemDao examItemDao;
     private final ExamItemAnswerDao answerDao;
@@ -51,10 +52,10 @@ public class ProfHomeAction extends BaseAction {
         diffs.put(3, "Dificil");
     }
 
-    public ProfHomeAction(StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamService examService, ExamGroupDao examGroupDao, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
+    public ProfHomeAction(StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamService examService, ExamGroupService examGroupService, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
         this.userDao = userDao;
         this.examService = examService;
-        this.examGroupDao = examGroupDao;
+        this.examGroupService = examGroupService;
         this.examItemDao = examItemDao;
         this.answerDao = answerDao;
         this.examGroupUserDao = examGroupUserDao;
@@ -233,14 +234,9 @@ public class ProfHomeAction extends BaseAction {
         }
 
         User user = getSessionObj();
-        group.setOwner(user.getId());
-        if (group.getId() == null) {
-            group.setStudents(0);
-            examGroupDao.insert(group);
-        } else {
-            examGroupDao.save(group);
-        }
-        output().setObject("activeTab", "liGroups");
+
+        examGroupService.saveInsert(user.getId(), group);
+
         return SUCCESS;
     }
 
@@ -251,7 +247,7 @@ public class ProfHomeAction extends BaseAction {
             return ERROR;
         }
 
-        ExamGroup examGroup = examGroupDao.findById(groupId);
+        ExamGroup examGroup = examGroupService.findById(groupId);
         if (examGroup == null) {
             return ERROR;
         }
@@ -323,7 +319,7 @@ public class ProfHomeAction extends BaseAction {
     }
 
     private void updateGroupStudents(Integer groupId) {
-        examGroupDao.updateStudents(groupId);
+        examGroupService.updateStudentsNo(groupId);
     }
 
     private void createGroupUser(String[] userIds, Integer groupId) {
@@ -362,10 +358,7 @@ public class ProfHomeAction extends BaseAction {
             emailService.sendExamCreated(user);
 
             examService.lockExam(instance.getExamid());
-
-            ExamGroup group = examGroupDao.findById(instance.getEgroupid());
-            group.setLocked(true);
-            examGroupDao.save(group);
+            examGroupService.lockGroup(instance.getEgroupid());
 
 //            TODO implement logic to prevent editing of locked exams
 //            TODO implement logic to prevent editing of locked groups
@@ -384,7 +377,7 @@ public class ProfHomeAction extends BaseAction {
 
                 User user = getSessionObj();
                 List<Exam> exams = examService.findForOwner(user.getId());
-                List<ExamGroup> groups = examGroupDao.findByOwner(user.getId());
+                List<ExamGroup> groups = examGroupService.findByOwner(user.getId());
 
                 Map<Integer, String> examsMap = new HashMap<>();
                 Map<Integer, String> groupsMap = new HashMap<>();

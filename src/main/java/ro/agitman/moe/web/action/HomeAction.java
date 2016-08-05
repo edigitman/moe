@@ -4,6 +4,7 @@ import org.mentawai.action.BaseLoginAction;
 import org.mentawai.core.BaseAction;
 import ro.agitman.moe.dao.*;
 import ro.agitman.moe.model.*;
+import ro.agitman.moe.service.ExamGroupService;
 import ro.agitman.moe.service.ExamService;
 import ro.agitman.moe.web.dto.ExamInstanceDTO;
 
@@ -16,14 +17,14 @@ public class HomeAction extends BaseAction {
 
     private final UserDao userDao;
     private final ExamService examService;
-    private final ExamGroupDao examGroupDao;
+    private final ExamGroupService examGroupService;
     private final ExamInstanceDao instanceDao;
     private final StudExamInstanceDao studEXIDao;
 
-    public HomeAction(UserDao userDao, ExamService examService, ExamGroupDao examGroupDao, ExamInstanceDao instanceDao, StudExamInstanceDao studEXIDao) {
+    public HomeAction(UserDao userDao, ExamService examService, ExamGroupService examGroupService, ExamInstanceDao instanceDao, StudExamInstanceDao studEXIDao) {
         this.userDao = userDao;
         this.examService = examService;
-        this.examGroupDao = examGroupDao;
+        this.examGroupService = examGroupService;
         this.instanceDao = instanceDao;
         this.studEXIDao = studEXIDao;
     }
@@ -40,7 +41,7 @@ public class HomeAction extends BaseAction {
 
                 User user = getSessionObj();
                 List<Exam> exams = examService.findForOwner(user.getId());
-                List<ExamGroup> examGroups = examGroupDao.findByOwner(user.getId());
+                List<ExamGroup> examGroups = examGroupService.findByOwner(user.getId());
                 List<ExamInstanceDTO> instances = instanceDao.findByOwnerToDTO(user.getId());
 
                 output().setValue("concepts", exams);

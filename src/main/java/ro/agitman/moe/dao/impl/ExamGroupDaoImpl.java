@@ -30,7 +30,7 @@ public class ExamGroupDaoImpl extends GenericDaoImpl<ExamGroup> implements ExamG
         return beanSession.loadList(examGroup);
     }
 
-    public void updateStudents(Integer groupId){
+    public void updateStudentsNo(Integer groupId){
         Connection conn = beanSession.getConnection();
         PreparedStatement stmt = null;
         try {
