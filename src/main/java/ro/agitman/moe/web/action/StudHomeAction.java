@@ -92,7 +92,7 @@ public class StudHomeAction extends BaseAction {
                 if (chosenItem != null) {
                     Map<Integer, String> answers = new HashMap<>();
 
-                    answerDao.findForItem(chosenItem.getId()).stream().forEach(a -> {
+                    answerDao.findForItem(chosenItem.getId()).forEach(a -> {
                         answers.put(a.getId(), a.getValue());
                     });
                     session().setAttribute("itemId", chosenItem.getId());

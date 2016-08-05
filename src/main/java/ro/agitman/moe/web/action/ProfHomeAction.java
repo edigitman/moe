@@ -371,14 +371,6 @@ public class ProfHomeAction extends BaseAction {
             User user = getSessionObj();
             instance.setOwner(user.getId());
 
-//            TODO locked exam for editing
-//            TODO locked group for editing
-
-//            TODO implement logic to prevent editing of locked exams
-//            TODO implement logic to prevent editing of locked groups
-
-//            TODO implement logic to clone an exam
-
             if (instance.getId() == null) {
                 instance.setStatus(1);
                 instanceDao.insert(instance);
@@ -387,6 +379,20 @@ public class ProfHomeAction extends BaseAction {
             }
 
             emailService.sendExamCreated(user);
+
+            Exam exam = examDao.findById(instance.getExamid());
+            exam.setLocked(true);
+            examDao.save(exam);
+
+            ExamGroup group = examGroupDao.findById(instance.getEgroupid());
+            group.setLocked(true);
+            examGroupDao.save(group);
+
+//            TODO implement logic to prevent editing of locked exams
+//            TODO implement logic to prevent editing of locked groups
+
+//            TODO implement logic to clone an exam
+
 
             session().setAttribute(EXAM_INST_ID_SK, instance.getId());
             return CREATED;

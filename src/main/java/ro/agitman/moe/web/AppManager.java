@@ -336,6 +336,7 @@ public class AppManager extends ApplicationManager {
                 .field("name", DBTypes.STRING)
                 .field("owner", DBTypes.INTEGER)
                 .field("students", DBTypes.INTEGER)
+                .field("locked", DBTypes.BOOLEAN)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 
         bean(Exam.class, "exams")

@@ -9,6 +9,7 @@
 <%@page pageEncoding="UTF-8" %>
 <%@taglib prefix="mtw" uri="http://www.mentaframework.org/tags-mtw/" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
 <t:layout title="index">
@@ -25,24 +26,34 @@
 
              <div class="form-group">
                  <h3>Examen:
-                     <a href="#" id="examName"
-                        data-type="text"
-                        data-pk="<mtw:out value="exam.id"/>"
-                        data-url="/ProfHome.updateExam.m"
-                        data-title="Modifica numele">
+                     <c:if test="${exam.locked}">
                          <mtw:out value="exam.name"/>
-                     </a>
+                     </c:if>
+                     <c:if test="${!exam.locked}">
+                         <a href="#" id="examName"
+                            data-type="text"
+                            data-pk="<mtw:out value="exam.id"/>"
+                            data-url="/ProfHome.updateExam.m"
+                            data-title="Modifica numele">
+                             <mtw:out value="exam.name"/>
+                         </a>
+                     </c:if>
                  </h3>
 
                  <h4>Dificultate:
-                     <a href="#" id="examDiff"
-                        data-source="[{value: 1, text: 'Usor'}, {value: 2, text: 'Mediu'}, {value: 3, text: 'Dificil'}]"
-                        data-type="select"
-                        data-pk="<mtw:out value="exam.id"/>"
-                        data-url="/ProfHome.updateExam.m"
-                        data-title="Enter username">
+                     <c:if test="${exam.locked}">
                          <mtw:out value="exam.difficulty"/>
-                     </a>
+                     </c:if>
+                     <c:if test="${!exam.locked}">
+                         <a href="#" id="examDiff"
+                            data-source="[{value: 1, text: 'Usor'}, {value: 2, text: 'Mediu'}, {value: 3, text: 'Dificil'}]"
+                            data-type="select"
+                            data-pk="<mtw:out value="exam.id"/>"
+                            data-url="/ProfHome.updateExam.m"
+                            data-title="Enter username">
+                             <mtw:out value="exam.difficulty"/>
+                         </a>
+                     </c:if>
                  </h4>
                  <h4>Puncte totale: <mtw:out value="exam.points"/></h4>
              </div>

@@ -59,7 +59,7 @@ CREATE TABLE exams
   owner       INTEGER,
   difficulty  SMALLINT,
   points      INTEGER,
-  locked      BOOLEAN,
+  locked      BOOLEAN DEFAULT FALSE ,
   datecreated TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
   CONSTRAINT exams_pkey PRIMARY KEY (id)
 )
@@ -119,6 +119,7 @@ CREATE TABLE exam_groups
   name        CHARACTER VARYING(200),
   owner       INTEGER,
   students    INTEGER                     DEFAULT 0,
+  locked      BOOLEAN                     DEFAULT FALSE,
   datecreated TIMESTAMP WITHOUT TIME ZONE DEFAULT now(),
   CONSTRAINT exam_groups_pkey PRIMARY KEY (id)
 )

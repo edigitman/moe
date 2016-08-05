@@ -11,6 +11,7 @@ public class ExamGroup {
     private String  name;
     private Integer students;
     private Integer owner;
+    private Boolean locked;
     private Timestamp datecreated;
 
     public ExamGroup(Integer id) {
@@ -90,5 +91,13 @@ public class ExamGroup {
 
     public void setStudents(Integer students) {
         this.students = students;
+    }
+
+    public Boolean getLocked() {
+        return locked;
+    }
+
+    public void setLocked(Boolean locked) {
+        this.locked = locked;
     }
 }

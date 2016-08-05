@@ -63,6 +63,7 @@
                                         <a class="btn btn-link" href="/ProfHome.addItemsRedir.m?id=<mtw:out value="c.id"/>">Modifica</a>
                                     </c:if>
                                     <c:if test="${c.locked}">
+                                        <a class="btn btn-link" href="/ProfHome.addItemsRedir.m?id=<mtw:out value="c.id"/>">Vizualizare</a>
                                         <a class="btn btn-link" href="/ProfHome.editExam.m?id=<mtw:out value="c.id"/>">Cloneaza</a>
                                     </c:if>
                                 </td>
@@ -159,8 +160,12 @@
                                     <td><mtw:out value="g.name"/></td>
                                     <td><mtw:out value="g.students"/></td>
                                     <td>
-                                        <a class="btn btn-link" href="/ProfHome.addStudsRedir.m?id=<mtw:out value="g.id"/>">Adauga Studenti</a>
-                                        <a class="btn btn-link" href="/ProfHome.editGroup.m?id=<mtw:out value="g.id"/>">Modifica</a>
+                                        <%--<c:if test="${g.locked}">--%>
+                                            <a class="btn btn-link" href="/ProfHome.addStudsRedir.m?id=<mtw:out value="g.id"/>">Adauga Studenti</a>
+                                        <%--</c:if>--%>
+                                        <%--<c:if test="${g.locked}">--%>
+                                            <a class="btn btn-link" href="/ProfHome.editGroup.m?id=<mtw:out value="g.id"/>">Modifica</a>
+                                        <%--</c:if>--%>
                                     </td>
                                 </tr>
                             </mtw:loop>
