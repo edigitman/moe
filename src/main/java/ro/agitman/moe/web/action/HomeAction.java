@@ -4,6 +4,7 @@ import org.mentawai.action.BaseLoginAction;
 import org.mentawai.core.BaseAction;
 import ro.agitman.moe.dao.*;
 import ro.agitman.moe.model.*;
+import ro.agitman.moe.service.ExamService;
 import ro.agitman.moe.web.dto.ExamInstanceDTO;
 
 import java.util.List;
@@ -14,14 +15,14 @@ import java.util.List;
 public class HomeAction extends BaseAction {
 
     private final UserDao userDao;
-    private final ExamDao examDao;
+    private final ExamService examService;
     private final ExamGroupDao examGroupDao;
     private final ExamInstanceDao instanceDao;
     private final StudExamInstanceDao studEXIDao;
 
-    public HomeAction(UserDao userDao, ExamDao examDao, ExamGroupDao examGroupDao, ExamInstanceDao instanceDao, StudExamInstanceDao studEXIDao) {
+    public HomeAction(UserDao userDao, ExamService examService, ExamGroupDao examGroupDao, ExamInstanceDao instanceDao, StudExamInstanceDao studEXIDao) {
         this.userDao = userDao;
-        this.examDao = examDao;
+        this.examService = examService;
         this.examGroupDao = examGroupDao;
         this.instanceDao = instanceDao;
         this.studEXIDao = studEXIDao;
@@ -38,7 +39,7 @@ public class HomeAction extends BaseAction {
             if ("PROFESOR".equals(role)) {
 
                 User user = getSessionObj();
-                List<Exam> exams = examDao.findForOwner(user.getId());
+                List<Exam> exams = examService.findForOwner(user.getId());
                 List<ExamGroup> examGroups = examGroupDao.findByOwner(user.getId());
                 List<ExamInstanceDTO> instances = instanceDao.findByOwnerToDTO(user.getId());
 

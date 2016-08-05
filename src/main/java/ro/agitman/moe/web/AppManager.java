@@ -15,7 +15,9 @@ import ro.agitman.moe.dao.*;
 import ro.agitman.moe.dao.impl.*;
 import ro.agitman.moe.model.*;
 import ro.agitman.moe.service.EmailService;
+import ro.agitman.moe.service.ExamService;
 import ro.agitman.moe.service.impl.EmailServiceImpl;
+import ro.agitman.moe.service.impl.ExamServiceImpl;
 import ro.agitman.moe.web.action.*;
 import ro.agitman.moe.web.filter.PerformanceMonitoringFilter;
 
@@ -250,6 +252,7 @@ public class AppManager extends ApplicationManager {
 
 //        services ----------------------------------------------------
         ioc(EmailService.class, EmailServiceImpl.class);
+        ioc(ExamService.class, ExamServiceImpl.class);
     }
 
     @Override

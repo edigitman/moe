@@ -1,11 +1,8 @@
 package ro.agitman.moe.dao.impl;
 
 import org.mentabean.BeanSession;
-import ro.agitman.moe.dao.ExamDao;
 import ro.agitman.moe.dao.ExamItemDao;
-import ro.agitman.moe.model.Exam;
 import ro.agitman.moe.model.ExamItem;
-import ro.agitman.moe.model.User;
 
 import java.util.List;
 

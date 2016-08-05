@@ -12,5 +12,4 @@ public interface ExamDao extends GenericDao<Exam> {
 
     List<Exam> findForOwner(Integer id);
 
-    Exam findForExamInstanceId(Integer exiId);
 }

@@ -6,6 +6,7 @@ import org.mentawai.core.BaseAction;
 import ro.agitman.moe.dao.*;
 import ro.agitman.moe.model.*;
 import ro.agitman.moe.service.EmailService;
+import ro.agitman.moe.service.ExamService;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,7 +21,7 @@ public class ProfHomeAction extends BaseAction {
     private final Map<Integer, String> diffs;// = new ArrayList<String>(Arrays.asList("USOR", "MEDIU", "GREU"));
     private final Map<Integer, String> examItemType;// = new ArrayList<String>(Arrays.asList("Selectie unica", "Selectie multipla", "Text liber"));
 
-    private final ExamDao examDao;
+    private final ExamService examService;
     private final ExamGroupDao examGroupDao;
     private final ExamGroupUserDao examGroupUserDao;
     private final ExamItemDao examItemDao;
@@ -50,9 +51,9 @@ public class ProfHomeAction extends BaseAction {
         diffs.put(3, "Dificil");
     }
 
-    public ProfHomeAction(StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamDao examDao, ExamGroupDao examGroupDao, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
+    public ProfHomeAction(StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamService examService, ExamGroupDao examGroupDao, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
         this.userDao = userDao;
-        this.examDao = examDao;
+        this.examService = examService;
         this.examGroupDao = examGroupDao;
         this.examItemDao = examItemDao;
         this.answerDao = answerDao;
@@ -100,7 +101,7 @@ public class ProfHomeAction extends BaseAction {
             if (isGet()) {
                 Integer examId = (Integer) session().getAttribute(EXAM_ID_SK);
                 Integer examItemId = (Integer) session().getAttribute(EXAM_ITEM_ID_SK);
-                Exam exam = examDao.findById(examId);
+                Exam exam = examService.findById(examId);
                 if (exam == null) {
                     return ERROR;
                 }
@@ -150,16 +151,7 @@ public class ProfHomeAction extends BaseAction {
 
     private void recomputeExamPoints() {
         Integer examId = (Integer) session().getAttribute(EXAM_ID_SK);
-        Exam exam = examDao.findById(examId);
-        List<ExamItem> items = examItemDao.findByExamId(examId);
-
-        Long total = 0L;
-        for (ExamItem ei : items) {
-            total += ei.getPoints();
-        }
-
-        exam.setPoints(total);
-        examDao.save(exam);
+        examService.recomputeTotalPoints(examId);
     }
 
     //***********************************************************
@@ -176,7 +168,7 @@ public class ProfHomeAction extends BaseAction {
 
     public String addItemsAnswer() {
 
-        String answerString = input.getString("answer");
+        String answerString = input().getString("answer");
         ExamItemAnswer answer = gson.fromJson(answerString, ExamItemAnswer.class);
         Integer examItemId = (Integer) session().getAttribute(EXAM_ITEM_ID_SK);
 
@@ -210,12 +202,8 @@ public class ProfHomeAction extends BaseAction {
         }
 
         User user = getSessionObj();
-        exam.setOwner(user.getId());
-        if (exam.getId() == null) {
-            examDao.insert(exam);
-        } else {
-            examDao.save(exam);
-        }
+
+        examService.saveInsert(user.getId(), exam);
 
         return SUCCESS;
     }
@@ -226,14 +214,7 @@ public class ProfHomeAction extends BaseAction {
         String value = input().getString("value");
         Integer pk = input().getInt("pk");
 
-        Exam exam = examDao.findById(pk);
-        if ("examName".equals(name))
-            exam.setName(value);
-
-        if ("examDiff".equals(name))
-            exam.setDifficulty(Integer.valueOf(value));
-
-        examDao.save(exam);
+        examService.updateNameDiff(pk, value, name);
 
         return SUCCESS;
     }
@@ -380,9 +361,7 @@ public class ProfHomeAction extends BaseAction {
 
             emailService.sendExamCreated(user);
 
-            Exam exam = examDao.findById(instance.getExamid());
-            exam.setLocked(true);
-            examDao.save(exam);
+            examService.lockExam(instance.getExamid());
 
             ExamGroup group = examGroupDao.findById(instance.getEgroupid());
             group.setLocked(true);
@@ -404,7 +383,7 @@ public class ProfHomeAction extends BaseAction {
                 }
 
                 User user = getSessionObj();
-                List<Exam> exams = examDao.findForOwner(user.getId());
+                List<Exam> exams = examService.findForOwner(user.getId());
                 List<ExamGroup> groups = examGroupDao.findByOwner(user.getId());
 
                 Map<Integer, String> examsMap = new HashMap<>();
@@ -455,7 +434,7 @@ public class ProfHomeAction extends BaseAction {
 
         Integer groupId = instance.getEgroupid();
         Integer examId = instance.getExamid();
-        Exam exam = examDao.findById(examId);
+        Exam exam = examService.findById(examId);
 
         List<ExamItem> items = examItemDao.findByExamId(examId);
         List<User> students = examGroupUserDao.findByGroupId(groupId);
