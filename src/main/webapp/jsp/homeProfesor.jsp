@@ -230,12 +230,14 @@
 
                     <div class="form-group">
                         <label for="exam">Examen</label>
-                        <select class="form-control" name="exi.examid" id="exam"></select>
+                        <mtw:select klass="form-control" name="exi.examid" list="exams" id="exam"/>
+                        <%--<select class="form-control" name="exi.examid" id="exam"></select>--%>
                     </div>
 
                     <div class="form-group">
                         <label for="group">Grupa</label>
-                        <select class="form-control" name="exi.egroupid" id="group"></select>
+                        <mtw:select klass="form-control" name="exi.egroupid" list="examGroups" id="group"/>
+                        <%--<select class="form-control" name="exi.egroupid" id="group"></select>--%>
                     </div>
 
                     <div class="form-group">
@@ -287,30 +289,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-
-    <%-- Load the list of exams and groups, AJAX Style --%>
-    var loadExams = function(){
-        $('#exam').find('option').remove();
-        $('#group').find('option').remove();
-
-        $.getJSON('<mtw:contextPath />/prof.getMyConcepts.m', function (actionOutput) {
-            $.each(actionOutput.exams, function(index, value){
-                $('#exam').append($('<option>', {
-                    value: index,
-                    text : value
-                }));
-            });
-
-            $.each(actionOutput.groups, function(index, value){
-                $('#group').append($('<option>', {
-                    value: index,
-                    text : value
-                }));
-            });
-        });
-    };
-
-    loadExams();
-</script>

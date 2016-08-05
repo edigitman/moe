@@ -142,9 +142,6 @@ public class AppManager extends ApplicationManager {
 
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS RELATED TO EXAM INSTANCE ---------------
-        action("/prof", ProfessorAction.class, "getMyConcepts")
-                .authorize("PROFESOR")
-                .on(SUCCESS, ajax(new JsonRenderer()));
         action("/prof", ProfessorAction.class, "addExamInst")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("exi", ExamInstance.class, "exi"))

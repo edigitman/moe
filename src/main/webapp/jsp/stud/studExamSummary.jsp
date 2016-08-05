@@ -35,7 +35,7 @@
                     </thead>
                     <tbody>
                     <mtw:loop var="r" counter="index" counterStart="1">
-                        <tr>
+                        <tr id="item-<mtw:out value="r.answer.id"/>">
                             <th scope="row"><mtw:out value="index"/></th>
                             <td><mtw:out value="r.item.assertion"/></td>
                             <td><mtw:out value="r.item.points"/></td>

@@ -8,7 +8,9 @@ import ro.agitman.moe.service.ExamGroupService;
 import ro.agitman.moe.service.ExamService;
 import ro.agitman.moe.web.dto.ExamInstanceDTO;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by edi on 7/10/2016.
@@ -40,11 +42,22 @@ public class HomeAction extends BaseAction {
             if ("PROFESOR".equals(role)) {
 
                 User user = getSessionObj();
-                List<Exam> exams = examService.findForOwner(user.getId());
+                List<Exam> concepts = examService.findForOwner(user.getId());
                 List<ExamGroup> examGroups = examGroupService.findByOwner(user.getId());
                 List<ExamInstanceDTO> instances = instanceDao.findByOwnerToDTO(user.getId());
+                List<Exam> exams = examService.findForOwner(user.getId());
 
-                output().setValue("concepts", exams);
+                Map<String, String> examsMap = new HashMap<>();
+                Map<String, String> groupsMap = new HashMap<>();
+
+
+                exams.forEach(exam -> examsMap.put("" + exam.getId(), exam.getName()));
+                examGroups.forEach(group -> groupsMap.put("" + group.getId(), group.getName()));
+
+                output.setValue("exams", examsMap);
+                output.setValue("examGroups", groupsMap);
+
+                output().setValue("concepts", concepts);
                 output().setValue("groups", examGroups);
                 output().setValue("instances", instances);
             }

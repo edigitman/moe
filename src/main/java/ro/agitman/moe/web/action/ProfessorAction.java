@@ -354,46 +354,8 @@ public class ProfessorAction extends BaseAction {
             if (isGet()) {
 
                 throw new IllegalAccessError("This should not happen anymore");
-
-//                Integer instanceId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
-//                if (instanceId != null) {
-//                    output.setValue("exi", instanceDao.findById(instanceId));
-//                }
-//
-//                User user = getSessionObj();
-//                List<Exam> exams = examService.findForOwner(user.getId());
-//                List<ExamGroup> groups = examGroupService.findByOwner(user.getId());
-//
-//                Map<Integer, String> examsMap = new HashMap<>();
-//                Map<Integer, String> groupsMap = new HashMap<>();
-//
-//
-//                exams.stream().forEach(exam -> examsMap.put(exam.getId(), exam.getName()));
-//                groups.stream().forEach(group -> groupsMap.put(group.getId(), group.getName()));
-//
-//                output.setValue("exams", examsMap);
-//                output.setValue("groups", groupsMap);
-
             }
         }
-        return SUCCESS;
-    }
-
-    public String getMyConcepts(){
-        User user = getSessionObj();
-        List<Exam> exams = examService.findForOwner(user.getId());
-        List<ExamGroup> groups = examGroupService.findByOwner(user.getId());
-
-        Map<String, String> examsMap = new HashMap<>();
-        Map<String, String> groupsMap = new HashMap<>();
-
-
-        exams.stream().forEach(exam -> examsMap.put("" + exam.getId(), exam.getName()));
-        groups.stream().forEach(group -> groupsMap.put("" + group.getId(), group.getName()));
-
-        output.setValue("exams", examsMap);
-        output.setValue("groups", groupsMap);
-
         return SUCCESS;
     }
 
@@ -454,7 +416,7 @@ public class ProfessorAction extends BaseAction {
         session().setAttribute(EXAM_ITEM_ID_SK, itemId);
 
         output().setValue("item", item);
-        if (answer != null) {
+        if (answer != null && answer.getValue() != null) {
             String val = answer.getValue();
             val = val.replace("#$", "<br/>");
             answer.setValue(val);
