@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by d-uu31cq on 22.07.2016.
  */
-public class StudHomeAction extends BaseAction {
+public class StudentAction extends BaseAction {
 
     private final ExamService examService;
     private final ExamInstanceDao instanceDao;
@@ -22,7 +22,7 @@ public class StudHomeAction extends BaseAction {
     private final StudExamAnswerDao examAnswerDao;
     private final ExamItemAnswerDao answerDao;
 
-    public StudHomeAction(ExamItemDao examItemDao, ExamService examService, ExamInstanceDao instanceDao, StudExamInstanceDao studExamInstanceDao, StudExamAnswerDao studExamAnswerDao, ExamItemAnswerDao answerDao) {
+    public StudentAction(ExamItemDao examItemDao, ExamService examService, ExamInstanceDao instanceDao, StudExamInstanceDao studExamInstanceDao, StudExamAnswerDao studExamAnswerDao, ExamItemAnswerDao answerDao) {
         this.examService = examService;
         this.instanceDao = instanceDao;
         this.examItemDao = examItemDao;

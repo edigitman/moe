@@ -80,96 +80,96 @@ public class AppManager extends ApplicationManager {
 
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS RELATED TO EXAM ------------------------
-        action("/ProfHome", ProfHomeAction.class, "newExam")
+        action("/prof", ProfessorAction.class, "newExam")
                 .authorize("PROFESOR")
                 .on(SUCCESS, fwd("/jsp/prof/profEditExam.jsp"));
-        action("/ProfHome", ProfHomeAction.class, "saveExam")
+        action("/prof", ProfessorAction.class, "saveExam")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("exam", Exam.class, "exam"))
                 .on(SUCCESS, redir("/home.m"));
-        action("/ProfHome", ProfHomeAction.class, "updateExam")
+        action("/prof", ProfessorAction.class, "updateExam")
                 .authorize("PROFESOR")
                 .on(SUCCESS, ajax(new JsonRenderer()));
 
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS RELATED TO EXAM ITEM -------------------
-        action("/ProfHome", ProfHomeAction.class, "addItemsRedir")
+        action("/prof", ProfessorAction.class, "addItemsRedir")
                 .authorize("PROFESOR")
-                .on(SUCCESS, redir("/ProfHome.addItems.m"));
-        action("/ProfHome", ProfHomeAction.class, "addItemsAnswer")
-                .authorize("PROFESOR")
-                .on(SUCCESS, ajax(new JsonRenderer()));
-        action("/ProfHome", ProfHomeAction.class, "getAllAnswers")
+                .on(SUCCESS, redir("/prof.addItems.m"));
+        action("/prof", ProfessorAction.class, "addItemsAnswer")
                 .authorize("PROFESOR")
                 .on(SUCCESS, ajax(new JsonRenderer()));
-        action("/ProfHome", ProfHomeAction.class, "editItem")
+        action("/prof", ProfessorAction.class, "getAllAnswers")
+                .authorize("PROFESOR")
+                .on(SUCCESS, ajax(new JsonRenderer()));
+        action("/prof", ProfessorAction.class, "editItem")
                 .authorize("PROFESOR")
                 .on(AJAX, ajax(new JsonRenderer()))
-                .on(SUCCESS, redir("/ProfHome.addItems.m"));
-        action("/ProfHome", ProfHomeAction.class, "deleteItem")
+                .on(SUCCESS, redir("/prof.addItems.m"));
+        action("/prof", ProfessorAction.class, "deleteItem")
                 .authorize("PROFESOR")
-                .on(SUCCESS, redir("/ProfHome.addItems.m"));
-        action("/ProfHome", ProfHomeAction.class, "removeEditItem")
+                .on(SUCCESS, redir("/prof.addItems.m"));
+        action("/prof", ProfessorAction.class, "removeEditItem")
                 .authorize("PROFESOR")
-                .on(SUCCESS, redir("/ProfHome.addItems.m"));
-        action("/ProfHome", ProfHomeAction.class, "addItems")
+                .on(SUCCESS, redir("/prof.addItems.m"));
+        action("/prof", ProfessorAction.class, "addItems")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("examItem", ExamItem.class, "item"))
                 .on(SUCCESS, fwd("/jsp/prof/profAddItems.jsp"))
-                .on(CREATED, redir("/ProfHome.addItems.m"));
-        action("/ProfHome", ProfHomeAction.class, "deleteAnswer")
+                .on(CREATED, redir("/prof.addItems.m"));
+        action("/prof", ProfessorAction.class, "deleteAnswer")
                 .authorize("PROFESOR")
-                .on(SUCCESS, redir("/ProfHome.addItems.m"));
+                .on(SUCCESS, redir("/prof.addItems.m"));
 
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS RELATED TO GROUP -------------------
-        action("/ProfHome", ProfHomeAction.class, "newGroup")
+        action("/prof", ProfessorAction.class, "newGroup")
                 .authorize("PROFESOR")
                 .on(SUCCESS, fwd("/jsp/prof/profAddGroup.jsp"));
-        action("/ProfHome", ProfHomeAction.class, "saveGroup")
+        action("/prof", ProfessorAction.class, "saveGroup")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("group", ExamGroup.class, "group"))
                 .on(SUCCESS, redir("/home.m"));
-        action("/ProfHome", ProfHomeAction.class, "editGroup")
+        action("/prof", ProfessorAction.class, "editGroup")
                 .authorize("PROFESOR")
                 .on(SUCCESS, fwd("/jsp/prof/profAddGroup.jsp"));
-        action("/ProfHome", ProfHomeAction.class, "addStudsRedir")
+        action("/prof", ProfessorAction.class, "addStudsRedir")
                 .authorize("PROFESOR")
-                .on(SUCCESS, redir("/ProfHome.addStuds.m"));
-        action("/ProfHome", ProfHomeAction.class, "addStuds")
+                .on(SUCCESS, redir("/prof.addStuds.m"));
+        action("/prof", ProfessorAction.class, "addStuds")
                 .authorize("PROFESOR")
                 .on(SUCCESS, fwd("/jsp/prof/profAddStuds.jsp"))
-                .on(CREATED, redir("/ProfHome.addStuds.m"));
-        action("/ProfHome", ProfHomeAction.class, "deleteStuds")
+                .on(CREATED, redir("/prof.addStuds.m"));
+        action("/prof", ProfessorAction.class, "deleteStuds")
                 .authorize("PROFESOR")
-                .on(SUCCESS, redir("/ProfHome.addStuds.m"));
+                .on(SUCCESS, redir("/prof.addStuds.m"));
 
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS RELATED TO EXAM INSTANCE ---------------
-        action("/ProfHome", ProfHomeAction.class, "addExamInstRedir")
+        action("/prof", ProfessorAction.class, "addExamInstRedir")
                 .authorize("PROFESOR")
-                .on(SUCCESS, redir("/ProfHome.addExamInst.m"));
-        action("/ProfHome", ProfHomeAction.class, "addExamInst")
+                .on(SUCCESS, redir("/prof.addExamInst.m"));
+        action("/prof", ProfessorAction.class, "addExamInst")
                 .authorize("PROFESOR")
                 .filter(new VOFilter("exi", ExamInstance.class, "exi"))
                 .on(CREATED, redir("/home.m"))
                 .on(SUCCESS, fwd("/jsp/prof/profAddExamInstance.jsp"));
-        action("/ProfHome", ProfHomeAction.class, "changeInstanceStatus")
+        action("/prof", ProfessorAction.class, "changeInstanceStatus")
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/home.m"));
 
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS RELATED TO EXAM INSTANCE ---------------
-        action("/ProfHome", ProfHomeAction.class, "reviewExam")
+        action("/prof", ProfessorAction.class, "reviewExam")
                 .authorize("PROFESOR")
                 .on(SUCCESS, fwd("/jsp/prof/profReviewExam.jsp"));
-        action("/ProfHome", ProfHomeAction.class, "viewExamItemResult")
+        action("/prof", ProfessorAction.class, "viewExamItemResult")
                 .authorize("PROFESOR")
                 .on(SUCCESS, ajax(new JsonRenderer()));
-        action("/ProfHome", ProfHomeAction.class, "solveExamInstance")
+        action("/prof", ProfessorAction.class, "solveExamInstance")
                 .authorize("PROFESOR")
-                .on(SUCCESS, redir("/ProfHome.reviewExam.m"));
-        action("/ProfHome", ProfHomeAction.class, "markAnswer")
+                .on(SUCCESS, redir("/prof.reviewExam.m"));
+        action("/prof", ProfessorAction.class, "markAnswer")
                 .authorize("PROFESOR")
                 .on(SUCCESS, ajax(new JsonRenderer()));
 
@@ -178,18 +178,18 @@ public class AppManager extends ApplicationManager {
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS TO START EXAM ------------------------
 
-        action("/stud", StudHomeAction.class, "startExam")
+        action("/stud", StudentAction.class, "startExam")
                 .authorize("STUDENT")
                 .on(SUCCESS, fwd("/jsp/stud/studTakeExam.jsp"));
-        action("/stud", StudHomeAction.class, "launchExam")
+        action("/stud", StudentAction.class, "launchExam")
                 .authorize("STUDENT")
                 .on(CREATED, redir("/stud.launchExam.m"))
                 .on(SUCCESS, fwd("/jsp/stud/studItemview.jsp"));
-        action("/stud", StudHomeAction.class, "saveAnswer")
+        action("/stud", StudentAction.class, "saveAnswer")
                 .authorize("STUDENT")
                 .on(SUCCESS, redir("/stud.viewResults.m"))
                 .on(ADD, redir("/stud.launchExam.m"));
-        action("/stud", StudHomeAction.class, "viewResults")
+        action("/stud", StudentAction.class, "viewResults")
                 .authorize("STUDENT")
                 .on(SUCCESS, fwd("/jsp/stud/studExamSummary.jsp"));
 
@@ -197,13 +197,13 @@ public class AppManager extends ApplicationManager {
 //---------- ADMIN ACTIONS ---------------------------------------
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS TO MANAGE USERS ------------------------
-        action("/EditUser", AdminHomeAction.class, "editUser")
+        action("/admin", AdminAction.class, "editUser")
                 .authorize("ADMIN")
                 .on(SUCCESS, fwd("/jsp/admin/adminEditUser.jsp"));
-        action("/EditUser", AdminHomeAction.class, "newUser")
+        action("/admin", AdminAction.class, "newUser")
                 .authorize("ADMIN")
                 .on(SUCCESS, fwd("/jsp/admin/adminEditUser.jsp"));
-        action("/EditUser", AdminHomeAction.class, "saveUser")
+        action("/admin", AdminAction.class, "saveUser")
                 .authorize("ADMIN")
                 .filter(new VOFilter("user", User.class, "user"))
                 .on(SUCCESS, redir("/home.m"));

@@ -23,7 +23,7 @@
                 <h3>Examen: <mtw:out value="exam.name"/></h3>
                 <h4>Dificultate: <mtw:out value="exam.difficulty"/></h4>
                 <h4>Puncte totale: <mtw:out value="exam.points"/></h4>
-                <a id="autoSolve" href="/ProfHome.solveExamInstance.m" class="btn btn-info btn-sm">auto-corecteaza
+                <a id="autoSolve" href="/prof.solveExamInstance.m" class="btn btn-info btn-sm">auto-corecteaza
                     ? </a>
             </div>
         </div>
@@ -120,7 +120,7 @@
             var loadItem = function () {
                 var studId = localStorage.getItem("studId");
                 var itemId = localStorage.getItem("itemId");
-                $.getJSON('<mtw:contextPath />/ProfHome.viewExamItemResult.m?studId=' + studId + '&itemId=' + itemId, function (actionOutput) {
+                $.getJSON('<mtw:contextPath />/prof.viewExamItemResult.m?studId=' + studId + '&itemId=' + itemId, function (actionOutput) {
                     if (actionOutput.answer != null) {
                         $('#answerAction').hide();
 
@@ -152,13 +152,13 @@
             $('#markAnswerOK').click(function () {
                 var aid = $('#markAnswerOK').attr('aid');
                 var percentage = $('#scorePC').val();
-                $.get('/ProfHome.markAnswer.m?id=' + aid + '&r=ok' + '&p=' + percentage, function (data) {
+                $.get('/prof.markAnswer.m?id=' + aid + '&r=ok' + '&p=' + percentage, function (data) {
                     loadItem();
                 });
             });
             $('#markAnswerKO').click(function () {
                 var aid = $('#markAnswerKO').attr('aid');
-                $.get('/ProfHome.markAnswer.m?id=' + aid + '&r=1', function (data) {
+                $.get('/prof.markAnswer.m?id=' + aid + '&r=1', function (data) {
                     loadItem();
                 });
             });

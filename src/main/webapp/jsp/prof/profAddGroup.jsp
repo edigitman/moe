@@ -17,7 +17,7 @@
     <jsp:attribute name="body">
  <div class="row">
      <div class="col-md-6 col-md-offset-3">
-         <mtw:form action="/ProfHome.saveGroup.m" method="post">
+         <mtw:form action="/prof.saveGroup.m" method="post">
              <mtw:input name="group.id" type="hidden"/>
 
              <div class="form-group">

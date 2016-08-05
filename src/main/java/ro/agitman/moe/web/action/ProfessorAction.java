@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Created by edi on 7/11/2016.
  */
-public class ProfHomeAction extends BaseAction {
+public class ProfessorAction extends BaseAction {
 
     private final Map<Integer, String> diffs;// = new ArrayList<String>(Arrays.asList("USOR", "MEDIU", "GREU"));
     private final Map<Integer, String> examItemType;// = new ArrayList<String>(Arrays.asList("Selectie unica", "Selectie multipla", "Text liber"));
@@ -52,7 +52,7 @@ public class ProfHomeAction extends BaseAction {
         diffs.put(3, "Dificil");
     }
 
-    public ProfHomeAction(StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamService examService, ExamGroupService examGroupService, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
+    public ProfessorAction(StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamService examService, ExamGroupService examGroupService, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
         this.userDao = userDao;
         this.examService = examService;
         this.examGroupService = examGroupService;

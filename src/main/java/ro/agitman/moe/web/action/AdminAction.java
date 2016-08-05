@@ -11,12 +11,12 @@ import java.util.List;
 /**
  * Created by d-uu31cq on 08.07.2016.
  */
-public class AdminHomeAction extends BaseAction {
+public class AdminAction extends BaseAction {
 
     private final UserDao userDao;
     private final List<String> roles = new ArrayList<String>(Arrays.asList("STUDENT", "PROFESOR", "ADMIN"));
 
-    public AdminHomeAction(UserDao userDao) {
+    public AdminAction(UserDao userDao) {
         this.userDao = userDao;
     }
 

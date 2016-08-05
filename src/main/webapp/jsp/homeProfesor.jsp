@@ -60,11 +60,11 @@
                                 </td>
                                 <td>
                                     <c:if test="${!c.locked}">
-                                        <a class="btn btn-link" href="/ProfHome.addItemsRedir.m?id=<mtw:out value="c.id"/>">Modifica</a>
+                                        <a class="btn btn-link" href="/prof.addItemsRedir.m?id=<mtw:out value="c.id"/>">Modifica</a>
                                     </c:if>
                                     <c:if test="${c.locked}">
-                                        <a class="btn btn-link" href="/ProfHome.addItemsRedir.m?id=<mtw:out value="c.id"/>">Vizualizare</a>
-                                        <a class="btn btn-link" href="/ProfHome.editExam.m?id=<mtw:out value="c.id"/>">Cloneaza</a>
+                                        <a class="btn btn-link" href="/prof.addItemsRedir.m?id=<mtw:out value="c.id"/>">Vizualizare</a>
+                                        <a class="btn btn-link" href="/prof.editExam.m?id=<mtw:out value="c.id"/>">Cloneaza</a>
                                     </c:if>
                                 </td>
                             </tr>
@@ -76,7 +76,7 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <a class="btn btn-info" href="/ProfHome.newExam.m">Adauga</a>
+                        <a class="btn btn-info" href="/prof.newExam.m">Adauga</a>
                     </div>
                 </div>
             </div>
@@ -111,14 +111,14 @@
                                     <td><mtw:out value="i.startdate"/></td>
                                     <td>
                                         <c:if test="${i.status == 1}">
-                                            <a href="/ProfHome.changeInstanceStatus.m?id=<mtw:out value="i.id"/>&action=doStart">start</a>
+                                            <a href="/prof.changeInstanceStatus.m?id=<mtw:out value="i.id"/>&action=doStart">start</a>
                                         </c:if>
                                         <c:if test="${i.status == 2}">
-                                            <a href="/ProfHome.changeInstanceStatus.m?id=<mtw:out value="i.id"/>&action=doFinish">termina</a>
-                                            <%--<a href="/ProfHome.changeInstanceStatus.m?id=<mtw:out value="i.id"/>&action=doStop">stop</a>--%>
+                                            <a href="/prof.changeInstanceStatus.m?id=<mtw:out value="i.id"/>&action=doFinish">termina</a>
+                                            <%--<a href="/prof.changeInstanceStatus.m?id=<mtw:out value="i.id"/>&action=doStop">stop</a>--%>
                                         </c:if>
                                         <c:if test="${i.status == 3}">
-                                            <a href="/ProfHome.reviewExam.m?id=<mtw:out value="i.id"/>">Corecteaza</a>
+                                            <a href="/prof.reviewExam.m?id=<mtw:out value="i.id"/>">Corecteaza</a>
                                         </c:if>
                                     </td>
                                 </tr>
@@ -131,7 +131,7 @@
                 <br/>
                 <div class="row">
                     <div class="col-sm-12">
-                        <a class="btn btn-info" href="/ProfHome.addExamInstRedir.m">Adauga</a>
+                        <a class="btn btn-info" href="/prof.addExamInstRedir.m">Adauga</a>
                     </div>
                 </div>
             </div>
@@ -161,10 +161,10 @@
                                     <td><mtw:out value="g.students"/></td>
                                     <td>
                                         <%--<c:if test="${g.locked}">--%>
-                                            <a class="btn btn-link" href="/ProfHome.addStudsRedir.m?id=<mtw:out value="g.id"/>">Adauga Studenti</a>
+                                            <a class="btn btn-link" href="/prof.addStudsRedir.m?id=<mtw:out value="g.id"/>">Adauga Studenti</a>
                                         <%--</c:if>--%>
                                         <%--<c:if test="${g.locked}">--%>
-                                            <a class="btn btn-link" href="/ProfHome.editGroup.m?id=<mtw:out value="g.id"/>">Modifica</a>
+                                            <a class="btn btn-link" href="/prof.editGroup.m?id=<mtw:out value="g.id"/>">Modifica</a>
                                         <%--</c:if>--%>
                                     </td>
                                 </tr>
@@ -176,7 +176,7 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <a class="btn btn-info" href="/ProfHome.newGroup.m">Adauga</a>
+                        <a class="btn btn-info" href="/prof.newGroup.m">Adauga</a>
                     </div>
                 </div>
             </div>

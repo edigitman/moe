@@ -16,7 +16,7 @@
     <jsp:attribute name="body">
  <div class="row">
      <div class="col-md-8 col-md-offset-2">
-         <mtw:form action="/ProfHome.addStuds.m" method="post">
+         <mtw:form action="/prof.addStuds.m" method="post">
 <div class="col-md-6">
     <div class="row">
         <div class="col-md-8">
@@ -63,7 +63,7 @@
                                          <th scope="row"><mtw:out value="c"/></th>
                                          <td><mtw:out value="s.name"/></td>
                                          <td>
-                                             <a href="/ProfHome.deleteStuds.m?id=<mtw:out value="s.id"/>" id="delete">
+                                             <a href="/prof.deleteStuds.m?id=<mtw:out value="s.id"/>" id="delete">
                                                  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                              </a>
                                          </td>

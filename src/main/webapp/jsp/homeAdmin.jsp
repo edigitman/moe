@@ -38,7 +38,7 @@
                             <td><mtw:out value="u.role"/></td>
                             <td>
                                 <a class="btn btn-link"
-                                   href="/EditUser.editUser.m?id=<mtw:out value="u.id"/>">Modifica</a>
+                                   href="/admin.editUser.m?id=<mtw:out value="u.id"/>">Modifica</a>
                             </td>
                         </tr>
                     </mtw:loop>
@@ -48,7 +48,7 @@
         </mtw:list>
         <div class="row">
             <div class="col-sm-12">
-                <a class="btn btn-info" href="/EditUser.newUser.m">Adauga</a>
+                <a class="btn btn-info" href="/admin.newUser.m">Adauga</a>
             </div>
         </div>
 

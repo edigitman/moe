@@ -33,7 +33,7 @@
                          <a href="#" id="examName"
                             data-type="text"
                             data-pk="<mtw:out value="exam.id"/>"
-                            data-url="/ProfHome.updateExam.m"
+                            data-url="/prof.updateExam.m"
                             data-title="Modifica numele">
                              <mtw:out value="exam.name"/>
                          </a>
@@ -49,7 +49,7 @@
                             data-source="[{value: 1, text: 'Usor'}, {value: 2, text: 'Mediu'}, {value: 3, text: 'Dificil'}]"
                             data-type="select"
                             data-pk="<mtw:out value="exam.id"/>"
-                            data-url="/ProfHome.updateExam.m"
+                            data-url="/prof.updateExam.m"
                             data-title="Enter username">
                              <mtw:out value="exam.difficulty"/>
                          </a>
@@ -102,7 +102,7 @@
          </div>
          <div class="col-md-6">
 
-             <mtw:form action="/ProfHome.addItems.m" method="post">
+             <mtw:form action="/prof.addItems.m" method="post">
                  <mtw:input name="exam.id" type="hidden"/>
                  <mtw:input id="itemId" name="item.id" type="hidden"/>
 
@@ -127,10 +127,10 @@
                          <button type="submit" class="btn btn-info" id="addItemBtn">Adauga</button>
                      </div>
                      <div class="col-md-2" style="height: 74px; padding-top: 25px">
-                         <a href="/ProfHome.removeEditItem.m" id="clearItemForm" class="btn btn-link">Curata</a>
+                         <a href="/prof.removeEditItem.m" id="clearItemForm" class="btn btn-link">Curata</a>
                      </div>
                      <div class="col-md-2" style="height: 74px; padding-top: 25px">
-                         <a href="/ProfHome.deleteItem.m?id=<mtw:out value="item.id"/>" id="delete" class="btn btn-danger">Sterge</a>
+                         <a href="/prof.deleteItem.m?id=<mtw:out value="item.id"/>" id="delete" class="btn btn-danger">Sterge</a>
                      </div>
                  </div>
              </mtw:form>
@@ -231,14 +231,14 @@
                 text.val('');
                 correct.bootstrapSwitch('state', false);
 
-                $.post( "/ProfHome.addItemsAnswer.m", { answer: JSON.stringify(answer) }, function(data) {
+                $.post( "/prof.addItemsAnswer.m", { answer: JSON.stringify(answer) }, function(data) {
                         addAnswerRow(data);
                     }
                 );
             });
 
             var removeAnswer = function(answerId){
-                $.post( "/ProfHome.deleteAnswer.m", { id: answerId }, function(data) { loadAllAnswers(); } );
+                $.post( "/prof.deleteAnswer.m", { id: answerId }, function(data) { loadAllAnswers(); } );
             };
 
 //          cut the assertion
@@ -255,7 +255,7 @@
             $('.itemRow').click(function (event) {
                 event.preventDefault();
                 var itemId = event.currentTarget.attributes.itemId.value;
-                $.get('/ProfHome.editItem.m?id=' + itemId, function (data, result) {
+                $.get('/prof.editItem.m?id=' + itemId, function (data, result) {
                     if (result == 'success'){
                         location.reload();
                     }

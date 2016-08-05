@@ -17,7 +17,7 @@
 
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-        <mtw:form action="/ProfHome.saveExam.m" method="post">
+        <mtw:form action="/prof.saveExam.m" method="post">
             <mtw:input name="exam.id" type="hidden"/>
 
             <div class="form-group">

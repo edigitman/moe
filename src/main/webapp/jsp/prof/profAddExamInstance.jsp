@@ -17,7 +17,7 @@
 
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
-        <mtw:form action="/ProfHome.addExamInst.m" method="post">
+        <mtw:form action="/prof.addExamInst.m" method="post">
 
             <div class="form-group">
                 <label for="nume">Nume</label>

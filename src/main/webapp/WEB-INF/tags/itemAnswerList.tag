@@ -30,7 +30,7 @@ Nu sunt raspunsuri pentru acest subiect!
 <script type="text/javascript">
     var loadAllAnswers = function(){
         $('table#answersTable tbody').empty();
-        $.get("/ProfHome.getAllAnswers.m", function(data){
+        $.get("/prof.getAllAnswers.m", function(data){
             if(data.answers.length == 0){
                 $('#noAnswers').show();
                 $('#answerDiv').hide();
