@@ -29,6 +29,7 @@ public class ProfessorAction extends BaseAction {
     private final UserDao userDao;
     private final ExamInstanceDao instanceDao;
     private final StudExamAnswerDao studAnswerDao;
+    private final StudExamInstanceDao studEXIDao;
 
     private final EmailService emailService;
     private Gson gson = new Gson();
@@ -46,7 +47,7 @@ public class ProfessorAction extends BaseAction {
         examItemType.put(3, "Text liber");
     }
 
-    public ProfessorAction(StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamService examService, ExamGroupService examGroupService, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
+    public ProfessorAction(StudExamInstanceDao studEXIDao,StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamService examService, ExamGroupService examGroupService, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
         this.userDao = userDao;
         this.examService = examService;
         this.examGroupService = examGroupService;
@@ -55,6 +56,7 @@ public class ProfessorAction extends BaseAction {
         this.examGroupUserDao = examGroupUserDao;
         this.instanceDao = examInstanceDao;
         this.studAnswerDao = studAnswerDao;
+        this.studEXIDao = studEXIDao;
 
         this.emailService = emailService;
     }
@@ -498,6 +500,19 @@ public class ProfessorAction extends BaseAction {
         studAnswerDao.save(answer);
 
         output().setValue("answer", answer);
+
+        return SUCCESS;
+    }
+
+    public String closeExamInstance(){
+        Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
+        ExamInstance instance = instanceDao.findById(exiId);
+
+        //TODO validate everyting is solved
+        studEXIDao.updateExamInstanceStatusById(instance.getId());
+        instance.setStatus(5);
+
+        instanceDao.save(instance);
 
         return SUCCESS;
     }

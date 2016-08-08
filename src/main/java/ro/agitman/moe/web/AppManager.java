@@ -171,6 +171,9 @@ public class AppManager extends ApplicationManager {
         action("/prof", ProfessorAction.class, "solveExamInstance")
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/prof.reviewExam.m"));
+        action("/prof", ProfessorAction.class, "closeExamInstance")
+                .authorize("PROFESOR")
+                .on(SUCCESS, redir("/home.m"));
         action("/prof", ProfessorAction.class, "markAnswer")
                 .authorize("PROFESOR")
                 .on(SUCCESS, ajax(new JsonRenderer()));

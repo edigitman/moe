@@ -27,7 +27,8 @@
                     <h3>Examen: {{ exam.name }}</h3>
                     <h4>Dificultate: {{ exam.difficulty }}</h4>
                     <h4>Puncte totale: {{ exam.points }}</h4>
-                        <%-- TODO <a id="autoSolve" href="/prof.solveExamInstance.m" class="btn btn-info btn-sm">auto-corecteaza</a>--%>
+                    <a id="autoSolve" href="/prof.solveExamInstance.m"
+                       class="btn btn-info btn-sm">auto-corecteaza</a>
 
                 </div>
             </div>
@@ -103,6 +104,7 @@
 
 
             <a href="/home.m" class="btn btn-link">Inapoi</a>
+            <a href="/prof.closeExamInstance.m" class="btn btn-primary">Marcheaza rezolvat</a>
         </div>
     </jsp:attribute>
 
@@ -158,7 +160,7 @@
                         });
                         this.setGradePerc(50);
                     },
-                    
+
                     changeItem: function () {
                         var self = this;
                         $.getJSON('<mtw:contextPath />/prof.getAnswersForItem.m?id=' + self.selectedItem, function (out) {

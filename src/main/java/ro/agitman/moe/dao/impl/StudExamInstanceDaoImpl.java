@@ -1,9 +1,15 @@
 package ro.agitman.moe.dao.impl;
 
+import org.mentabean.BeanException;
 import org.mentabean.BeanSession;
+import org.mentabean.util.SQLUtils;
 import ro.agitman.moe.dao.StudExamInstanceDao;
 import ro.agitman.moe.model.StudentExamInstance;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -32,6 +38,21 @@ public class StudExamInstanceDaoImpl extends GenericDaoImpl<StudentExamInstance>
         instance.setStudid(id);
 
         return beanSession.loadList(instance);
+    }
+
+    public void updateExamInstanceStatusById(Integer id){
+        Connection conn = beanSession.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rset = null;
+
+        try {
+            stmt = SQLUtils.prepare(conn, "update student_exam_instances set status = 3 where examid = ?", id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new BeanException(e);
+        } finally {
+            SQLUtils.close(stmt);
+        }
     }
 
     public StudentExamInstance findActiveByOwner(Integer id){
