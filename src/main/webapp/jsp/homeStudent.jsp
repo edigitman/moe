@@ -39,7 +39,7 @@
                                 <c:if test="${i.status == 2}">
                                     <a href="/stud.startExam.m?id=<mtw:out value="i.id"/>">Start exam</a>
                                 </c:if>
-                                <c:if test="${i.status == 3}">
+                                <c:if test="${i.status == 3 || i.status == 5}">
                                     <%-- TODO viziualizare --%>
                                     <a href="#">Vizualizare</a>
                                 </c:if>

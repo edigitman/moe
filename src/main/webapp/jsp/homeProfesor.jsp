@@ -106,8 +106,11 @@
                                         <%--<a href="/prof.changeInstanceStatus.m?id=<mtw:out value="i.id"/>&action=doStop">stop</a>--%>
                                     </c:if>
                                     <c:if test="${i.status == 3}">
-                                        <a href="#"/>Vizualizare</a>
+                                        <a href="/prof.viewExam.m?id=<mtw:out value="i.id"/>"/>Vizualizare</a>
                                         <a href="/prof.reviewExam.m?id=<mtw:out value="i.id"/>">Corecteaza</a>
+                                    </c:if>
+                                    <c:if test="${i.status == 5}">
+                                        <a href="/prof.viewExam.m?id=<mtw:out value="i.id"/>"/>Vizualizare</a>
                                     </c:if>
                                 </td>
                             </tr>
