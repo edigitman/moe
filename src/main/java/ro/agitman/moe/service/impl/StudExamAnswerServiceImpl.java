@@ -103,14 +103,14 @@ public class StudExamAnswerServiceImpl implements StudExamAnswerService {
 
                 for (String s : studAnswerArr) {
                     ExamItemAnswer foundAnswer = matchWithAnswer(s, answers);
-                    actualAnswer.append(foundAnswer.getValue()).append("#$");
+                    actualAnswer.append(foundAnswer.getValue()).append(", ");
                 }
             } else {
                 // in case only one answer selected, radiobox
                 answer.setRawAnswer(String.valueOf(studAnswerObj));
 
                 ExamItemAnswer foundAnswer = matchWithAnswer(studAnswerObj, answers);
-                actualAnswer.append(foundAnswer.getValue()).append("#$");
+                actualAnswer.append(foundAnswer.getValue());
             }
         }
         answer.setValue(actualAnswer.toString());

@@ -150,8 +150,18 @@ public class AppManager extends ApplicationManager {
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/home.m"));
 
-//````````````````````````````````````````````````````````````````
-//--------------- ACTIONS RELATED TO EXAM INSTANCE ---------------
+        action("/prof", ProfessorAction.class, "getExam")
+                .authorize("PROFESOR")
+                .on(SUCCESS, ajax(new JsonRenderer()));
+        action("/prof", ProfessorAction.class, "getAnswersForItem")
+                .authorize("PROFESOR")
+                .on(SUCCESS, ajax(new JsonRenderer()));
+        action("/prof", ProfessorAction.class, "getStudentAnswersForItem")
+                .authorize("PROFESOR")
+                .on(SUCCESS, ajax(new JsonRenderer()));
+
+
+
         action("/prof", ProfessorAction.class, "reviewExam")
                 .authorize("PROFESOR")
                 .on(SUCCESS, fwd("/jsp/prof/profReviewExam.jsp"));

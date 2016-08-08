@@ -10,201 +10,201 @@
 <%@taglib prefix="mtw" uri="http://www.mentaframework.org/tags-mtw/" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="v-on" uri="http://ajaxtags.org/tags/ajax" %>
 <mtw:requiresAuthentication/>
 <mtw:requiresAuthorization group="PROFESOR"/>
 
 <t:layout title="index">
+
     <jsp:attribute name="body">
 
-        <div class="row">
+        <div id="app">
+            <div class="row">
 
-            <br/>
-            <div class="form-group">
-                <h3>Examen: <mtw:out value="exam.name"/></h3>
-                <h4>Dificultate: <mtw:out value="exam.difficulty"/></h4>
-                <h4>Puncte totale: <mtw:out value="exam.points"/></h4>
-                <a id="autoSolve" href="/prof.solveExamInstance.m" class="btn btn-info btn-sm">auto-corecteaza
-                    ? </a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5 well">
-                <mtw:list value="items">
-                    <mtw:loop var="i">
-                        <div class="row itemRow" itemId="<mtw:out value="i.id"/>">
-                            <div class="col-md-8 assertionClass"><mtw:out value="i.assertion"/></div>
-                            <div class="col-md-2"><mtw:out value="i.points"/></div>
-                            <div class="col-md-2">
-                                <span class="itemType"><mtw:out value="i.type"/></span>
-                            </div>
-                        </div>
-                    </mtw:loop>
-                </mtw:list>
-            </div>
-            <div class="col-md-5 col-md-offset-1 well">
-                <mtw:list value="students">
-                    <mtw:loop var="s">
-                        <div class="row studRow" studId="<mtw:out value="s.id"/>">
-                            <mtw:out value="s.name"/>
-                        </div>
-                    </mtw:loop>
-                </mtw:list>
-            </div>
-        </div>
+                <br/>
+                <div class="form-group">
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-12">
-                        <span id="itemAssertion"></span>
-                    </div>
+                    <h3>Examen: {{ exam.name }}</h3>
+                    <h4>Dificultate: {{ exam.difficulty }}</h4>
+                    <h4>Puncte totale: {{ exam.points }}</h4>
+                        <%-- TODO <a id="autoSolve" href="/prof.solveExamInstance.m" class="btn btn-info btn-sm">auto-corecteaza</a>--%>
+
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
+            </div>
+            <div class="row">
+                <div class="col-md-5 well">
+                    Doar subiectele care necesita corectare manuala
+                    <input type="checkbox" id="checkbox" v-model="itemTextFilter">
+                    <br/>
+                    <label for="itemsSelect">Subiecte</label>
+                    <select v-model="selectedItem" @change="changeItem" class="form-control" id="itemsSelect">
+                        <option v-for="item in filterItemType(3)" v-bind:value="item.id">
+                            <div class="col-md-8 assertionClass">{{ item.assertion }}</div>
+                        </option>
+                    </select>
+                </div>
 
-                        <t:itemAnswerList delete="false">
-                        </t:itemAnswerList>
+                <div class="col-md-5 col-md-offset-1 well">
+                    <label for="studsSelect">Studenti</label>
+                    <select v-model="selectedStudent" @change="changeStudent" class="form-control"
+                            id="studsSelect">
+                        <option v-for="student in students" v-bind:value="student.id">
+                            <div class="col-md-8 assertionClass">{{ student.name }}</div>
+                        </option>
+                    </select>
+                </div>
+            </div>
 
-                    </div>
-                    <div class="col-md-6">
-                        <div class="row">
-                            <span id="studentAnswer"></span>
-                        </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <span>Puncte: {{ item.points }}</span><br/>
+                    <span id="itemAssertion">{{ item.assertion }}</span>
+
+                    <br/>
+                    <span>Raspunsuri</span>
+                    <br/>
+
+                    <ul>
+                        <li v-for="answer in itemAnswers">
+                            {{ answer.value }} -
+                            <answer-text v-bind:value="answer.correct">
+                            </answer-text>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="col-md-6">
+                    <div>
+                        <span id="studentAnswer"> {{ studAnswer.value }}</span>
                         <br/>
-                        <div class="row">
-                            <div id="answerAction">
-                                <span><input type="number" id="scorePC" style="width: 45px"/> &percnt;</span>
-                                <a id="markAnswerOK" class="btn btn-link" href="#">Mark Corect</a>
-                                <a id="markAnswerKO" class="btn btn-link" href="#">Mark Gresit</a>
+                        <span> Puncte: {{ studAnswer.points }}</span> <br/>
+                    </div>
+                    <br/>
+                    <div <%--v-if="!studAnswer.solvable"--%>>
+                        <div style="display: inline-block; float: left; margin-top: 3px">
+                            <div style="width: 150px">
+                                <div  id="slider"></div>
                             </div>
+                            <span style="display: inline-block">
+                                <a href="#" @click="setGradePerc(0, $event)">0</a>
+                            </span>
+                            <span style="display: inline-block; margin-left: 114px">
+                                <a href="#" @click="setGradePerc(100, $event)">100</a>
+                            </span>
+                        </div>
+                        <div style="display: inline-block; float: right; margin-right: 160px">
+                            <input type="text" id="gradePerc" v-model="answerMarkPct" value="50" style="width: 35px" readonly> &percnt;
+                            <button type="button" class="btn btn-primary" @click="markAnswer">Puncteaza</button>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+            <a href="/home.m" class="btn btn-link">Inapoi</a>
         </div>
-        <a href="/home.m" class="btn btn-link">Inapoi</a>
     </jsp:attribute>
 
 
     <jsp:attribute name="scripts">
+        <script src="https://npmcdn.com/vue/dist/vue.js"></script>
         <script type="text/javascript">
-            $('#answerAction').hide();
-            var hideSolveBtn = function () {
-                if ('<mtw:out value="alreadySolved"/>' == 'true') {
-                    $('#autoSolve').hide();
-                }
-            };
-            hideSolveBtn();
 
-            var markCurrent = function () {
-                var studId = localStorage.getItem("studId");
-                var itemId = localStorage.getItem("itemId");
-
-                if (itemId)
-                    $('.itemRow').each(function (index) {
-                        if ($(this).attr('itemId') == itemId)
-                            $(this).addClass('currentItem');
-                        else
-                            $(this).removeClass('currentItem');
-                    });
-
-                if (studId)
-                    $('.studRow').each(function (index) {
-                        if ($(this).attr('studId') == studId)
-                            $(this).addClass('currentItem');
-                        else
-                            $(this).removeClass('currentItem');
-                    });
-            };
-
-            var loadItem = function () {
-                var studId = localStorage.getItem("studId");
-                var itemId = localStorage.getItem("itemId");
-                $.getJSON('<mtw:contextPath />/prof.viewExamItemResult.m?studId=' + studId + '&itemId=' + itemId, function (actionOutput) {
-                    if (actionOutput.answer != null) {
-                        $('#answerAction').hide();
-
-                        var span = $('<span/>');
-                        span.append(actionOutput.answer.value);
-
-                        if (actionOutput.answer.reviewed || actionOutput.answer.solvable) {
-                            span.append($('<br/>'));
-                            span.append(actionOutput.answer.correct == true ? "Corect" : "Gresit");
-                            if(!actionOutput.answer.solvable && actionOutput.answer.reviewed && actionOutput.answer.correct){
-                                span.append(" cu " + actionOutput.answer.points + " puncte");
-                            }
-                        }
-
-                        if (!actionOutput.answer.solvable) {
-                            $('#markAnswerOK').attr("aid", actionOutput.answer.id);
-                            $('#markAnswerKO').attr("aid", actionOutput.answer.id);
-                            $('#answerAction').show();
-                        }
-                        $('#studentAnswer').html(span);
+            $( function() {
+                $( "#slider" ).slider({
+                    min:0,
+                    max:100,
+                    step: 5,
+                    value: 50,
+                    change: function( event, ui ) {
+                        var selection = $( "#slider" ).slider( "value" );
+                        $('#gradePerc').val(selection);
                     }
-
-                    $('#itemAssertion').html(actionOutput.item.assertion);
-
-                    loadAllAnswers();
                 });
-            };
-
-            $('#markAnswerOK').click(function () {
-                var aid = $('#markAnswerOK').attr('aid');
-                var percentage = $('#scorePC').val();
-                $.get('/prof.markAnswer.m?id=' + aid + '&r=ok' + '&p=' + percentage, function (data) {
-                    loadItem();
-                });
-            });
-            $('#markAnswerKO').click(function () {
-                var aid = $('#markAnswerKO').attr('aid');
-                $.get('/prof.markAnswer.m?id=' + aid + '&r=1', function (data) {
-                    loadItem();
-                });
+                $('#gradePerc').val(50);
             });
 
-            $('.itemRow').click(function (event) {
-                event.preventDefault();
-                var itemId = event.currentTarget.attributes.itemId.value;
-                localStorage.setItem("itemId", itemId);
-                markCurrent();
-                if (localStorage.getItem("studId")) {
-                    loadItem();
-                }
+            Vue.component('answerText', {
+                // declare the props
+                props: ['value'],
+                template: '<span v-if="value">Corect</span><span v-if="!value">Gresit</span>'
             });
 
-            $('.studRow').click(function (event) {
-                event.preventDefault();
-                var studId = event.currentTarget.attributes.studId.value;
-                localStorage.setItem("studId", studId);
-                markCurrent();
-                if (localStorage.getItem("itemId")) {
-                    loadItem();
-                }
-            });
+            new Vue({
+                el: '#app',
+                data: {
+                    exam: {},
 
-            markCurrent();
+                    items: {},
+                    selectedItem: {},
+                    itemTextFilter: false,
 
-            //          cut the assertion
-            $('.assertionClass').each(function (index) {
-                // sanitize html assertion
-                $(this).text($(this).html(this.innerHTML).text());
-            });
+                    students: {},
+                    selectedStudent: {},
 
-            $(window).unload(function () {
-                localStorage.removeItem("itemId");
-                localStorage.removeItem("studId");
-            });
+                    item: {},
+                    itemAnswers: [],
+                    studAnswer: {}
+                },
+                methods: {
+                    markAnswer:function () {
+                        var self = this;
+                        var perc = $( "#slider" ).slider( "value" );
+                        var id = this.studAnswer.id;
+                        $.post('/prof.markAnswer.m',{id:id, p:perc}, function(data, status){
+                            console.log(data + ' -- ' + status);
+                            self.studAnswer = data.answer;
+                        });
+                        this.setGradePerc(50);
+                    },
+                    
+                    changeItem: function () {
+                        var self = this;
+                        $.getJSON('<mtw:contextPath />/prof.getAnswersForItem.m?id=' + self.selectedItem, function (out) {
+                            self.item = out.item;
+                            self.itemAnswers = [];
+                            $.each(out.answers, function (index, value) {
+                                self.itemAnswers.push(value);
+                            })
+                        });
+                        this.changeStudent();
+                    },
 
-            $('.itemType').each(function (index) {
-                if ('1' == $.trim($(this).text())) {
-                    $(this).text('S.U.');
-                }
-                if ('2' == $.trim($(this).text())) {
-                    $(this).text('S.M.');
-                }
-                if ('3' == $.trim($(this).text())) {
-                    $(this).text('T.');
+                    changeStudent: function () {
+                        var self = this;
+                        $.getJSON('<mtw:contextPath />/prof.getStudentAnswersForItem.m?id=' + self.selectedItem + '&s=' + self.selectedStudent, function (out) {
+                            self.studAnswer = out.answer;
+                        });
+                    },
+
+                    filterItemType: function (type) {
+                        if(this.itemTextFilter){
+                            return this.items.filter(function(item){
+                                return item.type == 3;
+                            });
+                        }
+                        return this.items;
+                    },
+
+                    setGradePerc:function(val, event){
+                        if(event!=undefined)
+                            event.preventDefault();
+
+                        $( '#slider' ).slider( 'value', val );
+                    },
+                    loadExam: function () {
+                        var self = this;
+                        $.getJSON('<mtw:contextPath />/prof.getExam.m', function (out) {
+                            self.exam = out.exam;
+                            self.items = out.items;
+                            self.students = out.students;
+                            self.solved = out.alreadySolved;
+                        });
+                    }
+                },
+                ready: function () {
+                    this.loadExam();
                 }
             });
         </script>

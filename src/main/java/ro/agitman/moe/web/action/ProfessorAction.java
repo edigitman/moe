@@ -378,6 +378,57 @@ public class ProfessorAction extends BaseAction {
         return SUCCESS;
     }
 
+
+    public String getExam() {
+        Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
+
+        ExamInstance instance = instanceDao.findById(exiId);
+
+        Integer groupId = instance.getEgroupid();
+        Integer examId = instance.getExamid();
+        Exam exam = examService.findById(examId);
+
+        List<ExamItem> items = examItemDao.findByExamId(examId);
+        List<User> students = examGroupUserDao.findByGroupId(groupId);
+
+        output().setValue("exam", exam);
+        output().setValue("items", items);
+        output().setValue("students", students);
+        output().setValue("alreadySolved", instance.getAutoSolved());
+
+
+        return SUCCESS;
+    }
+
+    public String getAnswersForItem() {
+        Integer itemId = input().getInt("id");
+
+        output().setValue("answers", answerDao.findForItem(itemId));
+        output().setValue("item", examItemDao.findById(itemId));
+
+        return SUCCESS;
+    }
+
+    public String getStudentAnswersForItem() {
+
+        try{
+            Integer.parseInt(input().getString("s"));
+        }catch (NumberFormatException e){
+            return SUCCESS;
+        }
+
+        Integer itemId = input().getInt("id");
+        Integer studId = input().getInt("s");
+        Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
+
+        StudentExamAnswer answer = studAnswerDao.findByExiStudItem(exiId, studId, itemId);
+
+        output().setValue("answer", answer);
+
+        return SUCCESS;
+    }
+
+
     public String reviewExam() {
 
         Integer exiId = input().getInt("id");
@@ -430,22 +481,23 @@ public class ProfessorAction extends BaseAction {
     public String markAnswer() {
 
         Integer studAnswerId = input().getInt("id");
-        String action = input().getString("r");
         Integer perc = input().getInt("p");
 
         StudentExamAnswer answer = studAnswerDao.findById(studAnswerId);
         ExamItem item = examItemDao.findById(answer.getExamItemId());
 
-        if ("ok".equals(action)) {
-            answer.setCorrect(true);
-            answer.setPoints(item.getPoints() * perc / 100);
-        } else{
+        if (perc == 0) {
             answer.setCorrect(false);
             answer.setPoints(0);
+        } else {
+            answer.setCorrect(true);
+            answer.setPoints(item.getPoints() * perc / 100);
         }
 
         answer.setReviewed(true);
         studAnswerDao.save(answer);
+
+        output().setValue("answer", answer);
 
         return SUCCESS;
     }
