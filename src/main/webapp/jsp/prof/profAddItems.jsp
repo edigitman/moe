@@ -84,7 +84,7 @@
                                      </td>
                                      <td>
                                      <span class="assertionClass">
-                                        <mtw:out value="i.assertion"/>
+                                        <mtw:out value="i.title"/>
                                      </span>
                                      </td>
                                      <td><mtw:out value="i.points"/></td>

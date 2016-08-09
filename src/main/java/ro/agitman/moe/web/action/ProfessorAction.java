@@ -47,7 +47,7 @@ public class ProfessorAction extends BaseAction {
         examItemType.put(3, "Text liber");
     }
 
-    public ProfessorAction(StudExamInstanceDao studEXIDao,StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamService examService, ExamGroupService examGroupService, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
+    public ProfessorAction(StudExamInstanceDao studEXIDao, StudExamAnswerDao studAnswerDao, ExamInstanceDao examInstanceDao, UserDao userDao, ExamService examService, ExamGroupService examGroupService, ExamGroupUserDao examGroupUserDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao, EmailService emailService) {
         this.userDao = userDao;
         this.examService = examService;
         this.examGroupService = examGroupService;
@@ -88,6 +88,8 @@ public class ProfessorAction extends BaseAction {
             } else {
                 examItem = examItemDao.save(examItem);
             }
+            String assertions = examItem.getAssertion();
+            examItem.setTitle(assertions.substring(0, Math.max(40, assertions.length())));
 
             recomputeExamPoints();
 
@@ -413,9 +415,9 @@ public class ProfessorAction extends BaseAction {
 
     public String getStudentAnswersForItem() {
 
-        try{
+        try {
             Integer.parseInt(input().getString("s"));
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return SUCCESS;
         }
 
@@ -504,7 +506,7 @@ public class ProfessorAction extends BaseAction {
         return SUCCESS;
     }
 
-    public String closeExamInstance(){
+    public String closeExamInstance() {
         Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
         ExamInstance instance = instanceDao.findById(exiId);
 

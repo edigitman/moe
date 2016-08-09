@@ -71,7 +71,8 @@ OIDS =FALSE
 CREATE TABLE exam_items
 (
   id          INTEGER NOT NULL,
-  assertion   CHARACTER VARYING(200),
+  title       CHARACTER VARYING(50),
+  assertion   CHARACTER VARYING(2000),
   difficulty  SMALLINT,
   points      INTEGER,
   type        SMALLINT,
@@ -237,16 +238,16 @@ VALUES ('admin@mail.com', 'administrator', 'secret', 'ADMIN', TRUE);
 
 INSERT INTO exams (owner, name, difficulty, points, items) VALUES (1000, 'exam 1', 2, 100, 5); -- id 1000
 
-INSERT INTO exam_items (assertion, points, type, examid)
-VALUES ('se da problema 1', 15, 1, 1000); -- id 1000
-INSERT INTO exam_items (assertion, points, type, examid)
-VALUES ('se da problema 2', 26, 2, 1000); -- id 1001
-INSERT INTO exam_items (assertion, points, type, examid)
-VALUES ('se da problema 3', 19, 2, 1000); -- id 1002
-INSERT INTO exam_items (assertion, points, type, examid)
-VALUES ('se da problema 4', 30, 3, 1000); -- id 1003
-INSERT INTO exam_items (assertion, points, type, examid)
-VALUES ('se da problema 5', 10, 1, 1000); -- id 1004
+INSERT INTO exam_items (title, assertion, points, type, examid)
+VALUES ('se da problema 1', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet, leo nec vulputate euismod, nibh mi rhoncus quam, et posuere risus nulla non nulla. Nullam hendrerit dictum velit, at facilisis neque semper et. Integer facilisis dui sit amet fringilla scelerisque. Proin eleifend mattis iaculis. Maecenas quis sem quis arcu pharetra ultricies. Cras ipsum dui, maximus eget quam pretium, semper imperdiet nisi. Ut pellentesque ultrices interdum. Donec eget ante nisl. Morbi in tortor sit amet lorem gravida ullamcorper at et purus. Curabitur vel odio eleifend, vehicula dolor sit amet, imperdiet risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vehicula congue urna, in suscipit nulla feugiat id. Pellentesque blandit, lectus id viverra aliquam, dui justo dictum mauris, non ornare ipsum nulla et dui. Sed aliquam ex nisl, sit amet dignissim augue sodales ut. Proin aliquam neque elementum luctus accumsan. Proin ac justo sit amet tellus ornare pulvinar.',15, 1, 1000); -- id 1000
+INSERT INTO exam_items (title, assertion, points, type, examid)
+VALUES ('se da problema 2', 'Vestibulum gravida ultrices leo et porta. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tincidunt nisl suscipit sapien consequat accumsan. Fusce a elementum enim. Ut condimentum vulputate eros, quis rhoncus diam. Suspendisse ac lorem erat. Donec mattis interdum lacus tincidunt commodo. Praesent aliquam convallis erat, eleifend iaculis ex auctor ac. Vivamus massa nisl, feugiat dignissim accumsan quis, posuere a elit. Duis vitae dui ante. Nunc scelerisque congue blandit.', 26, 2, 1000); -- id 1001
+INSERT INTO exam_items (title, assertion, points, type, examid)
+VALUES ('se da problema 3', 'Nulla euismod nisl id consectetur dignissim. Aenean nunc diam, tempus sed rutrum eget, tincidunt nec dolor. Vivamus eget eleifend massa. In hac habitasse platea dictumst. Integer ullamcorper tortor placerat, tincidunt velit at, blandit ante. Fusce in feugiat risus. Mauris magna mi, sagittis non lorem eu, fermentum molestie neque. Mauris vitae orci facilisis urna laoreet placerat. Etiam non ipsum ut neque aliquet tempor. Mauris egestas erat at dolor commodo, eget convallis sem auctor. Nullam lobortis justo eu justo convallis tincidunt. Aenean tempor ultrices metus, id viverra nisi euismod non. Aliquam erat volutpat. Donec porttitor enim sed vulputate consequat. Vestibulum id ullamcorper ex. Praesent mattis, massa non efficitur sagittis, augue diam tempus urna, a fringilla ex justo at magna.', 19, 2, 1000); -- id 1002
+INSERT INTO exam_items (title, assertion, points, type, examid)
+VALUES ('se da problema 4', 'Nullam dapibus ipsum quis nisi varius, quis facilisis arcu mattis. Sed sed urna placerat, porta justo sed, scelerisque diam. Nulla in enim congue, egestas odio vel, hendrerit erat. Etiam mollis velit nec metus efficitur, sit amet feugiat lectus imperdiet. Fusce vitae congue velit. Curabitur tempor, justo sit amet iaculis varius, lectus felis sagittis diam, ac tempus nisl ex ut massa. Nullam posuere tincidunt nisi vitae sollicitudin. Cras dolor felis, aliquet vitae cursus non, ornare in mi. Nulla facilisi. Vestibulum maximus lacus et commodo interdum. Ut pulvinar auctor est sit amet ullamcorper.', 30, 3, 1000); -- id 1003
+INSERT INTO exam_items (title, assertion, points, type, examid)
+VALUES ('se da problema 5', 'Maecenas rutrum elit non lorem viverra accumsan. Sed augue nisl, maximus id quam vel, malesuada facilisis mauris. Nullam feugiat, metus non commodo fermentum, diam massa imperdiet urna, et finibus augue est ac arcu. Sed dignissim nisi vitae tincidunt finibus. Ut et laoreet augue. Curabitur condimentum tincidunt metus, non laoreet ex volutpat in. Maecenas tincidunt justo ut dui lacinia fermentum. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque sagittis euismod arcu, vitae fermentum mauris volutpat eget.', 10, 1, 1000); -- id 1004
 
 INSERT INTO exam_item_answers (correct, value, itemid) VALUES (FALSE, 'raspuns 1', 1000);
 INSERT INTO exam_item_answers (correct, value, itemid) VALUES (TRUE, 'raspuns 2', 1000);

@@ -9,6 +9,7 @@ public class ExamItem {
 
     private Integer id;
     private String assertion;
+    private String title;
     private Integer difficulty;
     private Integer points;
     private Integer type;
@@ -26,6 +27,7 @@ public class ExamItem {
     public String toString() {
         return "ExamItem{" +
                 "id=" + id +
+                ", title='" + title + '\'' +
                 ", assertion='" + assertion + '\'' +
                 ", type=" + type +
                 ", examid=" + examid +
@@ -52,6 +54,7 @@ public class ExamItem {
     @Override
     public int hashCode() {
         int result = id.hashCode();
+        result = 31 * result + title.hashCode();
         result = 31 * result + assertion.hashCode();
         result = 31 * result + (difficulty != null ? difficulty.hashCode() : 0);
         result = 31 * result + (points != null ? points.hashCode() : 0);
@@ -115,5 +118,13 @@ public class ExamItem {
 
     public void setDatecreated(Timestamp datecreated) {
         this.datecreated = datecreated;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

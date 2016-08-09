@@ -318,6 +318,7 @@ public class AppManager extends ApplicationManager {
 
         bean(ExamItem.class, "exam_items")
                 .pk("id", DBTypes.SEQUENCE)
+                .field("title", DBTypes.STRING)
                 .field("assertion", DBTypes.STRING)
                 .field("difficulty", DBTypes.INTEGER)
                 .field("points", DBTypes.INTEGER)
