@@ -40,11 +40,6 @@
                      <input type="password" name="password" id="password" class="form-control"
                             placeholder="<mtw:i18n key="pass"/>" required="">
 
-                     <div class="checkbox">
-                         <label>
-                             <input type="checkbox" name="remember-me" value="remember-me"> <mtw:i18n key="rememberme"/>
-                         </label>
-                     </div>
                      <br/>
                      <button class="btn btn-lg btn-primary btn-block" type="submit"><mtw:i18n key="conectare"/></button>
                      <a href="/jsp/recoverPassword.jsp" class="btn btn-link"><mtw:i18n key="lostPass"/></a>

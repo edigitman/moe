@@ -25,7 +25,7 @@
                 <div class="form-group">
 
                     <h3>Examen: {{ exam.name }}</h3>
-                    <h4>Dificultate: {{ exam.difficulty }}</h4>
+                    <h4><item-diff  v-bind:value="exam.difficulty"></item-diff></h4>
                     <h4>Puncte totale: {{ exam.points }}</h4>
                     <a id="autoSolve" href="/prof.solveExamInstance.m"
                        class="btn btn-info btn-sm">auto-corecteaza</a>
@@ -34,18 +34,17 @@
             </div>
             <div class="row">
                 <div class="col-md-5 well">
-                    Doar subiectele care necesita corectare manuala
-                    <input type="checkbox" id="checkbox" v-model="itemTextFilter">
-                    <br/>
                     <label for="itemsSelect">Subiecte</label>
                     <select v-model="selectedItem" @change="changeItem" class="form-control" id="itemsSelect">
                         <option v-for="item in filterItemType(3)" v-bind:value="item.id">
-                            <div class="col-md-8 assertionClass">{{ item.assertion }}</div>
+                            <div class="col-md-8 assertionClass">{{ item.title }}</div>
                         </option>
                     </select>
+                    Doar subiectele care necesita corectare manuala
+                    <input type="checkbox" id="checkbox" v-model="itemTextFilter">
                 </div>
 
-                <div class="col-md-5 col-md-offset-1 well">
+                <div class="col-md-6 pull-right well">
                     <label for="studsSelect">Studenti</label>
                     <select v-model="selectedStudent" @change="changeStudent" class="form-control"
                             id="studsSelect">
@@ -58,26 +57,26 @@
 
             <div class="row">
 
-                <div class="col-md-6">
+                <div class="col-md-5 well">
+                    <div class="form-group">
+                        <label for="assertion">Enunt</label>
+                        <textarea klass="form-control" name="item.assertion" id="assertion"></textarea>
+                    </div>
                     <span>Puncte: {{ item.points }}</span><br/>
-                    <span id="itemAssertion">{{ item.assertion }}</span>
-
-                    <br/>
-                    <span>Raspunsuri</span>
-                    <br/>
-
-                    <ul>
-                        <li v-for="answer in itemAnswers">
-                            {{ answer.value }} -
-                            <answer-text v-bind:value="answer.correct">
-                            </answer-text>
-                        </li>
-                    </ul>
-
+                    <div class="form-group">
+                        <label for="itemAnswers">Raspunsuri</label>
+                        <ul id="itemAnswers">
+                            <li v-for="answer in itemAnswers">
+                                {{ answer.value }} -
+                                <answer-text v-bind:value="answer.correct"></answer-text>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <div>
-                        <span id="studentAnswer"> {{ studAnswer.value }}</span>
+                <div class="col-md-6 well pull-right">
+                    <div class="form-group">
+                        <label for="studentAnswer">Raspuns <answer-text v-bind:value="studAnswer.correct"></answer-text></label>
+                        <textarea id="studentAnswer" style="width: 100%; height: 100px; resize: none" readonly >{{ studAnswer.value }}</textarea>
                         <br/>
                         <span> Puncte: {{ studAnswer.points }}</span> <br/>
                     </div>
@@ -111,6 +110,17 @@
 
     <jsp:attribute name="scripts">
         <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+
+          <script>tinymce.init({
+              selector: '#assertion',
+              statusbar: false,
+              menubar: false,
+              resize: false,
+              toolbar: false,
+              readonly : 1
+          });
+          </script>
         <script type="text/javascript">
 
             $( function() {
@@ -130,7 +140,14 @@
             Vue.component('answerText', {
                 // declare the props
                 props: ['value'],
-                template: '<span v-if="value">Corect</span><span v-if="!value">Gresit</span>'
+                template: '<span v-if="value"> <span style="color: green" class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>Corect</span>' +
+                          '<span v-if="!value"> <span style="color: red" class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>Gresit</span>'
+            });
+
+            Vue.component('itemDiff', {
+                // declare the props
+                props: ['value'],
+                template: 'Dificultate: <span v-if="value == 1">User</span><span v-if="value == 2">Mediu</span><span v-if="value == 3">Dificil</span>'
             });
 
             new Vue({
@@ -147,7 +164,9 @@
 
                     item: {},
                     itemAnswers: [],
-                    studAnswer: {}
+                    studAnswer: {},
+
+                    answerMarkPct: 50
                 },
                 methods: {
                     markAnswer:function () {
@@ -155,7 +174,6 @@
                         var perc = $( "#slider" ).slider( "value" );
                         var id = this.studAnswer.id;
                         $.post('/prof.markAnswer.m',{id:id, p:perc}, function(data, status){
-                            console.log(data + ' -- ' + status);
                             self.studAnswer = data.answer;
                         });
                         this.setGradePerc(50);
@@ -168,7 +186,8 @@
                             self.itemAnswers = [];
                             $.each(out.answers, function (index, value) {
                                 self.itemAnswers.push(value);
-                            })
+                            });
+                            $(tinymce.get('assertion').getBody()).html(self.item.assertion);
                         });
                         this.changeStudent();
                     },

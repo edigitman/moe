@@ -245,7 +245,7 @@
 
             var removeAnswer = function (answerId) {
                 $.post("/prof.deleteAnswer.m", {id: answerId}, function (data) {
-                    loadAllAnswers();
+                    loadAllAnswers(data.answers);
                 });
             };
 

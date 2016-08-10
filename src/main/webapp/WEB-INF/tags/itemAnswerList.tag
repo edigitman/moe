@@ -28,18 +28,25 @@ Nu sunt raspunsuri pentru acest subiect!
 </div>
 
 <script type="text/javascript">
-    var loadAllAnswers = function(){
+    var loadAllAnswers = function(list){
         $('table#answersTable tbody').empty();
-        $.get("/prof.getAllAnswers.m", function(data){
-            if(data.answers.length == 0){
-                $('#noAnswers').show();
-                $('#answerDiv').hide();
-            } else {
-                $.each(data.answers, function(index, value){
-                    addAnswerRow({answer: value});
-                });
-            }
-        });
+
+        if(list!=undefined){
+            $.each(list, function(index, value){
+                addAnswerRow({answer: value});
+            });
+        } else {
+            $.get("/prof.getAllAnswers.m", function(data){
+                if(data.answers.length == 0){
+                    $('#noAnswers').show();
+                    $('#answerDiv').hide();
+                } else {
+                    $.each(data.answers, function(index, value){
+                        addAnswerRow({answer: value});
+                    });
+                }
+            });
+        }
     };
 
     var addAnswerRow = function(obj){

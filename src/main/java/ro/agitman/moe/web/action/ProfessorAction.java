@@ -190,7 +190,14 @@ public class ProfessorAction extends BaseAction {
 
     public String deleteAnswer() {
         Integer answerId = input.getInt("id");
-        answerDao.delete(answerDao.findById(answerId));
+
+        ExamItemAnswer answer = answerDao.findById(answerId);
+        Integer itemId = answer.getItemid();
+
+        answerDao.delete(answer);
+        List<ExamItemAnswer> examAnswers = answerDao.findForItem(itemId);
+
+        output().setValue("answers", examAnswers);
         return SUCCESS;
     }
 
@@ -390,7 +397,6 @@ public class ProfessorAction extends BaseAction {
         return SUCCESS;
     }
 
-
     public String getExam() {
         Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
 
@@ -439,7 +445,6 @@ public class ProfessorAction extends BaseAction {
 
         return SUCCESS;
     }
-
 
     public String reviewExam() {
 

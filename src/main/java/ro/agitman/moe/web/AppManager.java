@@ -118,7 +118,7 @@ public class AppManager extends ApplicationManager {
                 .on(CREATED, redir("/prof.addItems.m"));
         action("/prof", ProfessorAction.class, "deleteAnswer")
                 .authorize("PROFESOR")
-                .on(SUCCESS, redir("/prof.addItems.m"));
+                .on(SUCCESS, ajax(new JsonRenderer()));
 
 //````````````````````````````````````````````````````````````````
 //--------------- ACTIONS RELATED TO GROUP -------------------

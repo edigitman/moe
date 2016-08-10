@@ -4,14 +4,17 @@ import org.mentawai.mail.HtmlEmail;
 import org.mentawai.mail.Letter;
 import org.mentawai.mail.VelocityLetter;
 import ro.agitman.moe.model.User;
+import ro.agitman.moe.model.VerificationToken;
 import ro.agitman.moe.service.EmailService;
 
 /**
  * Created by d-uu31cq on 22.07.2016.
  */
 public class EmailServiceImpl implements EmailService{
+
+
     @Override
-    public void sendRequestNewPassword() {
+    public void sendRequestNewPassword(VerificationToken token) {
 
     }
 
