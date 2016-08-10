@@ -58,7 +58,17 @@ public class RenewPasswordAction extends BaseAction {
      * @return .
      */
     public String confirm() {
-        return SUCCESS;
+
+        String tokenValue = input().getString("t");
+
+        VerificationToken token = tokenDao.findByToken(tokenValue);
+
+        if (token.getVerified() == 0) {
+            output().setValue("token", token);
+            return SUCCESS;
+        }
+
+        return ERROR;
     }
 
     /**
@@ -67,6 +77,13 @@ public class RenewPasswordAction extends BaseAction {
      * @return .
      */
     public String validate() {
+
+        input().getString("token.token");
+        input().getString("newp");
+
+
+
+
         return SUCCESS;
     }
 

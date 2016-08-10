@@ -26,4 +26,12 @@ public class VerificationTokenDaoImpl extends GenericDaoImpl<VerificationToken> 
         }
         return verificationToken;
     }
+
+    public VerificationToken findByToken(String tokenValue){
+        VerificationToken token = new VerificationToken();
+        token.setToken(tokenValue);
+        token.setVerified(0);
+
+        return beanSession.loadUnique(token);
+    }
 }
