@@ -323,6 +323,7 @@ public class AppManager extends ApplicationManager {
                 .field("difficulty", DBTypes.INTEGER)
                 .field("points", DBTypes.INTEGER)
                 .field("type", DBTypes.INTEGER)
+                .field("ord", DBTypes.INTEGER)
                 .field("examid", DBTypes.INTEGER)
                 .field("datecreated", DBTypes.NOW_ON_INSERT_TIMESTAMP);
 

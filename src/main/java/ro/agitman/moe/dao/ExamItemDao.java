@@ -11,4 +11,6 @@ public interface ExamItemDao extends GenericDao<ExamItem> {
 
     List<ExamItem> findByExamId(Integer examId);
 
+    Integer findNextOrderIndex(Integer examId);
+
 }

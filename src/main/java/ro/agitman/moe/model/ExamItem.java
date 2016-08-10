@@ -14,6 +14,7 @@ public class ExamItem {
     private Integer points;
     private Integer type;
     private Integer examid;
+    private Integer ord;
     private Timestamp datecreated;
 
     public ExamItem(Integer examId) {
@@ -126,5 +127,13 @@ public class ExamItem {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getOrd() {
+        return ord;
+    }
+
+    public void setOrd(Integer ord) {
+        this.ord = ord;
     }
 }

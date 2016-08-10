@@ -81,15 +81,23 @@ public class ProfessorAction extends BaseAction {
 //            save and redir
             ExamItem examItem = (ExamItem) input.getValue("examItem");
             Integer examId = (Integer) session().getAttribute(EXAM_ID_SK);
+
             examItem.setExamid(examId);
+
+            String assertions = examItem.getAssertion();
+            examItem.setTitle(assertions.substring(0, Math.min(40, assertions.length())).replaceAll("\\<.*?>", ""));
+            if (assertions.length() > 40) {
+                examItem.setTitle(examItem.getTitle() + "...");
+            }
+
+            if (examItem.getOrd() == null)
+                examItem.setOrd(examItemDao.findNextOrderIndex(examId));
 
             if (examItem.getId() == null) {
                 examItem = examItemDao.insert(examItem);
             } else {
                 examItem = examItemDao.save(examItem);
             }
-            String assertions = examItem.getAssertion();
-            examItem.setTitle(assertions.substring(0, Math.max(40, assertions.length())));
 
             recomputeExamPoints();
 

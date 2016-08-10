@@ -106,6 +106,7 @@
 
                  <mtw:form action="/prof.addItems.m" method="post">
                      <mtw:input name="exam.id" type="hidden"/>
+                     <mtw:input name="item.ord" type="hidden"/>
                      <mtw:input id="itemId" name="item.id" type="hidden"/>
 
                      <div class="form-group">
