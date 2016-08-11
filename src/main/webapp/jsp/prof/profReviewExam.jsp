@@ -60,7 +60,7 @@
                 <div class="col-md-5 well">
                     <div class="form-group">
                         <label for="assertion">Enunt</label>
-                        <textarea klass="form-control" name="item.assertion" id="assertion"></textarea>
+                        <textarea class="form-control" name="item.assertion" id="assertion"></textarea>
                     </div>
                     <span>Puncte: {{ item.points }}</span><br/>
                     <div class="form-group">

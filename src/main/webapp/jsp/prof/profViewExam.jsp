@@ -17,10 +17,14 @@
     <jsp:attribute name="body">
 
 <div class="row">
-    <div class="col-md-8 col-md-offset-2" id="app">
+    <div class="col-md-10 col-md-offset-1" id="app">
 
         <%--todo all students for this exam --%>
-        <select></select>
+            <select v-model="selectedStudent">
+                <option v-for="student in students" v-bind:value="student.id">
+                    {{ student.name }}
+                </option>
+            </select>
 
         <table class="table">
             <caption> Lista cu subiecte:</caption>
@@ -28,26 +32,30 @@
             <tr>
                 <th>#</th>
                 <th>Enunt</th>
+                <th>&nbsp;</th>
+                <th>Raspuns Student</th>
                 <th>Tip / Pct</th>
             </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th scope="row"> id </th>
+
+                <tr v-for="item in items">
+                    <th scope="row"> {{ $index + 1 }} </th>
+                    <td>
+                        <textarea class="form-control assertion">
+                            {{ item.assertion }}
+                        </textarea>
+                    </td>
                     <td>
                         <table class="table">
-                            <tr>
-                                <td>assertions</td>
-                            </tr>
-                            <tr>
-                                <td>X</td>
-                                <td>answer 1</td>
-                                <td>answer 2</td>
-                                <td>answer 3</td>
+                            <tr v-for="ans in item.answers">
+                                <td>{{ ans.value }}</td>
+                                <td> <answer-text v-bind:value="ans.correct"> </answer-text></td>
                             </tr>
                         </table>
                     </td>
-                    <td>type / points</td>
+                    <td> {{ studentAnswer(item.id) }} </td>
+                    <td> <item-type v-bind:value="item.type"></item-type> / {{ item.points }}</td>
                 </tr>
             </tbody>
         </table>
@@ -57,28 +65,75 @@
         </jsp:attribute>
     <jsp:attribute name="scripts">
         <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+
+          <script>tinymce.init({
+              selector: '.assertion',
+              statusbar: false,
+              menubar: false,
+              resize: false,
+              toolbar: false,
+              readonly : 1
+          });
+          </script>
+
         <script type="text/javascript">
 
-            <%--new Vue({--%>
-                <%--el: '#app',--%>
-                <%--data: {--%>
-                    <%--students: {},--%>
-                    <%--items: {},--%>
-                    <%--studAnswers: {}--%>
-                <%--},--%>
-                <%--methods: {--%>
-                    <%--loadExam: function () {--%>
+            Vue.component('answerText', {
+                // declare the props
+                props: ['value'],
+                template: '<span v-if="value"> <span style="color: green" class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>Corect</span>' +
+                '<span v-if="!value"> <span style="color: red" class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>Gresit</span>'
+            });
+
+            Vue.component('itemType', {
+                // declare the props
+                props: ['value'],
+                template: '<span v-if="value == 1">S.U.</span>' +
+                          '<span v-if="value == 2">S.M.</span>' +
+                          '<span v-if="value == 3">T.</span>'
+            });
+
+            new Vue({
+                el: '#app',
+                data: {
+                    exam: {},
+                    items: {},
+
+                    students: {},
+                    selectedStudent: {},
+                    studAnswers: {}
+                },
+                methods: {
+                    studentAnswer: function (itemId) {
+                        console.log('requested answer for itemId ' + itemId);
+                    },
+//
+                    
+                    
+                    <%--loadStudentAnswers: function () {--%>
                         <%--var self = this;--%>
-                        <%--$.getJSON('<mtw:contextPath />/prof.getViewExam.m', function (out) {--%>
-                            <%--self.students = out.exam;--%>
+                        <%--self.selectedItem + '&s=' + self.selectedStudent--%>
+                        <%--$.getJSON('<mtw:contextPath />/prof.getStudentAnswersForItem.m?s'+ self.selectedStudent, function (out) {--%>
+                            <%--self.exam = out.exam;--%>
                             <%--self.items = out.items;--%>
+                            <%--self.students = out.students;--%>
                         <%--});--%>
-                    <%--}--%>
-                <%--},--%>
-                <%--ready: function () {--%>
-                    <%--this.loadExam();--%>
-                <%--}--%>
-            <%--});--%>
+                    <%--},--%>
+                    
+                    loadExam: function () {
+                        var self = this;
+                        $.getJSON('<mtw:contextPath />/prof.viewInstance.m', function (out) {
+                            self.exam = out.exam;
+                            self.items = out.items;
+                            self.students = out.students;
+                        });
+                    }
+                },
+                ready: function () {
+                    this.loadExam();
+                }
+            });
 
         </script>
     </jsp:attribute>

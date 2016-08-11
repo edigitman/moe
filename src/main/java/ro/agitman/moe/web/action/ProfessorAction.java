@@ -8,11 +8,9 @@ import ro.agitman.moe.model.*;
 import ro.agitman.moe.service.EmailService;
 import ro.agitman.moe.service.ExamGroupService;
 import ro.agitman.moe.service.ExamService;
+import ro.agitman.moe.web.dto.FullItemDTO;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by edi on 7/11/2016.
@@ -597,7 +595,30 @@ public class ProfessorAction extends BaseAction {
 
     public String viewInstance(){
 
-        return SUCCESS;
+        if(isAjaxRequest()){
+            Integer instanceId = (Integer)session().getAttribute(EXAM_INST_ID_SK);
+            ExamInstance instance = instanceDao.findById(instanceId);
+            Exam exam = examService.findById(instance.getExamid());
+            List<ExamItem> items = examItemDao.findByExamId(exam.getId());
+            List<FullItemDTO> itemDTOList = new ArrayList<>();
+            List<User> users = examGroupUserDao.findByGroupId(instance.getEgroupid());
+            for(ExamItem item : items){
+                FullItemDTO itemDTO = new FullItemDTO(item);
+                itemDTO.setAnswers(answerDao.findForItem(item.getId()));
+                itemDTOList.add(itemDTO);
+            }
+
+            output().setValue("exam", exam);
+            output().setValue("items", itemDTOList);
+            output().setValue("students", users);
+
+            return AJAX;
+        } else {
+            session().setAttribute(EXAM_INST_ID_SK, input().getInt("id"));
+            return SUCCESS;
+        }
     }
+
+
 
 }
