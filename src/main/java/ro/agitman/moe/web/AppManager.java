@@ -3,6 +3,7 @@ package ro.agitman.moe.web;
 import org.mentabean.DBTypes;
 import org.mentabean.jdbc.PostgreSQLBeanSession;
 import org.mentawai.ajax.renderer.JsonRenderer;
+import org.mentawai.core.ActionConfig;
 import org.mentawai.core.ApplicationManager;
 import org.mentawai.core.Context;
 import org.mentawai.core.Props;
@@ -160,8 +161,6 @@ public class AppManager extends ApplicationManager {
                 .authorize("PROFESOR")
                 .on(SUCCESS, ajax(new JsonRenderer()));
 
-
-
         action("/prof", ProfessorAction.class, "reviewExam")
                 .authorize("PROFESOR")
                 .on(SUCCESS, fwd("/jsp/prof/profReviewExam.jsp"));
@@ -177,6 +176,10 @@ public class AppManager extends ApplicationManager {
         action("/prof", ProfessorAction.class, "markAnswer")
                 .authorize("PROFESOR")
                 .on(SUCCESS, ajax(new JsonRenderer()));
+
+        action("/prof", ProfessorAction.class, "viewInstance")
+                .authorize("PROFESOR")
+                .on(SUCCESS, fwd("/jsp/prof/profViewExam.jsp"));
 
 //****************************************************************
 //---------- STUDENT ACTIONS ---------------------------------------

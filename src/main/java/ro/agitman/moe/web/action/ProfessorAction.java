@@ -595,4 +595,9 @@ public class ProfessorAction extends BaseAction {
         }
     }
 
+    public String viewInstance(){
+
+        return SUCCESS;
+    }
+
 }

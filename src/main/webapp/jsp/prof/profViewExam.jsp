@@ -17,7 +17,7 @@
     <jsp:attribute name="body">
 
 <div class="row">
-    <div class="col-md-6 col-md-offset-3" id="app">
+    <div class="col-md-8 col-md-offset-2" id="app">
 
         <%--todo all students for this exam --%>
         <select></select>
@@ -59,26 +59,26 @@
         <script src="https://npmcdn.com/vue/dist/vue.js"></script>
         <script type="text/javascript">
 
-            new Vue({
-                el: '#app',
-                data: {
-                    students: {},
-                    items: {},
-                    studAnswers: {}
-                },
-                methods: {
-                    loadExam: function () {
-                        var self = this;
-                        $.getJSON('<mtw:contextPath />/prof.getViewExam.m', function (out) {
-                            self.students = out.exam;
-                            self.items = out.items;
-                        });
-                    }
-                },
-                ready: function () {
-                    this.loadExam();
-                }
-            });
+            <%--new Vue({--%>
+                <%--el: '#app',--%>
+                <%--data: {--%>
+                    <%--students: {},--%>
+                    <%--items: {},--%>
+                    <%--studAnswers: {}--%>
+                <%--},--%>
+                <%--methods: {--%>
+                    <%--loadExam: function () {--%>
+                        <%--var self = this;--%>
+                        <%--$.getJSON('<mtw:contextPath />/prof.getViewExam.m', function (out) {--%>
+                            <%--self.students = out.exam;--%>
+                            <%--self.items = out.items;--%>
+                        <%--});--%>
+                    <%--}--%>
+                <%--},--%>
+                <%--ready: function () {--%>
+                    <%--this.loadExam();--%>
+                <%--}--%>
+            <%--});--%>
 
         </script>
     </jsp:attribute>
