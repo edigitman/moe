@@ -8,4 +8,6 @@ import ro.agitman.moe.model.VerificationToken;
 public interface VerificationTokenDao extends GenericDao<VerificationToken> {
 
     VerificationToken findByToken(String tokenValue);
+
+    VerificationToken findByUser(Integer id);
 }

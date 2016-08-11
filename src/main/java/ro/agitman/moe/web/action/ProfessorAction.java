@@ -82,26 +82,9 @@ public class ProfessorAction extends BaseAction {
             ExamItem examItem = (ExamItem) input.getValue("examItem");
             Integer examId = (Integer) session().getAttribute(EXAM_ID_SK);
 
-            examItem.setExamid(examId);
+            Integer itemId = examService.createExamItem(examId, examItem);
 
-            String assertions = examItem.getAssertion();
-            examItem.setTitle(assertions.substring(0, Math.min(40, assertions.length())).replaceAll("\\<.*?>", ""));
-            if (assertions.length() > 40) {
-                examItem.setTitle(examItem.getTitle() + "...");
-            }
-
-            if (examItem.getOrd() == null)
-                examItem.setOrd(examItemDao.findNextOrderIndex(examId));
-
-            if (examItem.getId() == null) {
-                examItem = examItemDao.insert(examItem);
-            } else {
-                examItem = examItemDao.save(examItem);
-            }
-
-            recomputeExamPoints();
-
-            session().setAttribute(EXAM_ITEM_ID_SK, examItem.getId());
+            session().setAttribute(EXAM_ITEM_ID_SK, itemId);
 
             return CREATED;
         } else {
@@ -145,20 +128,17 @@ public class ProfessorAction extends BaseAction {
 
     public String deleteItem() {
         Integer itemId = input.getInt("id");
-        examItemDao.delete(examItemDao.findById(itemId));
+        Integer examId = (Integer) session().getAttribute(EXAM_ID_SK);
+        examService.deleteItem(itemId, examId);
+
         session().removeAttribute(EXAM_ITEM_ID_SK);
-        recomputeExamPoints();
+
         return SUCCESS;
     }
 
     public String removeEditItem() {
         session().removeAttribute(EXAM_ITEM_ID_SK);
         return SUCCESS;
-    }
-
-    private void recomputeExamPoints() {
-        Integer examId = (Integer) session().getAttribute(EXAM_ID_SK);
-        examService.recomputeTotalPoints(examId);
     }
 
     //***********************************************************

@@ -220,14 +220,17 @@ public class AppManager extends ApplicationManager {
                 .on(SUCCESS, redir("/jsp/index.jsp"));
 //        request new password
         action("/RequestRenewPassword", RenewPasswordAction.class, "requestNewPwd")
+                .bypassAuthentication()
                 .on(SUCCESS, redir("/jsp/index.jsp"))
                 .on(ERROR, redir("/jsp/recoverPassword.jsp"));
 //        arrive here from email link to put the new password
         action("/ConfirmRenewPassword", RenewPasswordAction.class, "confirm")
+                .bypassAuthentication()
                 .on(SUCCESS, fwd("/jsp/confirmPassword.jsp"))
                 .on(ERROR, redir("/jsp/index.jsp"));
 //        save the new password
         action("/ValidateRenewPassword", RenewPasswordAction.class, "validate")
+                .bypassAuthentication()
                 .on(SUCCESS, redir("/home.m"))
                 .on(ERROR, redir("/jsp/confirmPassword.jsp"));
     }

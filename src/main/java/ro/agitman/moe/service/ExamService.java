@@ -1,6 +1,7 @@
 package ro.agitman.moe.service;
 
 import ro.agitman.moe.model.Exam;
+import ro.agitman.moe.model.ExamItem;
 
 import java.util.List;
 
@@ -9,11 +10,13 @@ import java.util.List;
  */
 public interface ExamService {
 
+    Integer createExamItem(Integer examId, ExamItem examItem);
+
+    void deleteItem(Integer itemId, Integer examId);
+
     List<Exam> findForOwner(Integer id);
 
     Exam findById(Integer examId);
-
-    void recomputeTotalPoints(Integer examId);
 
     void updateNameDiff(Integer id, String value, String name);
 

@@ -1,5 +1,6 @@
 package ro.agitman.moe.web.action;
 
+import org.apache.commons.validator.routines.EmailValidator;
 import org.mentawai.core.BaseAction;
 import ro.agitman.moe.dao.UserDao;
 import ro.agitman.moe.dao.VerificationTokenDao;
@@ -36,14 +37,24 @@ public class RenewPasswordAction extends BaseAction {
 
         String email = input().getString("email");
 
+        EmailValidator validator = EmailValidator.getInstance();
+        if (!validator.isValid(email)) {
+            addError("Adresa de email invalida !");
+            return ERROR;
+        }
+
         User user = userDao.findByEmail(email);
         if (user != null) {
-            VerificationToken token = new VerificationToken();
-            token.setDatecreated(new Date());
-            token.setUserid(user.getId());
-            token.setVerified(0);
-            token.setToken(UUID.randomUUID().toString());
-            tokenDao.insert(token);
+
+            VerificationToken token = tokenDao.findByUser(user.getId());
+            if (token == null) {
+                token = new VerificationToken();
+                token.setDatecreated(new Date());
+                token.setUserid(user.getId());
+                token.setVerified(0);
+                token.setToken(UUID.randomUUID().toString());
+                tokenDao.insert(token);
+            }
 
             emailService.sendRequestNewPassword(md5(user.getEmail()), token);
 
@@ -69,8 +80,8 @@ public class RenewPasswordAction extends BaseAction {
         if (token != null && token.getVerified() == 0) {
 
             User user = userDao.findById(token.getUserid());
-            if(md5(user.getEmail()).equalsIgnoreCase(email)){
-                session().setAttribute("token", token);
+            if (md5(user.getEmail()).equalsIgnoreCase(email)) {
+                session().setAttribute("token", token.getToken());
                 return SUCCESS;
             }
         }
@@ -88,15 +99,16 @@ public class RenewPasswordAction extends BaseAction {
         String pass = input().getString("password");
         String tokenValue = (String) session().getAttribute("token");
         VerificationToken token = tokenDao.findByToken(tokenValue);
+        token.setVerified(1);
 
         User user = userDao.findById(token.getUserid());
         user.setPassword(pass);
 
         userDao.save(user);
+        tokenDao.save(token);
 
         return SUCCESS;
     }
-
 
     private String md5(String value) {
         try {

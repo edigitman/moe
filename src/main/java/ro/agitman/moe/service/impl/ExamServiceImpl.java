@@ -35,10 +35,51 @@ public class ExamServiceImpl implements ExamService {
         return examDao.findById(examId);
     }
 
-    public void recomputeTotalPoints(Integer examId) {
 
+    public Integer createExamItem(Integer examId, ExamItem examItem) {
+        try {
+            session.getConnection().setAutoCommit(false);
+
+            examItem.setExamid(examId);
+
+            String assertions = examItem.getAssertion();
+            examItem.setTitle(assertions.substring(0, Math.min(40, assertions.length())).replaceAll("\\<.*?>", ""));
+            if (assertions.length() > 40) {
+                examItem.setTitle(examItem.getTitle() + "...");
+            }
+
+            if (examItem.getOrd() == null)
+                examItem.setOrd(examItemDao.findNextOrderIndex(examId));
+
+            if (examItem.getId() == null) {
+                examItem = examItemDao.insert(examItem);
+            } else {
+                examItem = examItemDao.save(examItem);
+            }
+
+            recomputeTotalPoints(examId);
+
+            session.getConnection().commit();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return examItem.getId();
+    }
+
+    public void deleteItem(Integer itemId, Integer examId) {
         try {
             this.session.getConnection().setAutoCommit(false);
+
+            examItemDao.delete(examItemDao.findById(itemId));
+            recomputeTotalPoints(examId);
+            this.session.getConnection().commit();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void recomputeTotalPoints(Integer examId) {
 
             Exam exam = examDao.findById(examId);
             List<ExamItem> items = examItemDao.findByExamId(examId);
@@ -48,12 +89,6 @@ public class ExamServiceImpl implements ExamService {
             exam.setPoints(total);
             exam.setItems(items.size());
             examDao.save(exam);
-
-            this.session.getConnection().commit();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     public void updateNameDiff(Integer id, String value, String name) {
@@ -78,7 +113,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     //TODO move to exam Instance service
-    public void lockExam(Integer id){
+    public void lockExam(Integer id) {
         Exam exam = examDao.findById(id);
         exam.setLocked(true);
         examDao.save(exam);
