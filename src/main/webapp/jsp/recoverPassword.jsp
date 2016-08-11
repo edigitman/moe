@@ -21,7 +21,7 @@
                 <span color="red"><mtw:out/></span>
             </mtw:outError>
 
-            <mtw:form klass="form-signin" action="/RequestRenewPassword.m" method="post">
+            <mtw:form klass="form-signin" action="/RequestRenewPassword.requestNewPwd.m" method="post">
                 <h2 class="form-signin-heading"><mtw:i18n key="title"/></h2>
 
                 <label for="email" class="sr-only"><mtw:i18n key="index.email" noPrefix="true"/></label>

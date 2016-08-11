@@ -219,12 +219,12 @@ public class AppManager extends ApplicationManager {
         action("/Logout", LogoutAction.class)
                 .on(SUCCESS, redir("/jsp/index.jsp"));
 //        request new password
-        action("/RequestRenewPassword", RenewPasswordAction.class, "request")
+        action("/RequestRenewPassword", RenewPasswordAction.class, "requestNewPwd")
                 .on(SUCCESS, redir("/jsp/index.jsp"))
                 .on(ERROR, redir("/jsp/recoverPassword.jsp"));
 //        arrive here from email link to put the new password
         action("/ConfirmRenewPassword", RenewPasswordAction.class, "confirm")
-                .on(SUCCESS, redir("/jsp/confirmPassword.jsp"))
+                .on(SUCCESS, fwd("/jsp/confirmPassword.jsp"))
                 .on(ERROR, redir("/jsp/index.jsp"));
 //        save the new password
         action("/ValidateRenewPassword", RenewPasswordAction.class, "validate")
@@ -256,6 +256,7 @@ public class AppManager extends ApplicationManager {
         ioc(ExamInstanceDao.class, ExamInstanceDaoImpl.class);
         ioc(StudExamInstanceDao.class, StudExamInstanceDaoImpl.class);
         ioc(StudExamAnswerDao.class, StudExamAnswerDaoImpl.class);
+        ioc(VerificationTokenDao.class, VerificationTokenDaoImpl.class);
 
 //        services ----------------------------------------------------
         ioc(EmailService.class, EmailServiceImpl.class);

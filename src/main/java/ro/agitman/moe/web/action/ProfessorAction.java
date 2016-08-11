@@ -546,6 +546,9 @@ public class ProfessorAction extends BaseAction {
                     List<ExamItemAnswer> itemAnswers = answerDao.findForItem(item.getId());
                     solveItem(answer, itemAnswers, item);
                     answer.setReviewed(true);
+                    if (answer.getCorrect()) {
+                        answer.setPoints(item.getPoints());
+                    }
                     studAnswerDao.save(answer);
                 }
             }

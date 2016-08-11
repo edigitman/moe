@@ -7,6 +7,8 @@ import ro.agitman.moe.model.User;
 import ro.agitman.moe.model.VerificationToken;
 import ro.agitman.moe.service.EmailService;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.UUID;
 
@@ -30,7 +32,7 @@ public class RenewPasswordAction extends BaseAction {
      *
      * @return .
      */
-    public String request() {
+    public String requestNewPwd() {
 
         String email = input().getString("email");
 
@@ -43,7 +45,7 @@ public class RenewPasswordAction extends BaseAction {
             token.setToken(UUID.randomUUID().toString());
             tokenDao.insert(token);
 
-            emailService.sendRequestNewPassword(token);
+            emailService.sendRequestNewPassword(md5(user.getEmail()), token);
 
             return SUCCESS;
         }
@@ -60,12 +62,17 @@ public class RenewPasswordAction extends BaseAction {
     public String confirm() {
 
         String tokenValue = input().getString("t");
+        String email = input().getString("m");
 
         VerificationToken token = tokenDao.findByToken(tokenValue);
 
-        if (token.getVerified() == 0) {
-            output().setValue("token", token);
-            return SUCCESS;
+        if (token != null && token.getVerified() == 0) {
+
+            User user = userDao.findById(token.getUserid());
+            if(md5(user.getEmail()).equalsIgnoreCase(email)){
+                session().setAttribute("token", token);
+                return SUCCESS;
+            }
         }
 
         return ERROR;
@@ -78,13 +85,36 @@ public class RenewPasswordAction extends BaseAction {
      */
     public String validate() {
 
-        input().getString("token.token");
-        input().getString("newp");
+        String pass = input().getString("password");
+        String tokenValue = (String) session().getAttribute("token");
+        VerificationToken token = tokenDao.findByToken(tokenValue);
 
+        User user = userDao.findById(token.getUserid());
+        user.setPassword(pass);
 
-
+        userDao.save(user);
 
         return SUCCESS;
     }
 
+
+    private String md5(String value) {
+        try {
+            byte[] md5Bytes = MessageDigest.getInstance("MD5").digest(value.getBytes());
+
+            StringBuilder hexString = new StringBuilder();
+
+            for (int i = 0; i < md5Bytes.length; i++) {
+                String hex = Integer.toHexString(0xFF & md5Bytes[i]);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 }

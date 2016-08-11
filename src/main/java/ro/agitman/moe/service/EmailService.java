@@ -8,7 +8,7 @@ import ro.agitman.moe.model.VerificationToken;
  */
 public interface EmailService {
 
-    void sendRequestNewPassword(VerificationToken token);
+    void sendRequestNewPassword(String md5Email, VerificationToken token);
 
     void sendAccountCreated();
 

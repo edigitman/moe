@@ -19,14 +19,17 @@
                 <span color="red"><mtw:out/></span>
             </mtw:outError>
 
-            <mtw:form klass="form-signin" action="/Login.m" method="post">
-                <h2 class="form-signin-heading"><mtw:i18n key="conectare"/></h2>
+            <mtw:form klass="form-signin" action="/RenewPasswordAction.confirm.m" method="post">
 
-                <label for="email" class="sr-only"><mtw:i18n key="email"/></label>
-                <input type="email" name="email" id="email" class="form-control" placeholder='<mtw:i18n key='email'/>'
-                       required="" autofocus="">
+                <h2 class="form-signin-heading">Schimbare parola</h2>
 
-                <button class="btn btn-lg btn-primary btn-block" type="submit"><mtw:i18n key="conectare"/></button>
+                <label for="password" class="sr-only">Parola noua</label>
+                <input type="password" name="password" id="password" class="form-control"
+                       placeholder='Parola' required="" autofocus="">
+
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Schimba parola
+                </button>
             </mtw:form>
         </div>
     </div>

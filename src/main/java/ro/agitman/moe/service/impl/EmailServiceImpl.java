@@ -10,12 +10,12 @@ import ro.agitman.moe.service.EmailService;
 /**
  * Created by d-uu31cq on 22.07.2016.
  */
-public class EmailServiceImpl implements EmailService{
+public class EmailServiceImpl implements EmailService {
 
 
     @Override
-    public void sendRequestNewPassword(VerificationToken token) {
-
+    public void sendRequestNewPassword(String md5Email, VerificationToken token) {
+        System.out.println("http://localhost:8080/ConfirmRenewPassword.confirm.m?m=" + md5Email + "&t=" + token.getToken());
     }
 
     @Override
@@ -35,7 +35,7 @@ public class EmailServiceImpl implements EmailService{
         letter.setAttribute("stud", user.getName());
 
         try {
-            String  text = letter.getText();
+            String text = letter.getText();
             System.out.println(text);
         } catch (Exception e) {
             e.printStackTrace();
