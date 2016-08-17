@@ -177,10 +177,13 @@ public class AppManager extends ApplicationManager {
                 .authorize("PROFESOR")
                 .on(SUCCESS, ajax(new JsonRenderer()));
 
+        action("/prof", ProfessorAction.class, "viewInstanceRedir")
+                .authorize("PROFESOR")
+                .on(SUCCESS, redir("/prof.viewInstance.m"));
         action("/prof", ProfessorAction.class, "viewInstance")
                 .authorize("PROFESOR")
-                .on(AJAX, ajax(new JsonRenderer()))
-                .on(SUCCESS, redir("/jsp/prof/profViewExam.jsp"));
+                .on(ADD, redir("/prof.viewInstance.m"))
+                .on(SUCCESS, fwd("/jsp/prof/profViewExam.jsp"));
 
 //****************************************************************
 //---------- STUDENT ACTIONS ---------------------------------------

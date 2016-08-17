@@ -36,6 +36,7 @@ public class ProfessorAction extends BaseAction {
     private static final String EXAM_ITEM_ID_SK = "examItemId";
     private static final String GROUP_ID_SK = "groupId";
     private static final String EXAM_INST_ID_SK = "examInstanceId";
+    private static final String STUD_ID_SK = "studId";
 
     //    static initialization
     {
@@ -593,32 +594,61 @@ public class ProfessorAction extends BaseAction {
         }
     }
 
-    public String viewInstance(){
-
-        if(isAjaxRequest()){
-            Integer instanceId = (Integer)session().getAttribute(EXAM_INST_ID_SK);
-            ExamInstance instance = instanceDao.findById(instanceId);
-            Exam exam = examService.findById(instance.getExamid());
-            List<ExamItem> items = examItemDao.findByExamId(exam.getId());
-            List<FullItemDTO> itemDTOList = new ArrayList<>();
-            List<User> users = examGroupUserDao.findByGroupId(instance.getEgroupid());
-            for(ExamItem item : items){
-                FullItemDTO itemDTO = new FullItemDTO(item);
-                itemDTO.setAnswers(answerDao.findForItem(item.getId()));
-                itemDTOList.add(itemDTO);
-            }
-
-            output().setValue("exam", exam);
-            output().setValue("items", itemDTOList);
-            output().setValue("students", users);
-
-            return AJAX;
-        } else {
-            session().setAttribute(EXAM_INST_ID_SK, input().getInt("id"));
-            return SUCCESS;
-        }
+    public String viewInstanceRedir() {
+        session().setAttribute(EXAM_INST_ID_SK, input().getInt("id"));
+        return SUCCESS;
     }
 
+    public String viewInstance() {
+
+        if (isPost()) {
+            session().setAttribute(STUD_ID_SK, input().getInt("studentId"));
+            return ADD;
+        }
 
 
+        List<StudentExamAnswer> answers = Collections.emptyList();
+        Integer instanceId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
+        Integer studId = (Integer) session().getAttribute(STUD_ID_SK);
+
+        ExamInstance instance = instanceDao.findById(instanceId);
+        Exam exam = examService.findById(instance.getExamid());
+        List<ExamItem> items = examItemDao.findByExamId(exam.getId());
+        List<FullItemDTO> itemDTOList = new ArrayList<>();
+        Map<Integer, String> userMap = new HashMap<>();
+        examGroupUserDao.findByGroupId(instance.getEgroupid()).forEach(u -> userMap.put(u.getId(), u.getName()));
+
+        if (studId != null && studId > 999) {
+            StudentExamInstance studInst = studEXIDao.findActiveByOwnerAndExam(studId, instanceId);
+            if (studInst != null) {
+                output().setValue("isStud", Boolean.TRUE);
+                output().setValue("studentName", userMap.get(studId));
+                answers = studAnswerDao.findByStudentAndExId(studId, studInst.getId());
+            }
+        }
+
+        for (ExamItem item : items) {
+            FullItemDTO itemDTO = new FullItemDTO(item);
+            itemDTO.setAnswers(answerDao.findForItem(item.getId()));
+            addStudentAnswer(answers, itemDTO);
+            itemDTOList.add(itemDTO);
+        }
+
+        output().setValue("exam", exam);
+        output().setValue("items", itemDTOList);
+        output().setValue("students", userMap);
+
+        return SUCCESS;
+
+    }
+
+    private void addStudentAnswer(List<StudentExamAnswer> answers, FullItemDTO itemDTO) {
+
+        for (StudentExamAnswer answer : answers) {
+            if (answer.getExamItemId().equals(itemDTO.getId())) {
+                itemDTO.setAnswer(answer);
+                break;
+            }
+        }
+    }
 }

@@ -13,5 +13,7 @@ public interface StudExamInstanceDao extends GenericDao<StudentExamInstance> {
 
     StudentExamInstance findActiveByOwner(Integer id);
 
+    StudentExamInstance findActiveByOwnerAndExam(Integer studId, Integer examId);
+
     void updateExamInstanceStatusById(Integer id);
 }

@@ -2,6 +2,7 @@ package ro.agitman.moe.web.dto;
 
 import ro.agitman.moe.model.ExamItem;
 import ro.agitman.moe.model.ExamItemAnswer;
+import ro.agitman.moe.model.StudentExamAnswer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class FullItemDTO {
     private Integer examid;
     private Integer ord;
     private List<ExamItemAnswer> answers = new ArrayList<>();
+    private StudentExamAnswer answer;
 
     public FullItemDTO(ExamItem item) {
         this.id = item.getId();
@@ -58,5 +60,13 @@ public class FullItemDTO {
 
     public List<ExamItemAnswer> getAnswers() {
         return answers;
+    }
+
+    public StudentExamAnswer getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(StudentExamAnswer answer) {
+        this.answer = answer;
     }
 }

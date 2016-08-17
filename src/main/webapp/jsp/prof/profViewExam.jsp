@@ -19,12 +19,21 @@
 <div class="row">
     <div class="col-md-10 col-md-offset-1" id="app">
 
-        <%--todo all students for this exam --%>
-            <select v-model="selectedStudent">
-                <option v-for="student in students" v-bind:value="student.id">
-                    {{ student.name }}
-                </option>
-            </select>
+        <form action="/prof.viewInstance.m" method="post">
+            <div class="row">
+                <div class="col-md-4">
+                    <select class="form-control" name="studentId">
+                        <option value="-1"></option>
+                        <c:forEach items="${students}" var="s">
+                            <option value="${s.key}">${s.value}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-default" type="submit">Vizualizare</button>
+                </div>
+            </div>
+        </form>
 
         <table class="table">
             <caption> Lista cu subiecte:</caption>
@@ -32,39 +41,83 @@
             <tr>
                 <th>#</th>
                 <th>Enunt</th>
-                <th>&nbsp;</th>
-                <th>Raspuns Student</th>
                 <th>Tip / Pct</th>
+                <c:if test="${isStud}">
+                    <th>
+                        <span>Raspuns Student</span><br/>
+                        <span>${studentName}</span>
+                    </th>
+                </c:if>
             </tr>
             </thead>
             <tbody>
 
-                <tr v-for="item in items">
-                    <th scope="row"> {{ $index + 1 }} </th>
+            <c:forEach var="item" items="${items}" varStatus="loop">
+                <tr>
+                    <th scope="row"> ${loop.index + 1}</th>
                     <td>
                         <textarea class="form-control assertion">
-                            {{ item.assertion }}
+                                ${ item.assertion }
                         </textarea>
                     </td>
                     <td>
+                        <c:choose>
+                            <c:when test="${item.type == 1 }">
+                                S.U.
+                            </c:when>
+                            <c:when test="${item.type == 2 }">
+                                S.M.
+                            </c:when>
+                            <c:when test="${item.type == 3 }">
+                                T.
+                            </c:when>
+                        </c:choose>
+                        <span>/ ${ item.points }</span>
+                    </td>
+                    <c:if test="${isStud}">
+                        <td>
+                                ${item.answer.value}
+                        </td>
+                    </c:if>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td colspan="3">
                         <table class="table">
-                            <tr v-for="ans in item.answers">
-                                <td>{{ ans.value }}</td>
-                                <td> <answer-text v-bind:value="ans.correct"> </answer-text></td>
-                            </tr>
+                            <c:forEach items="${item.answers}" var="ans">
+                                <tr>
+                                    <td>${ans.value}</td>
+                                    <td><c:if test="${ans.correct}">
+                                        <span>
+                                            <span style="color: green" class="glyphicon glyphicon-ok-sign"
+                                                  aria-hidden="true"></span>
+                                            Corect
+                                        </span>
+                                    </c:if>
+                                        <c:if test="${!ans.correct}">
+                                        <span>
+                                            <span style="color: red" class="glyphicon glyphicon-remove-sign"
+                                                  aria-hidden="true"></span>
+                                            Gresit
+                                        </span>
+                                        </c:if>
+                                    </td>
+                                </tr>
+                            </c:forEach>
                         </table>
                     </td>
-                    <td> {{ studentAnswer(item.id) }} </td>
-                    <td> <item-type v-bind:value="item.type"></item-type> / {{ item.points }}</td>
                 </tr>
+            </c:forEach>
             </tbody>
         </table>
 
+        <a href="/home.m" class="btn-link">Inapoi</a>
     </div>
+
+
 </div>
         </jsp:attribute>
     <jsp:attribute name="scripts">
-        <script src="https://npmcdn.com/vue/dist/vue.js"></script>
         <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
           <script>tinymce.init({
@@ -73,69 +126,10 @@
               menubar: false,
               resize: false,
               toolbar: false,
-              readonly : 1
+              readonly: 1
           });
           </script>
 
-        <script type="text/javascript">
-
-            Vue.component('answerText', {
-                // declare the props
-                props: ['value'],
-                template: '<span v-if="value"> <span style="color: green" class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>Corect</span>' +
-                '<span v-if="!value"> <span style="color: red" class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>Gresit</span>'
-            });
-
-            Vue.component('itemType', {
-                // declare the props
-                props: ['value'],
-                template: '<span v-if="value == 1">S.U.</span>' +
-                          '<span v-if="value == 2">S.M.</span>' +
-                          '<span v-if="value == 3">T.</span>'
-            });
-
-            new Vue({
-                el: '#app',
-                data: {
-                    exam: {},
-                    items: {},
-
-                    students: {},
-                    selectedStudent: {},
-                    studAnswers: {}
-                },
-                methods: {
-                    studentAnswer: function (itemId) {
-                        console.log('requested answer for itemId ' + itemId);
-                    },
-//
-                    
-                    
-                    <%--loadStudentAnswers: function () {--%>
-                        <%--var self = this;--%>
-                        <%--self.selectedItem + '&s=' + self.selectedStudent--%>
-                        <%--$.getJSON('<mtw:contextPath />/prof.getStudentAnswersForItem.m?s'+ self.selectedStudent, function (out) {--%>
-                            <%--self.exam = out.exam;--%>
-                            <%--self.items = out.items;--%>
-                            <%--self.students = out.students;--%>
-                        <%--});--%>
-                    <%--},--%>
-                    
-                    loadExam: function () {
-                        var self = this;
-                        $.getJSON('<mtw:contextPath />/prof.viewInstance.m', function (out) {
-                            self.exam = out.exam;
-                            self.items = out.items;
-                            self.students = out.students;
-                        });
-                    }
-                },
-                ready: function () {
-                    this.loadExam();
-                }
-            });
-
-        </script>
     </jsp:attribute>
 </t:layout>
 
