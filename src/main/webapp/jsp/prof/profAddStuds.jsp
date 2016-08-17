@@ -41,25 +41,6 @@
          </div>
          <mtw:form action="/prof.addStuds.m" method="post">
              <div class="col-md-6">
-                 <%--<div class="row">--%>
-                     <%--<div class="col-md-8">--%>
-                         <%--<div class="form-group">--%>
-                             <%--<label for="nameInput">Nume</label>--%>
-                             <%--<input type="text" class="form-control" id="nameInput"/>--%>
-                         <%--</div>--%>
-                     <%--</div>--%>
-                     <%--<div class="col-md-4">--%>
-                         <%--<div class="form-group" style="padding-top: 23px">--%>
-                             <%--<button class="btn btn-default">Cauta</button>--%>
-                         <%--</div>--%>
-                     <%--</div>--%>
-                 <%--</div>--%>
-                 <%--<div class="row" style="margin-bottom: 10px">--%>
-                     <%--<div class="col-md-12">--%>
-                         <%----%>
-                     <%--</div>--%>
-                 <%--</div>--%>
-
                  <div class="row">
                      <mtw:select name="selectedStudents" klass="form-control" list="freeStudents" multiple="true"
                                  style="width: 90%; height: 300px"/>
