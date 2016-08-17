@@ -214,7 +214,7 @@
 
                         $( '#slider' ).slider( 'value', val );
                     },
-                    loadExam: function () {
+                    loadStats: function () {
                         var self = this;
                         $.getJSON('<mtw:contextPath />/prof.getExam.m', function (out) {
                             self.exam = out.exam;
@@ -225,7 +225,7 @@
                     }
                 },
                 ready: function () {
-                    this.loadExam();
+                    this.loadStats();
                 }
             });
         </script>

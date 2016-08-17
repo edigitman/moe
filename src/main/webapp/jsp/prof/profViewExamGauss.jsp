@@ -15,13 +15,38 @@
 
 <t:layout title="index">
 
-    <jsp:attribute name="head">
-         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    </jsp:attribute>
-
     <jsp:attribute name="body">
-        <div class="row">
+        <div id="app" class="row">
             <div class="col-md-10 col-md-offset-1">
+
+                <div class="form-group">
+                    <label for="exis">Examene sustinute</label>
+                    <select id="exis" v-model="selectedExi" @change="changeExi" class="form-control">
+                        <option v-for="exi in exis" v-bind:value="exi.id">
+                            <div> {{ exi.name }}</div>
+                        </option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2" style="text-align: right">Total Subiecte:</div>
+                    <div class="col-md-1">{{ exam.points }}</div>
+                    <div class="col-md-2" style="text-align: right">Total Puncte:</div>
+                    <div class="col-md-1">{{ exam.items }}</div>
+                </div>
+                <br/>
+                <table class="table">
+                    <tr>
+                        <th>Student</th>
+                        <th>Procent Puncte</th>
+                        <th>Procent Subiecte</th>
+                    </tr>
+                    <tr v-for="s in studentsPerf">
+                        <th>{{s.name}}</th>
+                        <th>{{s.pointsPerc}}</th>
+                        <th>{{s.itemsPerc}}</th>
+                    </tr>
+                </table>
 
                 <div id="tester" style="width:600px;height:600px;"></div>
 
@@ -30,18 +55,46 @@
     </jsp:attribute>
 
     <jsp:attribute name="scripts">
-
+        <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
         <script type="text/javascript">
 
-            var trace1 = {
-                y: [75, 81, 45, 55, 95, 76, 56, 90, 68],
-                x: [1 , 1 , 2 , 1 ,  1,  1,  1, 1,  1],
-                type: 'scatter'
-            };
+            new Vue({
+                el: "#app",
+                data: {
+//                    exam instances list
+                    exis: [],
+                    selectedExi: [],
 
-            var data = [trace1];
+                    exam: {},
 
-            Plotly.newPlot('tester', data);
+                    studentsPerf: []
+
+                },
+                methods: {
+                    changeExi: function () {
+                        var self = this;
+                        console.log('load data for ' + self.selectedExi);
+                        $.getJSON('<mtw:contextPath />/prof.getExiData.m?id=' + self.selectedExi, function (out) {
+                            self.studentsPerf = out.studs;
+                            self.exam = out.exam;
+//                          TODO   http://alignedleft.com/tutorials/d3/making-a-bar-chart
+                        });
+                    },
+
+                    loadStats: function () {
+                        var self = this;
+                        $.getJSON('<mtw:contextPath />/prof.getExamInstances.m', function (out) {
+                            self.exis = out.exis;
+                        });
+                    }
+                },
+                ready: function () {
+                    this.loadStats();
+                }
+            });
+
+            d3.select("body").append("p").text("New paragraph!");
 
         </script>
 

@@ -64,7 +64,9 @@
                         <li role="presentation">
                             <a href="#exams" class="tabMenu" aria-controls="exams" role="tab" data-toggle="tab">Examene</a>
                         </li>
-
+                        <li>
+                            <a href="/jsp/prof/profViewExamGauss.jsp">Gauss</a>
+                        </li>
 
                     </ul>
                 </mtw:hasAuthorization>

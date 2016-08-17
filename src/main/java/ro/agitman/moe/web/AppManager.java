@@ -150,6 +150,12 @@ public class AppManager extends ApplicationManager {
         action("/prof", ProfessorAction.class, "changeInstanceStatus")
                 .authorize("PROFESOR")
                 .on(SUCCESS, redir("/home.m"));
+        action("/prof", ProfessorAction.class, "getExamInstances")
+                .authorize("PROFESOR")
+                .on(SUCCESS, ajax(new JsonRenderer()));
+        action("/prof", ProfessorAction.class, "getExiData")
+                .authorize("PROFESOR")
+                .on(SUCCESS, ajax(new JsonRenderer()));
 
         action("/prof", ProfessorAction.class, "getExam")
                 .authorize("PROFESOR")

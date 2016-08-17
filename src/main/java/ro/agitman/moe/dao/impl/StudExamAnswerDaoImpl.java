@@ -45,6 +45,13 @@ public class StudExamAnswerDaoImpl extends GenericDaoImpl<StudentExamAnswer> imp
         return beanSession.loadList(answer);
     }
 
+    public List<StudentExamAnswer> findBySExi(Integer studentExamInstanceId) {
+        StudentExamAnswer answer = new StudentExamAnswer();
+        answer.setStudentExamInstanceId(studentExamInstanceId);
+
+        return beanSession.loadList(answer);
+    }
+
     public List<StudentItemAnswerDTO> findWithItemByStudentInstance(Integer studExiId){
         List<StudentItemAnswerDTO> result = new ArrayList<>();
 

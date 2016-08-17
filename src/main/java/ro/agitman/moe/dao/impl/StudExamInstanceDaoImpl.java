@@ -55,7 +55,14 @@ public class StudExamInstanceDaoImpl extends GenericDaoImpl<StudentExamInstance>
         }
     }
 
-    public StudentExamInstance findActiveByOwnerAndExam(Integer studId, Integer examId){
+    public List<StudentExamInstance> findByExamInstanceId(Integer examid){
+        StudentExamInstance instance = new StudentExamInstance();
+        instance.setExamid(examid);
+
+        return beanSession.loadList(instance);
+    }
+
+    public StudentExamInstance findActiveByOwnerAndExamInstance(Integer studId, Integer examId){
         StudentExamInstance instance = new StudentExamInstance();
         instance.setStudid(studId);
         instance.setExamid(examId);

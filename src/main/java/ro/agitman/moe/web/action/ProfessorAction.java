@@ -9,7 +9,10 @@ import ro.agitman.moe.service.EmailService;
 import ro.agitman.moe.service.ExamGroupService;
 import ro.agitman.moe.service.ExamService;
 import ro.agitman.moe.web.dto.FullItemDTO;
+import ro.agitman.moe.web.dto.StudentResultsDTO;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 /**
@@ -377,6 +380,66 @@ public class ProfessorAction extends BaseAction {
         return SUCCESS;
     }
 
+    public String getExamInstances() {
+
+        User user = getSessionObj();
+
+        output().setValue("exis", instanceDao.findByOwner(user.getId()));
+
+        return SUCCESS;
+    }
+
+    public String getExiData() {
+        List<StudentResultsDTO> results = new ArrayList<>();
+
+        ExamInstance instance = instanceDao.findById(input().getInt("id"));
+        Exam exam = examService.findById(instance.getExamid());
+        List<StudentExamInstance> studentExamInstanceList = studEXIDao.findByExamInstanceId(instance.getId());
+
+        BigDecimal examPoints = new BigDecimal(exam.getPoints());
+        BigDecimal examItems = new BigDecimal(exam.getItems());
+
+        for (StudentExamInstance sexi : studentExamInstanceList) {
+
+            User student = userDao.findById(sexi.getStudid());
+            List<StudentExamAnswer> answers = studAnswerDao.findBySExi(sexi.getId());
+
+            buildStudentResults(results, examPoints, examItems, student, answers);
+        }
+
+        output().setValue("studs", results);
+        output().setValue("exam", exam);
+        output().setValue("plot", null);//TODO add graph data, split exam points by 10, make intervals and count for
+        // each interbal nr of students
+
+        return SUCCESS;
+    }
+
+    private void buildStudentResults(List<StudentResultsDTO> results, BigDecimal examPoints, BigDecimal examItems, User student, List<StudentExamAnswer> answers) {
+
+        StudentResultsDTO dto = new StudentResultsDTO();
+        dto.setName(student.getName());
+        dto.setPoints(0);
+
+        BigDecimal totalPoints = BigDecimal.ZERO;
+        BigDecimal totalItems = BigDecimal.ZERO;
+
+        for (StudentExamAnswer a : answers) {
+            if (a.getPoints() != null) {
+                dto.setPoints(dto.getPoints() + a.getPoints());
+                totalPoints = totalPoints.add(new BigDecimal(a.getPoints()));
+            }
+            if (a.getCorrect())
+                totalItems = totalItems.add(BigDecimal.ONE);
+        }
+
+        dto.setPointsPerc(totalPoints.multiply(new BigDecimal(100)).divide(examPoints, 5, RoundingMode.HALF_UP));
+        dto.setItemsPerc(totalItems.multiply(new BigDecimal(100)).divide(examItems, 5, RoundingMode.HALF_UP));
+
+        results.add(dto);
+    }
+
+
     public String getExam() {
         Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
 
@@ -620,7 +683,7 @@ public class ProfessorAction extends BaseAction {
         examGroupUserDao.findByGroupId(instance.getEgroupid()).forEach(u -> userMap.put(u.getId(), u.getName()));
 
         if (studId != null && studId > 999) {
-            StudentExamInstance studInst = studEXIDao.findActiveByOwnerAndExam(studId, instanceId);
+            StudentExamInstance studInst = studEXIDao.findActiveByOwnerAndExamInstance(studId, instanceId);
             if (studInst != null) {
                 output().setValue("isStud", Boolean.TRUE);
                 output().setValue("studentName", userMap.get(studId));
