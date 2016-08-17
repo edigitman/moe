@@ -117,7 +117,7 @@
                          <div class="col-md-2">
                              <div class="form-group" id="pointsDiv">
                                  <label for="points">Puncte</label>
-                                 <input type="number" class="form-control" name="item.points" id="points" required />
+                                 <input type="number" class="form-control" value="${item.points}" name="item.points" id="points" required />
                              </div>
                          </div>
                          <div class="col-md-4">

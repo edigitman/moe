@@ -160,7 +160,6 @@
                                     </c:if>
                                     <c:if test="${g.locked}">
                                         <a class="btn btn-link" href="/prof.addStudsRedir.m?id=<mtw:out value="g.id"/>">Vizualizare</a>
-                                        <a class="btn btn-link" href="/prof.addStudsRedir.m?id=<mtw:out value="g.id"/>">Cloneaza</a>
                                     </c:if>
                                 </td>
                             </tr>
@@ -203,7 +202,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Inchide</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Inchide</button>
                     <button type="submit" class="btn btn-primary">Salveaza</button>
                 </div>
             </mtw:form>
@@ -249,7 +248,7 @@
                     </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Inchide</button>
+                <button type="button" class="btn btn-link" data-dismiss="modal">Inchide</button>
                 <button type="submit" class="btn btn-primary">Salveaza</button>
             </div>
             </mtw:form>
@@ -275,6 +274,15 @@
                         <mtw:input type="text" klass="form-control" name="exam.name" id="nume"/>
                     </div>
                     <div class="form-group">
+                        <label for="nume">Copie dupa examen (optional)</label>
+                        <select class="form-control" name="cloneId">
+                            <option value="0"></option>
+                            <c:forEach items="${concepts}" var="c">
+                                <option value="${c.id}">${c.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="difficulty">Dificultate</label>
                         <select class="form-control" name="exam.difficulty" id="difficulty">
                             <option value="1">Usor</option>
@@ -285,7 +293,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Inchide</button>
+                    <button type="button" class="btn btn-link" data-dismiss="modal">Inchide</button>
                     <button type="submit" class="btn btn-primary">Salveaza</button>
                 </div>
             </mtw:form>

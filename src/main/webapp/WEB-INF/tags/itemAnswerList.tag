@@ -55,7 +55,7 @@ Nu sunt raspunsuri pentru acest subiect!
 
         var tr = $('<tr/>');
         var value = $('<td/>').append($("<span/>").text(obj.answer.value));
-        var correct = $('<td/>').append($("<span/>").text( ('true' == $.trim(obj.answer.correct) ) ? 'Corect' : 'Gresit'));
+        var correct = $('<td/>').append($("<span/>").html( ('true' == $.trim(obj.answer.correct) ) ? '<span> <span style="color: green" class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span>Corect</span>' : '<span v-if="!value"> <span style="color: red" class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span>Gresit</span>'));
         if(${delete}) {
             var rem = $('<td/>').append($('<a/>').attr("href", "#").attr("answerId", obj.answer.id).on('click', function (event) {
                         event.preventDefault();

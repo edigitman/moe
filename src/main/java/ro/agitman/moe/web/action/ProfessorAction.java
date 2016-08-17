@@ -183,15 +183,16 @@ public class ProfessorAction extends BaseAction {
     //******************************************************
 //---------------- EXAM ACTIONS ------------------------
     public String saveExam() {
-        Exam exam = (Exam) input.getValue("exam");
+        Exam exam = (Exam) input().getValue("exam");
+        Integer cloneId = input().getInt("cloneId");
 
         if (exam == null) {
             return ERROR;
         }
 
         User user = getSessionObj();
-
-        examService.saveInsert(user.getId(), exam);
+        exam.setOwner(user.getId());
+        examService.createExam(exam, cloneId);
 
         return SUCCESS;
     }
@@ -418,7 +419,7 @@ public class ProfessorAction extends BaseAction {
         Integer studId = input().getInt("s");
         Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
 
-        StudentExamAnswer answer = studAnswerDao.findByExiStudItem(exiId, studId, itemId);
+        StudentExamAnswer answer = studAnswerDao.findByExiStudItem(studId, itemId);
 
         output().setValue("answer", answer);
 
@@ -458,7 +459,7 @@ public class ProfessorAction extends BaseAction {
         Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
 
         ExamItem item = examItemDao.findById(itemId);
-        StudentExamAnswer answer = studAnswerDao.findByExiStudItem(exiId, studId, itemId);
+        StudentExamAnswer answer = studAnswerDao.findByExiStudItem(studId, itemId);
 
         session().setAttribute(EXAM_ITEM_ID_SK, itemId);
 
@@ -520,7 +521,7 @@ public class ProfessorAction extends BaseAction {
 
         for (User user : students) {
             for (ExamItem item : items) {
-                StudentExamAnswer answer = studAnswerDao.findByExiStudItem(exiId, user.getId(), item.getId());
+                StudentExamAnswer answer = studAnswerDao.findByExiStudItem(user.getId(), item.getId());
                 if (answer != null && answer.getSolvable()) {
                     List<ExamItemAnswer> itemAnswers = answerDao.findForItem(item.getId());
                     solveItem(answer, itemAnswers, item);

@@ -84,10 +84,9 @@ public class StudExamAnswerDaoImpl extends GenericDaoImpl<StudentExamAnswer> imp
         }
     }
 
-    public StudentExamAnswer findByExiStudItem(Integer exiId, Integer studId, Integer itemId) {
+    public StudentExamAnswer findByExiStudItem(Integer studId, Integer itemId) {
         StudentExamAnswer answer = new StudentExamAnswer();
         answer.setOwnerId(studId);
-        answer.setStudentExamInstanceId(exiId);
         answer.setExamItemId(itemId);
 
         return beanSession.loadUnique(answer);

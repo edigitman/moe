@@ -81,14 +81,14 @@ public class ExamServiceImpl implements ExamService {
 
     private void recomputeTotalPoints(Integer examId) {
 
-            Exam exam = examDao.findById(examId);
-            List<ExamItem> items = examItemDao.findByExamId(examId);
+        Exam exam = examDao.findById(examId);
+        List<ExamItem> items = examItemDao.findByExamId(examId);
 
-            Integer total = items.stream().mapToInt(ExamItem::getPoints).sum();
+        Integer total = items.stream().mapToInt(ExamItem::getPoints).sum();
 
-            exam.setPoints(total);
-            exam.setItems(items.size());
-            examDao.save(exam);
+        exam.setPoints(total);
+        exam.setItems(items.size());
+        examDao.save(exam);
     }
 
     public void updateNameDiff(Integer id, String value, String name) {
@@ -118,6 +118,16 @@ public class ExamServiceImpl implements ExamService {
         exam.setLocked(true);
         examDao.save(exam);
     }
+
+    public void createExam(Exam exam, Integer cloneId) {
+
+        if (cloneId != null && cloneId > 999) {
+            //TODO do the clone logic
+        }
+
+        examDao.insert(exam);
+    }
+
 
     public Exam saveInsert(Integer userId, Exam exam) {
 

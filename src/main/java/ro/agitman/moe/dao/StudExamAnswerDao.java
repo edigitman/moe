@@ -14,7 +14,7 @@ public interface StudExamAnswerDao extends GenericDao<StudentExamAnswer> {
 
     List<StudentItemAnswerDTO> findWithItemByStudentInstance(Integer exiId);
 
-    StudentExamAnswer findByExiStudItem(Integer exiId, Integer studId, Integer itemId);
+    StudentExamAnswer findByExiStudItem(Integer studId, Integer itemId);
 
     List<StudentExamAnswer> findByStudentAndExId(Integer studId, Integer instanceId);
 }

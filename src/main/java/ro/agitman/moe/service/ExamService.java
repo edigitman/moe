@@ -23,4 +23,6 @@ public interface ExamService {
     Exam saveInsert(Integer userId, Exam exam);
 
     void lockExam(Integer id);
+
+    void createExam(Exam exam, Integer cloneId);
 }
