@@ -20,6 +20,11 @@ public class ExamItemAnswer {
     public ExamItemAnswer() {
     }
 
+    public ExamItemAnswer(ExamItemAnswer answer) {
+        this.correct = answer.getCorrect();
+        this.value = answer.getValue();
+    }
+
     @Override
     public String toString() {
         return "ExamItemAnswer{" +

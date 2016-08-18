@@ -47,8 +47,9 @@
                         <th>{{s.itemsPerc}}</th>
                     </tr>
                 </table>
+
+                <a class="btn btn-link" href="/home.m">Inapoi</a>
             </div>
-            <a class="btn btn-link" href="/home.m">Inapoi</a>
         </div>
     </jsp:attribute>
 
@@ -73,7 +74,6 @@
                         var h = 300;
                         var barPadding = 1;
 
-                        console.log('load data for ' + self.selectedExi);
                         $.getJSON('<mtw:contextPath />/prof.getExiData.m?id=' + self.selectedExi, function (out) {
                             self.studentsPerf = out.studs;
                             self.exam = out.exam;
@@ -100,6 +100,9 @@
                                     .attr("width", w / plotLength - barPadding)
                                     .attr("height", function(d) {
                                         return d * 10;
+                                    })
+                                    .attr("fill", function(d) {
+                                        return "rgb( " +(255 - d * 10)+ ", 255, " + (255 - d * 10) + ")";
                                     });
 
                             svg.selectAll("text.value")

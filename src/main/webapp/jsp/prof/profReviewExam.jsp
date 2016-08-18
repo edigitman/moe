@@ -27,9 +27,6 @@
                     <h3>Examen: {{ exam.name }}</h3>
                     <h4><item-diff  v-bind:value="exam.difficulty"></item-diff></h4>
                     <h4>Puncte totale: {{ exam.points }}</h4>
-                    <a v-show="!exam.autosolvable" id="autoSolve" href="/prof.solveExamInstance.m"
-                       class="btn btn-info btn-sm">auto-corecteaza</a>
-
                 </div>
             </div>
             <div class="row">

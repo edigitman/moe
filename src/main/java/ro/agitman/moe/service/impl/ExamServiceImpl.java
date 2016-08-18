@@ -2,9 +2,11 @@ package ro.agitman.moe.service.impl;
 
 import org.mentabean.BeanSession;
 import ro.agitman.moe.dao.ExamDao;
+import ro.agitman.moe.dao.ExamItemAnswerDao;
 import ro.agitman.moe.dao.ExamItemDao;
 import ro.agitman.moe.model.Exam;
 import ro.agitman.moe.model.ExamItem;
+import ro.agitman.moe.model.ExamItemAnswer;
 import ro.agitman.moe.service.ExamService;
 
 import java.sql.SQLException;
@@ -18,11 +20,13 @@ public class ExamServiceImpl implements ExamService {
     private final BeanSession session;
     private final ExamDao examDao;
     private final ExamItemDao examItemDao;
+    private final ExamItemAnswerDao answerDao;
 
-    public ExamServiceImpl(BeanSession beanSession, ExamDao examDao, ExamItemDao examItemDao) {
+    public ExamServiceImpl(BeanSession beanSession, ExamDao examDao, ExamItemDao examItemDao, ExamItemAnswerDao answerDao) {
         this.session = beanSession;
         this.examDao = examDao;
         this.examItemDao = examItemDao;
+        this.answerDao = answerDao;
     }
 
     @Override
@@ -121,11 +125,35 @@ public class ExamServiceImpl implements ExamService {
 
     public void createExam(Exam exam, Integer cloneId) {
 
-        if (cloneId != null && cloneId > 999) {
-            //TODO do the clone logic
-        }
+        try {
+            session.getConnection().setAutoCommit(false);
 
-        examDao.insert(exam);
+            if (cloneId != null && cloneId > 999) {
+                //TODO do the clone logic
+                Exam examClone = examDao.findById(cloneId);
+                Exam nExam = new Exam(examClone);
+                nExam.setName(exam.getName());
+                nExam.setDifficulty(exam.getDifficulty());
+                examDao.insert(nExam);
+
+                for(ExamItem item : examItemDao.findByExamId(cloneId)){
+                    ExamItem nItem = new ExamItem(item);
+                    nItem.setExamid(nExam.getId());
+                    examItemDao.insert(nItem);
+
+                    for(ExamItemAnswer answer : answerDao.findForItem(item.getId())){
+                        ExamItemAnswer nAnswer = new ExamItemAnswer(answer);
+                        nAnswer.setItemid(nItem.getId());
+                        answerDao.insert(nAnswer);
+                    }
+                }
+            } else {
+                examDao.insert(exam);
+            }
+            session.getConnection().commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 

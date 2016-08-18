@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import static org.mentabean.util.SQLUtils.orderByAsc;
+import static org.mentabean.util.SQLUtils.orderByDesc;
 
 /**
  * Created by d-uu31cq on 07.07.2016.
@@ -40,7 +40,7 @@ public class ExamDaoImpl extends GenericDaoImpl<Exam> implements ExamDao {
         Exam exam = new Exam();
         exam.setOwner(id);
 
-        return beanSession.loadList(exam, orderByAsc("id"));
+        return beanSession.loadList(exam, orderByDesc("id"));
     }
 
     public Exam findForExamInstanceId(Integer exiId) {

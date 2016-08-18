@@ -44,7 +44,7 @@
                                     <a href="#">Vizualizare</a>
                                 </c:if>
                                 <c:if test="${i.status == 4}">
-                                    pending
+                                    Asteapta corectare
                                 </c:if>
                             </td>
                         </tr>

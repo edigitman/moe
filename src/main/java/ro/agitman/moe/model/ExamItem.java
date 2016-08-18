@@ -24,6 +24,15 @@ public class ExamItem {
     public ExamItem() {
     }
 
+    public ExamItem(ExamItem item) {
+        this.assertion = item.getAssertion();
+        this.title = item.getTitle();
+        this.difficulty = item.getDifficulty();
+        this.points = item.getPoints();
+        this.type = item.getType();
+        this.ord = item.getOrd();
+    }
+
     @Override
     public String toString() {
         return "ExamItem{" +

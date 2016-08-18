@@ -549,6 +549,8 @@ public class ProfessorAction extends BaseAction {
 
         session().setAttribute("exam", exam);
 
+        solveExamInstance();
+
         return SUCCESS;
     }
 
@@ -611,9 +613,12 @@ public class ProfessorAction extends BaseAction {
         return SUCCESS;
     }
 
-    public String solveExamInstance() {
+    private void solveExamInstance() {
         Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
         ExamInstance instance = instanceDao.findById(exiId);
+
+        if(instance.getAutoSolved())
+            return;
 
         List<User> students = examGroupUserDao.findByGroupId(instance.getEgroupid());
         List<ExamItem> items = examItemDao.findByExamId(instance.getExamid());
@@ -635,10 +640,6 @@ public class ProfessorAction extends BaseAction {
 
         instance.setAutoSolved(true);
         instanceDao.save(instance);
-
-        output().setValue("id", exiId);
-
-        return SUCCESS;
     }
 
     private void solveItem(StudentExamAnswer studAnswer, List<ExamItemAnswer> itemAnswers, ExamItem item) {

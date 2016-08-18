@@ -20,6 +20,15 @@ public class Exam {
     public Exam() {
     }
 
+    public Exam(Exam exam) {
+        this.name = exam.getName();
+        this.owner = exam.getOwner();
+        this.difficulty = exam.getDifficulty();
+        this.points = exam.getPoints();
+        this.items = exam.getItems();
+        this.locked = false;
+    }
+
     public Exam(Integer id) {
         this.id = id;
     }

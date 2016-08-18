@@ -51,7 +51,6 @@
                                     </c:if>
                                     <c:if test="${c.locked}">
                                         <a class="btn btn-link" href="/prof.addItemsRedir.m?id=<mtw:out value="c.id"/>">Vizualizare</a>
-                                        <a class="btn btn-link" href="/prof.editExam.m?id=<mtw:out value="c.id"/>">Cloneaza</a>
                                     </c:if>
                                 </td>
                             </tr>
