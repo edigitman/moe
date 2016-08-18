@@ -117,7 +117,8 @@
                          <div class="col-md-2">
                              <div class="form-group" id="pointsDiv">
                                  <label for="points">Puncte</label>
-                                 <input type="number" class="form-control" value="${item.points}" name="item.points" id="points" required />
+                                 <input type="number" class="form-control" value="${item.points}" name="item.points"
+                                        id="points" required/>
                              </div>
                          </div>
                          <div class="col-md-4">
@@ -127,12 +128,17 @@
                              </div>
                          </div>
                          <div class="col-md-2" style="height: 74px; padding-top: 25px">
+                             <button type="submit" class="btn btn-link">Resurse</button>
+                         </div>
+                     </div>
+                     <div class="row well">
+                         <div class="col-md-2">
                              <button type="submit" class="btn btn-info" id="addItemBtn">Adauga</button>
                          </div>
-                         <div class="col-md-2" style="height: 74px; padding-top: 25px">
+                         <div class="col-md-2">
                              <a href="/prof.removeEditItem.m" id="clearItemForm" class="btn btn-link">Curata</a>
                          </div>
-                         <div class="col-md-2" style="height: 74px; padding-top: 25px">
+                         <div class="col-md-2">
                              <a href="/prof.deleteItem.m?id=<mtw:out value="item.id"/>" id="delete"
                                 class="btn btn-danger">Sterge</a>
                          </div>

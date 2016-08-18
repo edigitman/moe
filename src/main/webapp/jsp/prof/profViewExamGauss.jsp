@@ -17,7 +17,7 @@
 
     <jsp:attribute name="body">
         <div id="app" class="row">
-            <div class="col-md-10 col-md-offset-1">
+            <div id="content" class="col-md-10 col-md-offset-1">
 
                 <div class="form-group">
                     <label for="exis">Examene sustinute</label>
@@ -35,11 +35,11 @@
                     <div class="col-md-1">{{ exam.items }}</div>
                 </div>
                 <br/>
-                <table class="table">
+                <table id="resultTable" class="table">
                     <tr>
                         <th>Student</th>
                         <th>Procent Puncte</th>
-                        <th>Procent Subiecte</th>
+                        <th>Subiecte Corecte</th>
                     </tr>
                     <tr v-for="s in studentsPerf">
                         <th>{{s.name}}</th>
@@ -47,10 +47,8 @@
                         <th>{{s.itemsPerc}}</th>
                     </tr>
                 </table>
-
-                <div id="tester" style="width:600px;height:600px;"></div>
-
             </div>
+            <a class="btn btn-link" href="/home.m">Inapoi</a>
         </div>
     </jsp:attribute>
 
@@ -65,20 +63,78 @@
 //                    exam instances list
                     exis: [],
                     selectedExi: [],
-
                     exam: {},
-
                     studentsPerf: []
-
                 },
                 methods: {
                     changeExi: function () {
                         var self = this;
+                        var w = 500;
+                        var h = 300;
+                        var barPadding = 1;
+
                         console.log('load data for ' + self.selectedExi);
                         $.getJSON('<mtw:contextPath />/prof.getExiData.m?id=' + self.selectedExi, function (out) {
                             self.studentsPerf = out.studs;
                             self.exam = out.exam;
-//                          TODO   http://alignedleft.com/tutorials/d3/making-a-bar-chart
+                            var plotLength = out.plot.length;
+
+                            $( "#graph" ).remove();
+
+                            var svg = d3.select("#resultTable")
+                                    .append("svg")
+                                    .attr("id", "graph")
+                                    .attr("width", w)
+                                    .attr("height", h);
+
+                            svg.selectAll("rect")
+                                    .data(out.plot)
+                                    .enter()
+                                    .append("rect")
+                                    .attr("x", function(d, i) {
+                                        return i * (w / plotLength);
+                                    })
+                                    .attr("y", function(d) {
+                                        return h - d * 10 - 10;  //Height minus data value
+                                    })
+                                    .attr("width", w / plotLength - barPadding)
+                                    .attr("height", function(d) {
+                                        return d * 10;
+                                    });
+
+                            svg.selectAll("text.value")
+                                    .data(out.plot)
+                                    .enter()
+                                    .append("text")
+                                    .text(function(d) {
+                                        return d;
+                                    })
+                                    .attr("x", function(d, i) {
+                                        return i * (w / plotLength) + 5;
+                                    })
+                                    .attr("y", function(d) {
+                                        return h - (d * 10) - 13;
+                                    })
+                                    .attr("font-family", "sans-serif")
+                                    .attr("font-size", "11px")
+                                    .attr("fill", "black");
+
+                            svg.selectAll("text.label")
+                                    .data(out.labels)
+                                    .enter()
+                                    .append("text")
+                                    .text(function(d) {
+                                        return d;
+                                    })
+                                    .attr("x", function(d, i) {
+                                        return i * (w / plotLength) + 5;
+                                    })
+                                    .attr("y", function(d) {
+                                        return h;
+                                    })
+                                    .attr("font-family", "sans-serif")
+                                    .attr("font-size", "11px")
+                                    .attr("fill", "black");
                         });
                     },
 
@@ -93,10 +149,6 @@
                     this.loadStats();
                 }
             });
-
-            d3.select("body").append("p").text("New paragraph!");
-
         </script>
-
     </jsp:attribute>
 </t:layout>

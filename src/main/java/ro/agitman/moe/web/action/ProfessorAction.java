@@ -1,6 +1,7 @@
 package ro.agitman.moe.web.action;
 
 import com.google.gson.Gson;
+import com.google.gson.internal.LinkedHashTreeMap;
 import org.apache.commons.lang3.StringUtils;
 import org.mentawai.core.BaseAction;
 import ro.agitman.moe.dao.*;
@@ -397,25 +398,60 @@ public class ProfessorAction extends BaseAction {
         List<StudentExamInstance> studentExamInstanceList = studEXIDao.findByExamInstanceId(instance.getId());
 
         BigDecimal examPoints = new BigDecimal(exam.getPoints());
-        BigDecimal examItems = new BigDecimal(exam.getItems());
 
         for (StudentExamInstance sexi : studentExamInstanceList) {
 
             User student = userDao.findById(sexi.getStudid());
             List<StudentExamAnswer> answers = studAnswerDao.findBySExi(sexi.getId());
 
-            buildStudentResults(results, examPoints, examItems, student, answers);
+            buildStudentResults(results, examPoints, student, answers);
         }
 
         output().setValue("studs", results);
         output().setValue("exam", exam);
-        output().setValue("plot", null);//TODO add graph data, split exam points by 10, make intervals and count for
-        // each interbal nr of students
+        Map<BigDecimal, Integer> plot = buildPlotData(examPoints, studentExamInstanceList);
+        List<String> labels = new LinkedList<>();
+        plot.keySet().forEach(m -> labels.add(m.toString()));
+
+        output().setValue("plot", plot.values());
+        output().setValue("labels", labels);
 
         return SUCCESS;
     }
 
-    private void buildStudentResults(List<StudentResultsDTO> results, BigDecimal examPoints, BigDecimal examItems, User student, List<StudentExamAnswer> answers) {
+    private Map<BigDecimal, Integer> buildPlotData(BigDecimal examPoints, List<StudentExamInstance> studentExamInstanceList) {
+        Map<BigDecimal, Integer> plot = new LinkedHashTreeMap<>();
+        BigDecimal stepValue = examPoints.divide(BigDecimal.TEN, 3, RoundingMode.HALF_UP);
+        for (int step = 0; step < 10; step++) {
+            plot.put(stepValue.multiply(BigDecimal.valueOf(step)), 0);
+        }
+
+        for (StudentExamInstance exi : studentExamInstanceList) {
+
+            BigDecimal exiPoints = computeExiPoints(exi);
+
+            BigDecimal pointSteps = exiPoints.divide(stepValue, 0, RoundingMode.FLOOR);
+            BigDecimal plotStep = pointSteps.multiply(stepValue);
+
+            plot.put(plotStep, plot.get(plotStep) + 1);
+        }
+
+        return plot;
+    }
+
+    private BigDecimal computeExiPoints(StudentExamInstance sexi) {
+        List<StudentExamAnswer> answers = studAnswerDao.findBySExi(sexi.getId());
+        BigDecimal sum = BigDecimal.ZERO;
+        for (StudentExamAnswer answer : answers) {
+            if (answer.getPoints() != null)
+                sum = sum.add(new BigDecimal(answer.getPoints()));
+        }
+
+        return sum;
+    }
+
+
+    private void buildStudentResults(List<StudentResultsDTO> results, BigDecimal examPoints, User student, List<StudentExamAnswer> answers) {
 
         StudentResultsDTO dto = new StudentResultsDTO();
         dto.setName(student.getName());
@@ -429,12 +465,12 @@ public class ProfessorAction extends BaseAction {
                 dto.setPoints(dto.getPoints() + a.getPoints());
                 totalPoints = totalPoints.add(new BigDecimal(a.getPoints()));
             }
-            if (a.getCorrect())
+            if (a.getCorrect() != null && a.getCorrect())
                 totalItems = totalItems.add(BigDecimal.ONE);
         }
 
         dto.setPointsPerc(totalPoints.multiply(new BigDecimal(100)).divide(examPoints, 5, RoundingMode.HALF_UP));
-        dto.setItemsPerc(totalItems.multiply(new BigDecimal(100)).divide(examItems, 5, RoundingMode.HALF_UP));
+        dto.setItemsPerc(totalItems);
 
         results.add(dto);
     }

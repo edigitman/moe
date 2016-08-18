@@ -13,6 +13,8 @@
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
 
+        <a href="/admin.insertBacInfoSNSub1.m">insert bac info sub I SN</a>
+
         <mtw:list value="users">
             <mtw:isEmpty>
                 Nu sunt utilizatori!

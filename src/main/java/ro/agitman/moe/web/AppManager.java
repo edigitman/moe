@@ -225,6 +225,9 @@ public class AppManager extends ApplicationManager {
                 .authorize("ADMIN")
                 .filter(new VOFilter("user", User.class, "user"))
                 .on(SUCCESS, redir("/home.m"));
+        action("/admin", AdminAction.class, "insertBacInfoSNSub1")
+                .authorize("ADMIN")
+                .on(SUCCESS, redir("/home.m"));
 
         action("/Login", LoginAction.class)
                 .on(SUCCESS, redir("/home.m"))
