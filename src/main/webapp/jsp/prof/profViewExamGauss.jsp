@@ -13,7 +13,7 @@
 <mtw:requiresAuthentication/>
 <mtw:requiresAuthorization group="PROFESOR"/>
 
-<t:layout title="index">
+<t:layout title="Grafic Examen">
 
     <jsp:attribute name="body">
         <div id="app" class="row">

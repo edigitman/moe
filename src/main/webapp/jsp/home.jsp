@@ -11,7 +11,7 @@
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <mtw:requiresAuthentication/>
 
-<t:layout title="index">
+<t:layout title="Acasa">
   <jsp:attribute name="head">
     <link rel="stylesheet" type="text/css" href="/css/jquery-picklist.css">
   </jsp:attribute>

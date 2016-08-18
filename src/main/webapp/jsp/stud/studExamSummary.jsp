@@ -12,7 +12,7 @@
 <mtw:requiresAuthentication/>
 <mtw:requiresAuthorization group="STUDENT"/>
 
-<t:layout title="index">
+<t:layout title="Sumar Raspunsuri">
     <jsp:attribute name="body">
 
 <div class="row">

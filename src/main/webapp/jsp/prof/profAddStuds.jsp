@@ -13,7 +13,7 @@
 <mtw:requiresAuthentication/>
 <mtw:requiresAuthorization group="PROFESOR"/>
 
-<t:layout title="index">
+<t:layout title="Gestioneaza studenti">
 
     <jsp:attribute name="head">
         <link rel="stylesheet" type="text/css" href="/css/bootstrap-switch.min.css">

@@ -10,7 +10,7 @@
 <%@taglib prefix="mtw" uri="http://www.mentaframework.org/tags-mtw/" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:layout title="index">
+<t:layout title="Confirma Parola">
 
   <jsp:attribute name="body">
     <div class="row">

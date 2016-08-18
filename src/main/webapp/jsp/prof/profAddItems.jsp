@@ -12,7 +12,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
-<t:layout title="index">
+<t:layout title="Gestioneaza subiecte">
 
     <jsp:attribute name="head">
         <link rel="stylesheet" type="text/css" href="/css/bootstrap-switch.min.css">
@@ -196,7 +196,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">Adauga Resursa</h4>
+                <%--<h4 class="modal-title">Adauga Resursa</h4>--%>
             </div>
             <div class="modal-body">
 
@@ -225,7 +225,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="text"></label>
+                    <label for="text">Text</label>
                     <textarea id="text" class="form-control" style="height: 400px"></textarea>
                 </div>
 
