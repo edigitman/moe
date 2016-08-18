@@ -273,8 +273,8 @@
                         <mtw:input type="text" klass="form-control" name="exam.name" id="nume"/>
                     </div>
                     <div class="form-group">
-                        <label for="nume">Copie dupa examen (optional)</label>
-                        <select class="form-control" name="cloneId">
+                        <label for="cloneId">Copie dupa examen (optional)</label>
+                        <select class="form-control" name="cloneId" id="cloneId">
                             <option value="0"></option>
                             <c:forEach items="${concepts}" var="c">
                                 <option value="${c.id}">${c.name}</option>

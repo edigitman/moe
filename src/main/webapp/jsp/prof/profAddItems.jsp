@@ -128,7 +128,10 @@
                              </div>
                          </div>
                          <div class="col-md-2" style="height: 74px; padding-top: 25px">
-                             <button type="submit" class="btn btn-link">Resurse</button>
+                             <button type="button" class="btn btn-link" data-toggle="modal"
+                                     data-target="#resourceModal">
+                                 Resurse
+                             </button>
                          </div>
                      </div>
                      <div class="row well">
@@ -182,6 +185,61 @@
         <a class="btn btn-link" href="/home.m">Inapoi</a>
     </div>
 </div>
+
+
+      <!-- Modal Add Exam -->
+<div class="modal fade" id="resourceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Adauga Resursa</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="language">Limbaj</label>
+                    <select class="form-control" name="language" id="language">
+                        <option value="text"></option>
+                        <option value="c">C</option>
+                        <option value="cpp">C++</option>
+                        <option value="css">CSS</option>
+                        <option value="bash">Bash</option>
+                        <option value="dos">BATCH</option>
+                        <option value="html4strict">HTML</option>
+                        <option value="html5">HTML 5</option>
+                        <option value="java">Java</option>
+                        <option value="javascript">Javascript</option>
+                        <option value="jquery">JQuery</option>
+                        <option value="json">JSON</option>
+                        <option value="pascal">Pascal</option>
+                        <option value="php">PHP</option>
+                        <option value="plsql">SQL</option>
+                        <option value="vbscript">VBScript</option>
+                        <option value="visualfoxpro">VisualFoxPro</option>
+                        <option value="XML">XML</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="text"></label>
+                    <textarea id="text" class="form-control" style="height: 400px"></textarea>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Inchide</button>
+                <%-- TODO link this to the item --%>
+                <button type="submit" class="btn btn-primary">Salveaza</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
   </jsp:attribute>
 
