@@ -47,8 +47,8 @@
                 </mtw:hasAuthorization>
                 <mtw:hasAuthorization groups="STUDENT">
                     <ul class="nav navbar-nav">
-                        <li><a href="#">Examene</a></li>
-                        <li><a href="#contact">Statistici</a></li>
+                        <%--<li><a href="#">Examene</a></li>--%>
+                        <%--<li><a href="#contact">Statistici</a></li>--%>
                     </ul>    
                 </mtw:hasAuthorization>
                 <mtw:hasAuthorization groups="PROFESOR">

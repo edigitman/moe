@@ -207,6 +207,10 @@ public class AppManager extends ApplicationManager {
         action("/stud", StudentAction.class, "viewResults")
                 .authorize("STUDENT")
                 .on(SUCCESS, fwd("/jsp/stud/studExamSummary.jsp"));
+        action("/stud", StudentAction.class, "viewInstance")
+                .authorize("STUDENT")
+                .on(SUCCESS, fwd("/jsp/stud/studViewExamResults.jsp"));
+
 
 //****************************************************************
 //---------- ADMIN ACTIONS ---------------------------------------

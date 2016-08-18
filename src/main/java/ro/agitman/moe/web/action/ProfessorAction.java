@@ -617,7 +617,7 @@ public class ProfessorAction extends BaseAction {
         Integer exiId = (Integer) session().getAttribute(EXAM_INST_ID_SK);
         ExamInstance instance = instanceDao.findById(exiId);
 
-        if(instance.getAutoSolved())
+        if (instance.getAutoSolved())
             return;
 
         List<User> students = examGroupUserDao.findByGroupId(instance.getEgroupid());

@@ -41,7 +41,7 @@
                                 </c:if>
                                 <c:if test="${i.status == 3 || i.status == 5}">
                                     <%-- TODO viziualizare --%>
-                                    <a href="#">Vizualizare</a>
+                                    <a href="/stud.viewInstance.m?id=<mtw:out value="i.id"/>">Vizualizare</a>
                                 </c:if>
                                 <c:if test="${i.status == 4}">
                                     Asteapta corectare

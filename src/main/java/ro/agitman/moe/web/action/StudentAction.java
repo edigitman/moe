@@ -5,11 +5,12 @@ import ro.agitman.moe.dao.*;
 import ro.agitman.moe.model.*;
 import ro.agitman.moe.service.ExamService;
 import ro.agitman.moe.service.StudExamAnswerService;
+import ro.agitman.moe.web.dto.FullItemDTO;
 import ro.agitman.moe.web.dto.StudentItemAnswerDTO;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
 
 /**
  * Created by d-uu31cq on 22.07.2016.
@@ -22,14 +23,16 @@ public class StudentAction extends BaseAction {
     private final StudExamInstanceDao studEXIDao;
     private final StudExamAnswerService examAnswerService;
     private final ExamItemAnswerDao answerDao;
+    private final StudExamAnswerDao studExamAnswerDao;
 
-    public StudentAction(ExamItemDao examItemDao, ExamService examService, ExamInstanceDao instanceDao, StudExamInstanceDao studExamInstanceDao, StudExamAnswerService studExamAnswerService, ExamItemAnswerDao answerDao) {
+    public StudentAction(ExamItemDao examItemDao, ExamService examService, ExamInstanceDao instanceDao, StudExamInstanceDao studExamInstanceDao, StudExamAnswerService studExamAnswerService, ExamItemAnswerDao answerDao, StudExamAnswerDao studExamAnswerDao) {
         this.examService = examService;
         this.instanceDao = instanceDao;
         this.examItemDao = examItemDao;
         this.studEXIDao = studExamInstanceDao;
         this.examAnswerService = studExamAnswerService;
         this.answerDao = answerDao;
+        this.studExamAnswerDao = studExamAnswerDao;
     }
 
     public String startExam() {
@@ -108,6 +111,61 @@ public class StudentAction extends BaseAction {
         }
 
         return SUCCESS;
+    }
+
+    public String viewInstance() {
+
+        Integer instanceId = input().getInt("id");
+        User user = getSessionObj();
+        Integer studId = user.getId();
+        Integer totalStudPoints = 0;
+
+        List<StudentExamAnswer> answers = Collections.emptyList();
+
+        ExamInstance instance = instanceDao.findById(instanceId);
+        Exam exam = examService.findById(instance.getExamid());
+        List<ExamItem> items = examItemDao.findByExamId(exam.getId());
+        List<FullItemDTO> itemDTOList = new ArrayList<>();
+        StudentExamInstance studInst = studEXIDao.findActiveByOwnerAndExamInstance(studId, instanceId);
+            if (studInst != null) {
+                answers = studExamAnswerDao.findByStudentAndExId(studId, studInst.getId());
+            }
+
+        for (ExamItem item : items) {
+            FullItemDTO itemDTO = new FullItemDTO(item);
+            itemDTO.setAnswers(answerDao.findForItem(item.getId()));
+            addStudentAnswer(answers, itemDTO);
+            itemDTOList.add(itemDTO);
+
+            if(itemDTO.getAnswer().getPoints()!=null){
+                totalStudPoints += itemDTO.getAnswer().getPoints();
+            }
+
+        }
+
+        output().setValue("exam", exam);
+        output().setValue("items", itemDTOList);
+        output().setValue("studPoints", computeStudentPercentage(exam.getPoints(),totalStudPoints));
+
+        return SUCCESS;
+    }
+
+    private BigDecimal computeStudentPercentage(Integer examPoints, Integer studPoints){
+        BigDecimal ep = new BigDecimal(examPoints);
+        BigDecimal sp = new BigDecimal(studPoints);
+
+        return sp.multiply(BigDecimal.valueOf(100).divide(ep,3, RoundingMode.HALF_UP));
+    }
+
+
+    private void addStudentAnswer(List<StudentExamAnswer> answers, FullItemDTO itemDTO) {
+
+        for (StudentExamAnswer answer : answers) {
+            if (answer.getExamItemId().equals(itemDTO.getId())) {
+                itemDTO.setAnswer(answer);
+                break;
+            }
+        }
     }
 
     public String saveAnswer() {
